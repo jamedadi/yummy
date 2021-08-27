@@ -72,6 +72,9 @@ class Customer(AbstractBaseUser, PermissionsMixin):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
+    def __str__(self):
+        return f"{self.full_name} - {self.phone_number}"
+
     class Meta:
         verbose_name = _('customer')
         verbose_name_plural = _('customers')
