@@ -6,6 +6,13 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 
+class User(AbstractUser):
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+        db_table = 'user'
+
+
 class CustomerManager(UserManager):
     def _create_user(self, phone_number, password, **extra_fields):
 
