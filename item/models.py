@@ -18,3 +18,14 @@ class Item(BaseModel):
         verbose_name = _('item')
         verbose_name_plural = _('items')
         db_table = 'item'
+
+
+class ItemLine(BaseModel):
+    item = models.OneToOneField(Item, related_name='line', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = _('item line')
+        verbose_name_plural = _('item lines')
+        db_table = 'item_line'
+
