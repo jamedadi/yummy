@@ -36,8 +36,8 @@ class Item(BaseModel):
 
 
 class ItemLine(BaseModel):
-    item = models.OneToOneField(Item, related_name='line', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
+    item = models.OneToOneField(Item, verbose_name=_('item'), related_name='line', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0, verbose_name=_('quantity'))
 
     class Meta:
         verbose_name = _('Item line')
