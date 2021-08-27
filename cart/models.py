@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from accounts.models import Customer
+from item.models import Item
 from library.models import BaseModel
 
 
@@ -13,3 +14,12 @@ class Cart(BaseModel):
 
     def __str__(self):
         return f"{self.customer} - {'Paid' if self.is_paid else 'Not paid'}"
+
+
+class CartLine(BaseModel):
+    item = models.ForeignKey(Item, verbose_name=_('item'), related_name='lines', on_delete=models.SET_NULL)
+    cart = models.ForeignKey(Cart, verbose_name=_('cart'), related_name='lines', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1, verbose_name=_('quantity'))
+
+    def __str__(self):
+        return f"{self.item} - {self.quantity}"
