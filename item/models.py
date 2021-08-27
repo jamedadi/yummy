@@ -19,6 +19,13 @@ class Item(BaseModel):
         verbose_name_plural = _('items')
         db_table = 'item'
 
+    def __str__(self):
+        return self.name
+
+    @property
+    def stock(self):
+        return self.line.quantity
+
 
 class ItemLine(BaseModel):
     item = models.OneToOneField(Item, related_name='line', on_delete=models.CASCADE)
@@ -28,4 +35,3 @@ class ItemLine(BaseModel):
         verbose_name = _('item line')
         verbose_name_plural = _('item lines')
         db_table = 'item_line'
-
