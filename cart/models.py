@@ -17,8 +17,8 @@ class Cart(BaseModel):
         return f"{self.customer} - {'Paid' if self.is_paid else 'Not paid'}"
 
     class Meta:
-        verbose_name = _('cart')
-        verbose_name_plural = _('carts')
+        verbose_name = _('Cart')
+        verbose_name_plural = _('Carts')
         db_table = 'cart'
 
 
@@ -31,6 +31,6 @@ class CartLine(BaseModel):
         return f"{self.item} - {self.quantity}"
 
     class Meta:
-        verbose_name = _('cart line')
-        verbose_name_plural = _('cart lines')
+        verbose_name = _('Cart line')
+        verbose_name_plural = _('Cart lines')
         db_table = 'cart_line'

@@ -13,8 +13,8 @@ class Invoice(BaseModel):
     #  TODO: Address must be created for relation
 
     class Meta:
-        verbose_name = _('invoice')
-        verbose_name_plural = _('invoices')
+        verbose_name = _('Invoice')
+        verbose_name_plural = _('Invoices')
         db_table = 'invoice'
 
     def __str__(self):
@@ -28,8 +28,8 @@ class Payment(BaseModel):
     is_paid = models.BooleanField(verbose_name=_('is paid'), default=False)
 
     class Meta:
-        verbose_name = _('payment')
-        verbose_name_plural = _('payments')
+        verbose_name = _('Payment')
+        verbose_name_plural = _('Payments')
         db_table = 'payment'
 
     def __str__(self):

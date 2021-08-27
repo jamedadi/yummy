@@ -11,8 +11,8 @@ class User(AbstractUser):
     # TODO : AUTH_USER_MODEL must be changed to this model in settings
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
         db_table = 'user'
 
 
@@ -76,8 +76,8 @@ class Customer(AbstractBaseUser, PermissionsMixin):
         return f"{self.full_name} - {self.phone_number}"
 
     class Meta:
-        verbose_name = _('customer')
-        verbose_name_plural = _('customers')
+        verbose_name = _('Customer')
+        verbose_name_plural = _('Customers')
         db_table = 'customer'
 
 
@@ -86,6 +86,6 @@ class ServiceProvider(AbstractUser):
     phone_number = models.CharField(max_length=13, verbose_name=_('phone number'), unique=True)
 
     class Meta:
-        verbose_name = _('service provider')
-        verbose_name_plural = _('service providers')
+        verbose_name = _('Service provider')
+        verbose_name_plural = _('Service providers')
         db_table = 'service_provider'

@@ -23,8 +23,8 @@ class Item(BaseModel):
     # TODO-2 : ServiceCategory must be created for the relation
 
     class Meta:
-        verbose_name = _('item')
-        verbose_name_plural = _('items')
+        verbose_name = _('Item')
+        verbose_name_plural = _('Items')
         db_table = 'item'
 
     def __str__(self):
@@ -40,6 +40,6 @@ class ItemLine(BaseModel):
     quantity = models.PositiveIntegerField(default=0)
 
     class Meta:
-        verbose_name = _('item line')
-        verbose_name_plural = _('item lines')
+        verbose_name = _('Item line')
+        verbose_name_plural = _('Item lines')
         db_table = 'item_line'
