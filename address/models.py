@@ -36,7 +36,7 @@ class Area(BaseModel):
     city = models.ForeignKey(City, verbose_name=_('city'), related_name='areas', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.city} - {self.name})'
+        return f'{self.city.name} - {self.name})'
 
     class Meta:
         verbose_name = _('Area')
