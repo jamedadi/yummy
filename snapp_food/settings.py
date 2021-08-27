@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'service.apps.ServiceConfig'
     'address.apps.AddressConfig'
 ]
 
