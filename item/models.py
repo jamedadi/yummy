@@ -4,6 +4,11 @@ from django.utils.translation import gettext as _
 from library.models import BaseModel
 
 
+class ItemManager(models.Manager):
+    def available(self):
+        return self.get_queryset().first(available=True)
+
+
 class Item(BaseModel):
     upc = models.BigIntegerField(unique=True, db_index=True)
     available = models.BooleanField(default=True)
@@ -11,6 +16,8 @@ class Item(BaseModel):
     description = models.TextField(verbose_name=_('description'), blank=True)
     price = models.IntegerField(verbose_name=_('price'))
     image = models.ImageField(verbose_name=_('image'), blank=True, null=True, upload_to='items/')
+
+    objects = ItemManager()
 
     # TODO-1: Service model must be created for the relation
     # TODO-2 : ServiceCategory must be created for the relation
