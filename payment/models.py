@@ -17,6 +17,9 @@ class Invoice(BaseModel):
         verbose_name_plural = _('invoices')
         db_table = 'invoice'
 
+    def __str__(self):
+        return f"{self.customer} - {self.price} - {'Paid' if self.is_paid else 'Not paid'}"
+
 
 class Payment(BaseModel):
     uuid = models.UUIDField(unique=True, verbose_name=_('uuid'))
@@ -28,3 +31,6 @@ class Payment(BaseModel):
         verbose_name = _('payment')
         verbose_name_plural = _('payments')
         db_table = 'payment'
+
+    def __str__(self):
+        return f"{self.price} - {'Paid' if self.is_paid else 'Not paid'}"
