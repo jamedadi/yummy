@@ -55,6 +55,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = []
+    objects = CustomerManager()
 
     @property
     def full_name(self):
