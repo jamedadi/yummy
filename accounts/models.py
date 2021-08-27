@@ -1,5 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -36,3 +36,13 @@ class Customer(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('customer')
         verbose_name_plural = _('customers')
         db_table = 'customer'
+
+
+class ServiceProvider(AbstractUser):
+    email = models.EmailField(_('email address'), blank=True, unique=True)
+    phone_number = models.CharField(max_length=13, verbose_name=_('phone number'), unique=True)
+
+    class Meta:
+        verbose_name = _('service provider')
+        verbose_name_plural = _('service providers')
+        db_table = 'service_provider'
