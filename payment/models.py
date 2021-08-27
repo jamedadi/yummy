@@ -16,3 +16,15 @@ class Invoice(BaseModel):
         verbose_name = _('invoice')
         verbose_name_plural = _('invoices')
         db_table = 'invoice'
+
+
+class Payment(BaseModel):
+    uuid = models.UUIDField(unique=True, verbose_name=_('uuid'))
+    invoice = models.OneToOneField(Invoice, verbose_name=_('invoice'), related_name='payment', on_delete=models.CASCADE)
+    price = models.IntegerField(verbose_name=_('price'))
+    is_paid = models.BooleanField(verbose_name=_('is paid'), default=False)
+
+    class Meta:
+        verbose_name = _('payment')
+        verbose_name_plural = _('payments')
+        db_table = 'payment'
