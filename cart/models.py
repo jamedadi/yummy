@@ -15,6 +15,11 @@ class Cart(BaseModel):
     def __str__(self):
         return f"{self.customer} - {'Paid' if self.is_paid else 'Not paid'}"
 
+    class Meta:
+        verbose_name = _('cart')
+        verbose_name_plural = _('carts')
+        db_table = 'cart'
+
 
 class CartLine(BaseModel):
     item = models.ForeignKey(Item, verbose_name=_('item'), related_name='lines', on_delete=models.SET_NULL)
@@ -23,3 +28,8 @@ class CartLine(BaseModel):
 
     def __str__(self):
         return f"{self.item} - {self.quantity}"
+
+    class Meta:
+        verbose_name = _('cart line')
+        verbose_name_plural = _('cart lines')
+        db_table = 'cart_line'
