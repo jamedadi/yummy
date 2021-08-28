@@ -20,7 +20,7 @@ class Service(BaseModel):
         (SUPERMARKET, _('supermarket')),
     )
 
-    uuid = models.UUIDField(default=uuid.uuid4, verbose_name=_('uuid'))
+    uuid = models.UUIDField(default=uuid.uuid4, verbose_name=_('uuid'), unique=True, db_index=True)
     service_provider = models.ForeignKey(
         ServiceProvider, verbose_name=_('service provider'), related_name='services', on_delete=models.CASCADE
     )

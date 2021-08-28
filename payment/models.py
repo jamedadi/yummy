@@ -3,6 +3,7 @@ from django.utils.translation import gettext as _
 from accounts.models import Customer
 from address.models import Address
 from library.models import BaseModel
+import uuid
 
 
 class Invoice(BaseModel):
@@ -23,7 +24,7 @@ class Invoice(BaseModel):
 
 
 class Payment(BaseModel):
-    uuid = models.UUIDField(unique=True, verbose_name=_('uuid'))
+    uuid = models.UUIDField(unique=True, verbose_name=_('uuid'), db_index=True, default=uuid.uuid4)
     invoice = models.OneToOneField(Invoice, verbose_name=_('invoice'), related_name='payment', on_delete=models.CASCADE)
     price = models.IntegerField(verbose_name=_('price'))
     is_paid = models.BooleanField(verbose_name=_('is paid'), default=False)
