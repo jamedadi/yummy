@@ -27,7 +27,8 @@ class Service(BaseModel):
     name = models.CharField(max_length=40, verbose_name=_('name'))
     service_type = models.PositiveSmallIntegerField(verbose_name=_('service type'), choices=SERVICE_TYPES)
     minimum_purchase = models.DecimalField(max_digits=9, decimal_places=0, verbose_name=_('minimum purchase'))
-    address = models.ForeignKey(Address, verbose_name=_('address'), related_name='services', on_delete=models.SET_NULL)
+    address = models.ForeignKey(Address, verbose_name=_('address'), related_name='services', on_delete=models.SET_NULL,
+                                null=True)
 
     def __str__(self):
         return f'{self.name} - {self.get_service_type_display()}'
