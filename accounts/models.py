@@ -8,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 
 class User(AbstractUser):
     #  this model is used for admins and superusers
-    # TODO : AUTH_USER_MODEL must be changed to this model in settings
 
     class Meta:
         verbose_name = _('User')
