@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 from library.models import BaseModel
+from service.models import Service, ServiceCategory
 
 
 class ItemManager(models.Manager):
@@ -16,11 +17,10 @@ class Item(BaseModel):
     description = models.TextField(verbose_name=_('description'), blank=True)
     price = models.IntegerField(verbose_name=_('price'))
     image = models.ImageField(verbose_name=_('image'), blank=True, null=True, upload_to='items/')
-
+    service = models.ForeignKey(Service, verbose_name=_('service'), related_name='items', on_delete=models.CASCADE)
+    category = models.ForeignKey(ServiceCategory, verbose_name=_('category'), related_name='items',
+                                 on_delete=models.CASCADE)
     objects = ItemManager()
-
-    # TODO-1: Service model must be created for the relation
-    # TODO-2 : ServiceCategory must be created for the relation
 
     class Meta:
         verbose_name = _('Item')
