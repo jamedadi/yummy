@@ -1,6 +1,5 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from django.utils.translation import gettext as _
+
 
 from accounts.models import Customer, ServiceProvider
 
@@ -13,9 +12,7 @@ class CustomerAdmin(admin.ModelAdmin):
 
 
 @admin.register(ServiceProvider)
-class ServiceProviderAdmin(UserAdmin):
-    list_display = UserAdmin.list_display + ('phone_number',)
-    search_fields = UserAdmin.search_fields + ('phone_number',)
-    fieldsets = UserAdmin.fieldsets + (
-        (_("Phone number"), {'fields': ('phone_number',)}),
-    )
+class ServiceProviderAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'phone_number', 'date_joined', 'is_active')
+    list_filter = ('is_active', 'date_joined')
+    search_fields = ('username', 'phone_number')
