@@ -6,7 +6,7 @@ from library.models import BaseModel
 
 class ItemManager(models.Manager):
     def available(self):
-        return self.get_queryset().first(available=True)
+        return self.get_queryset().filter(available=True)
 
 
 class Item(BaseModel):
