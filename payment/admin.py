@@ -6,7 +6,7 @@ from payment.models import Invoice, Payment
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = ('customer', 'price', 'is_paid', 'address')
-    list_filter = ('is_paid', 'crated_time')
+    list_filter = ('is_paid', 'created_time')
     search_fields = ('customer__phone_number',)
 
 
