@@ -23,7 +23,7 @@ class AreaAdmin(admin.ModelAdmin):
 
 
 @admin.register(Address)
-class Address(admin.ModelAdmin):
+class AddressAdmin(admin.ModelAdmin):
     list_display = ('state', 'city', 'area', 'floor', 'plaque')
     list_filter = ('state', 'city')
     search_fields = ('area', 'floor', 'plaque')
