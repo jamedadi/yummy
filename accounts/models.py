@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, AbstractUser, UserManager
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -71,9 +72,40 @@ class Customer(AbstractBaseUser, PermissionsMixin):
         db_table = 'customer'
 
 
-class ServiceProvider(AbstractUser):
+class ServiceProvider(AbstractBaseUser):
+    username_validator = UnicodeUsernameValidator()
+    username = models.CharField(
+        _('username'),
+        max_length=150,
+        unique=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[username_validator],
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
     email = models.EmailField(_('email address'), blank=True, unique=True)
     phone_number = models.CharField(max_length=13, verbose_name=_('phone number'), unique=True)
+    is_staff = models.BooleanField(
+        _('staff status'),
+        default=False,
+        help_text=_('Designates whether the user can log into this admin site.'),
+    )
+    is_active = models.BooleanField(
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this user should be treated as active. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+
+    objects = UserManager()
+
+    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     class Meta:
         verbose_name = _('Service provider')
