@@ -2,12 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext as _
 
-from accounts.models import User, Customer, ServiceProvider
-
-
-@admin.register(User)
-class CustomUserAdmin(UserAdmin):
-    pass
+from accounts.models import Customer, ServiceProvider
 
 
 @admin.register(Customer)
