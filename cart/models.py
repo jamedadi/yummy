@@ -26,6 +26,11 @@ class CartLine(BaseModel):
     item = models.ForeignKey(Item, verbose_name=_('item'), related_name='lines', on_delete=models.SET_NULL, null=True)
     cart = models.ForeignKey(Cart, verbose_name=_('cart'), related_name='lines', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, verbose_name=_('quantity'))
+    price = models.IntegerField(verbose_name=_('price'), default=0)
+
+    def save(self, **kwargs):
+        self.price = self.item.price * self.quantity
+        return super().save(**kwargs)
 
     def __str__(self):
         return f"{self.item} - {self.quantity}"
