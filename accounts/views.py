@@ -9,12 +9,12 @@ from django.contrib.auth import authenticate, login
 
 
 class ProfileView(TemplateView):
-    template_name = 'accounts/profile.html'
+    template_name = 'accounts/customer/profile.html'
 
 
 class CustomerLoginRegisterView(FormView):
     form_class = CustomerLoginRegisterForm
-    template_name = 'accounts/login_register.html'
+    template_name = 'accounts/customer/login_register.html'
     success_url = reverse_lazy('accounts:code-confirm')
 
     def form_valid(self, form):
@@ -35,7 +35,7 @@ class CustomerLoginRegisterView(FormView):
 
 class CustomerPhoneNumberConfirmView(FormView):
     form_class = CustomerCodeConfirmForm
-    template_name = 'accounts/phone_number_confirm.html'
+    template_name = 'accounts/customer/phone_number_confirm.html'
     success_url = reverse_lazy('accounts:profile')
 
     def dispatch(self, request, *args, **kwargs):
@@ -72,7 +72,7 @@ class CustomerPhoneNumberConfirmView(FormView):
 
 class CustomerPasswordConfirmView(FormView):
     form_class = CustomerPasswordForm
-    template_name = 'accounts/password_confirm.html'
+    template_name = 'accounts/customer/password_confirm.html'
     success_url = reverse_lazy('accounts:profile')
 
     def form_valid(self, form):
