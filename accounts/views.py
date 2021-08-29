@@ -18,7 +18,7 @@ class ProfileView(TemplateView):
 class CustomerLoginRegisterView(FormView):
     form_class = CustomerLoginRegisterForm
     template_name = 'accounts/customer/login_register.html'
-    success_url = reverse_lazy('customer-code-confirm')
+    success_url = reverse_lazy('accounts:customer-code-confirm')
 
     def form_valid(self, form):
         phone_number = form.cleaned_data['phone_number']
@@ -28,7 +28,7 @@ class CustomerLoginRegisterView(FormView):
             set_phone_number_session(self.request, phone_number)
         else:
             if customer.password:
-                self.success_url = reverse_lazy('customer-password-confirm')
+                self.success_url = reverse_lazy('accounts:customer-password-confirm')
                 self.request.session['phone_number'] = phone_number
             else:
                 set_phone_number_session(self.request, phone_number)
@@ -39,7 +39,7 @@ class CustomerLoginRegisterView(FormView):
 class CustomerPhoneNumberConfirmView(FormView):
     form_class = CustomerCodeConfirmForm
     template_name = 'accounts/customer/phone_number_confirm.html'
-    success_url = reverse_lazy('customer-profile')
+    success_url = reverse_lazy('accounts:customer-profile')
 
     def dispatch(self, request, *args, **kwargs):
         check_expire_time(request)
@@ -64,10 +64,10 @@ class CustomerPhoneNumberConfirmView(FormView):
 
             else:
                 messages.info(self.request, 'The code is incorrect!', 'danger')
-                return redirect('customer-code-confirm')
+                return redirect('accounts:customer-code-confirm')
         else:
             messages.info(self.request, 'The code is invalid! Enter your phone number again', 'danger')
-            return redirect('customer-login-register')
+            return redirect('accounts:customer-login-register')
 
     def delete_confirm_code(self):
         del self.request.session['code']
@@ -76,7 +76,7 @@ class CustomerPhoneNumberConfirmView(FormView):
 class CustomerPasswordConfirmView(FormView):
     form_class = CustomerPasswordForm
     template_name = 'accounts/customer/password_confirm.html'
-    success_url = reverse_lazy('customer-profile')
+    success_url = reverse_lazy('accounts:customer-profile')
 
     def form_valid(self, form):
         phone_number = self.request.session['phone_number']
@@ -90,6 +90,6 @@ class CustomerPasswordConfirmView(FormView):
 
         else:
             messages.info(self.request, 'Your password is incorrect!', 'danger')
-            return redirect('customer-password-confirm')
+            return redirect('accounts:customer-password-confirm')
 
 
