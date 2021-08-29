@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, RedirectView, TemplateView
 from .forms import ServiceProviderRegistrationForm, ServiceProviderLoginForm
 
 
+@require_http_methods(['POST', 'GET'])
 class ServiceProviderRegistrationView(FormView):
     form_class = ServiceProviderRegistrationForm
     template_name = 'accounts/service_provider/registration.html'
