@@ -21,3 +21,7 @@ def set_phone_number_session(request, phone_number):
     request.session['created_time'] = str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     print(request.session['code'])
     print(request.session['created_time'])
+
+
+def check_is_not_authenticated(user):
+    return not user.is_authnticated
