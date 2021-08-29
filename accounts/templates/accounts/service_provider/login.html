@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Service Provider Login</title>
-</head>
-<body>
+{% extends 'accounts/base.html' %}
+{% block content %}
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="submit">
+        <input type="submit" value="submit" class="btn btn-warning">
     </form>
-</body>
-</html>
+{% endblock %}
