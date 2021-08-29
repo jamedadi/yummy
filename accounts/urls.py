@@ -9,4 +9,5 @@ urlpatterns = [
     path('customer/code-confirm/', CustomerPhoneNumberConfirmView.as_view(), name='code-confirm'),
     path('customer/password-confirm/', CustomerPasswordConfirmView.as_view(), name='password-confirm'),
     path('customer/profile/', ProfileView.as_view(), name='profile'),
+
 ]

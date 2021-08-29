@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm
 from accounts.models import Customer
@@ -8,6 +10,7 @@ from accounts.utils import check_expire_time, set_phone_number_session
 from django.contrib.auth import authenticate, login
 
 
+@method_decorator(login_required, name='dispatch')
 class ProfileView(TemplateView):
     template_name = 'accounts/customer/profile.html'
 
@@ -88,3 +91,5 @@ class CustomerPasswordConfirmView(FormView):
         else:
             messages.info(self.request, 'Your password is incorrect!', 'danger')
             return redirect('accounts:password-confirm')
+
+
