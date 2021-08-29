@@ -20,14 +20,14 @@ class ServiceProviderRegistrationView(FormView):
 class ServiceProviderLoginView(FormView):
     form_class = ServiceProviderLoginForm
     template_name = 'accounts/service_provider_login.html'
-    success_url = reverse_lazy('')
+    success_url = reverse_lazy('accounts:service-provider-profile')
 
     def form_valid(self, form):
         user = form.cleaned_data['user']
         user_authenticated = authenticate(username=user.username, password=user.password)
         if user_authenticated:
             login(self.request, user_authenticated)
-        return self.form_valid(form)
+        return super().form_valid(form)
 
 
 class UserLogoutView(RedirectView):
