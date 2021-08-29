@@ -34,8 +34,8 @@ class ServiceProviderProfileView(TemplateView):
     template_name = 'accounts/service_provider_profile.html'
 
 
-class UserLogoutView(RedirectView):
+class LogoutView(RedirectView):
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             logout(self.request)
         return super().get(request, *args, **kwargs)
