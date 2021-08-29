@@ -33,24 +33,11 @@ class ServiceProviderRegistrationForm(forms.ModelForm):
             'password': forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
         }
 
-    def clean_username(self):
-        if ServiceProvider.objects.filter(username=self.cleaned_data['username']).exists():
-            raise ValidationError('There is a username!')
-        return self.cleaned_data['username']
-
-    def clean_email(self):
-        if ServiceProvider.objects.filter(email=self.cleaned_data['email']).exists():
-            raise ValidationError('There is a email!')
-        return self.cleaned_data['email']
-
     def clean_phone_number(self):
         phone = self.cleaned_data['phone_number']
 
         if phone.startswith('98') and len(phone) == 12:
-            if ServiceProvider.objects.filter(email=self.cleaned_data['phone_number']).exists():
-                raise ValidationError('There is a phone_number!')
-            else:
-                return self.cleaned_data['phone_number']
+            return self.cleaned_data['phone_number']
         else:
             raise ValidationError('phone_number invalid!')
 
