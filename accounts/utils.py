@@ -24,4 +24,4 @@ def set_phone_number_session(request, phone_number):
 
 
 def check_is_not_authenticated(user):
-    return not user.is_authnticated
+    return not user.is_authenticated
