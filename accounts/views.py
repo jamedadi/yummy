@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.views.generic import FormView
-from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm
+from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time
 from django.contrib.auth import authenticate, login
@@ -56,3 +56,23 @@ class CustomerPhoneNumberConfirmView(FormView):
 
     def delete_confirm_code(self):
         del self.request.session['code']
+
+
+class CustomerPasswordConfirmView(FormView):
+    form_class = CustomerPasswordForm
+    template_name = None
+    success_url = None
+
+    def form_valid(self, form):
+        phone_number = self.request.session['phone_number']
+        password = form.changed_data['password']
+        customer = authenticate(phone_number=phone_number, password=password)
+
+        if customer:
+            login(self.request, customer)
+            messages.info(self.request, 'Login success', 'success')
+            super().form_valid(form)
+
+        else:
+            messages.info(self.request, 'Your password is incorrect!', 'danger')
+            return
