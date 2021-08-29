@@ -12,6 +12,8 @@ class PhoneNumberPasswordBackend(BaseBackend):
             if password:  # if the password is sent via the form
                 if customer.check_password(password):
                     return customer
+                else:
+                    return None
             return customer
 
     def get_user(self, user_id):

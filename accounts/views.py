@@ -18,15 +18,17 @@ class CustomerLoginRegisterView(FormView):
     success_url = reverse_lazy('accounts:code-confirm')
 
     def form_valid(self, form):
+        phone_number = form.cleaned_data['phone_number']
         try:
-            customer = Customer.objects.get(phone_number='98' + form.cleaned_data['phone_number'])
+            customer = Customer.objects.get(phone_number='98' + phone_number)
         except Customer.DoesNotExist:
-            set_phone_number_session(self.request, form.cleaned_data['phone_number'])
+            set_phone_number_session(self.request, phone_number)
         else:
             if customer.password:
                 self.success_url = reverse_lazy('accounts:password-confirm')
+                self.request.session['phone_number'] = phone_number
             else:
-                set_phone_number_session(self.request, form.cleaned_data['phone_number'])
+                set_phone_number_session(self.request, phone_number)
 
         return super().form_valid(form)
 
