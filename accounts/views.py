@@ -1,7 +1,8 @@
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.views.generic import FormView
-from .forms import ServiceProviderRegistrationForm
+from .forms import ServiceProviderRegistrationForm, ServiceProviderLoginForm
 
 
 class ServiceProviderRegistrationView(FormView):
@@ -13,4 +14,17 @@ class ServiceProviderRegistrationView(FormView):
         instance = form.save(commit=False)
         instance.password = make_password(instance.password)
         instance.save()
+        return self.form_valid(form)
+
+
+class ServiceProviderLoginView(FormView):
+    form_class = ServiceProviderLoginForm
+    template_name = 'accounts/service_provider_login.html'
+    success_url = reverse_lazy('')
+
+    def form_valid(self, form):
+        user = form.cleaned_data['user']
+        user_authenticated = authenticate(username=user.username, password=user.password)
+        if user_authenticated:
+            login(self.request, user_authenticated)
         return self.form_valid(form)
