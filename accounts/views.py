@@ -19,7 +19,7 @@ class CustomerLoginRegisterView(FormView):
 
     def form_valid(self, form):
         try:
-            customer = Customer.objects.get(phone_number=form.cleaned_data['phone_number'])
+            customer = Customer.objects.get(phone_number='98' + form.cleaned_data['phone_number'])
         except Customer.DoesNotExist:
             set_phone_number_session(self.request, form.cleaned_data['phone_number'])
         else:
