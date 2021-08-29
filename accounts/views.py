@@ -20,6 +20,7 @@ class ServiceProviderRegistrationView(FormView):
         return super().form_valid(form)
 
 
+@method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
 class ServiceProviderLoginView(FormView):
     form_class = ServiceProviderLoginForm
     template_name = 'accounts/service_provider/login.html'
