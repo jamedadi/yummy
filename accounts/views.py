@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm
@@ -31,7 +32,7 @@ class CustomerLoginRegisterView(FormView):
 class CustomerPhoneNumberConfirmView(FormView):
     form_class = CustomerCodeConfirmForm
     template_name = 'accounts/phone_number_confirm.html'
-    success_url = None
+    success_url = reverse_lazy('accounts:profile')
 
     def dispatch(self, request, *args, **kwargs):
         check_expire_time(request)
@@ -56,10 +57,10 @@ class CustomerPhoneNumberConfirmView(FormView):
 
             else:
                 messages.info(self.request, 'The code is incorrect!', 'danger')
-                return
+                return redirect('accounts:code-confirm')
         else:
             messages.info(self.request, 'The code is invalid! Enter your phone number again', 'danger')
-            return
+            return redirect('accounts:login-register')
 
     def delete_confirm_code(self):
         del self.request.session['code']
