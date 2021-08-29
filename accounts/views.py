@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView, UpdateView
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm, \
     CustomerPasswordSetForm
@@ -11,11 +12,13 @@ from accounts.utils import check_expire_time, set_phone_number_session
 from django.contrib.auth import authenticate, login
 
 
+@method_decorator(require_http_methods(['GET']), name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class ProfileView(TemplateView):
     template_name = 'accounts/customer/profile.html'
 
 
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 class CustomerLoginRegisterView(FormView):
     form_class = CustomerLoginRegisterForm
     template_name = 'accounts/customer/login_register.html'
@@ -37,6 +40,7 @@ class CustomerLoginRegisterView(FormView):
         return super().form_valid(form)
 
 
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 class CustomerPhoneNumberConfirmView(FormView):
     form_class = CustomerCodeConfirmForm
     template_name = 'accounts/customer/phone_number_confirm.html'
@@ -74,6 +78,7 @@ class CustomerPhoneNumberConfirmView(FormView):
         del self.request.session['code']
 
 
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 class CustomerPasswordConfirmView(FormView):
     form_class = CustomerPasswordForm
     template_name = 'accounts/customer/password_confirm.html'
@@ -94,6 +99,7 @@ class CustomerPasswordConfirmView(FormView):
             return redirect('accounts:customer-password-confirm')
 
 
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required, name='dispatch')
 class CustomerSetPasswordView(UpdateView):
     model = Customer
