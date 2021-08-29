@@ -4,6 +4,6 @@ from .views import ServiceProviderRegistrationView
 app_name = 'accounts'
 urlpatterns = [
     path(
-        'seviceprovider/registration/', ServiceProviderRegistrationView.as_view(), name='service-provider-registration'
+        'serviceprovider/registration/', ServiceProviderRegistrationView.as_view(), name='service-provider-registration'
     ),
 ]
