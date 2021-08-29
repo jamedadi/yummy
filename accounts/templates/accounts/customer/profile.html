@@ -1,8 +1,11 @@
 {% extends 'accounts/base.html' %}
 {% block title %} Profile {% endblock %}
 {% block content %}
-    <h4> Profile</h4>
+    <h4 class="text-warning"> Profile</h4>
     <p>Phone number : {{ request.user.phone_number }}</p>
+    <p>First name : {{ request.user.first_name }}</p>
+    <p>Last name : {{ request.user.last_name }}</p>
+
     {% if not request.user.password %}
         <a href="{% url 'accounts:customer-set-password' request.user.pk %}">Set password</a>
     {% endif %}
