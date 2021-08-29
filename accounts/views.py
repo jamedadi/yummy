@@ -7,7 +7,7 @@ from .forms import ServiceProviderRegistrationForm, ServiceProviderLoginForm
 
 class ServiceProviderRegistrationView(FormView):
     form_class = ServiceProviderRegistrationForm
-    template_name = 'accounts/service_provider_registration.html'
+    template_name = 'accounts/service_provider/registration.html'
     success_url = reverse_lazy('accounts:service-provider-login')
 
     def form_valid(self, form):
@@ -19,7 +19,7 @@ class ServiceProviderRegistrationView(FormView):
 
 class ServiceProviderLoginView(FormView):
     form_class = ServiceProviderLoginForm
-    template_name = 'accounts/service_provider_login.html'
+    template_name = 'accounts/service_provider/login.html'
     success_url = reverse_lazy('accounts:service-provider-profile')
 
     def form_valid(self, form):
@@ -31,7 +31,7 @@ class ServiceProviderLoginView(FormView):
 
 
 class ServiceProviderProfileView(TemplateView):
-    template_name = 'accounts/service_provider_profile.html'
+    template_name = 'accounts/service_provider/profile.html'
 
 
 class LogoutView(RedirectView):
