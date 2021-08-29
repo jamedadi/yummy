@@ -80,3 +80,18 @@ class ServiceProviderLoginForm(forms.Form):
         )
     )
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        username = cleaned_data['username']
+        user = ServiceProvider.objects.filter(
+            Q(username=username) |
+            Q(email=username) |
+            Q(phone_number=username),
+        ).first()
+
+        if user and user.check_password(cleaned_data['password']):
+            cleaned_data['user'] = user
+            return cleaned_data
+
+        raise ValidationError('username or password invalid!')
