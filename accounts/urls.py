@@ -1,6 +1,9 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
+from django.contrib.auth.views import LogoutView
+
 from accounts.views import CustomerLoginRegisterView, CustomerPhoneNumberConfirmView, CustomerPasswordConfirmView, \
-    ProfileView, CustomerSetPasswordView
+    ProfileView, CustomerSetPasswordView, ServiceProviderRegistrationView, ServiceProviderLoginView, \
+    ServiceProviderProfileView
 
 app_name = 'accounts'
 
@@ -10,5 +13,10 @@ urlpatterns = [
     path('customer/password-confirm/', CustomerPasswordConfirmView.as_view(), name='customer-password-confirm'),
     path('customer/profile/', ProfileView.as_view(), name='customer-profile'),
     path('customer/<int:pk>/set-password/', CustomerSetPasswordView.as_view(), name='customer-set-password'),
-
+    path(
+        'serviceprovider/registration/', ServiceProviderRegistrationView.as_view(), name='service-provider-registration'
+    ),
+    path('serviceprovider/login/', ServiceProviderLoginView.as_view(), name='service-provider-login'),
+    path('serviceprovider/profile/', ServiceProviderProfileView.as_view(), name='service-provider-profile'),
+    path('logout/', LogoutView.as_view(next_page=reverse_lazy('accounts:service-provider-login')), name='logout'),
 ]

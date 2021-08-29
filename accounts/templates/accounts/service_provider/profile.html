@@ -1,0 +1,7 @@
+{% extends 'accounts/base.html' %}
+{% block content %}
+    <h2>Your Profile</h2>
+    <h4> your username: {{ request.user.username }}</h4>
+    <h4> your email: {{ request.user.email }}</h4>
+    <h4> your phone number: {{ request.user.phone_number }}</h4>
+{% endblock %}
