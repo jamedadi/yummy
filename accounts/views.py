@@ -35,13 +35,6 @@ class ServiceProviderLoginView(FormView):
         return super().form_valid(form)
 
 
-@method_decorator(login_required(), name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class ServiceProviderProfileView(TemplateView):
     template_name = 'accounts/service_provider/profile.html'
-
-
-class LogoutView(RedirectView):
-    def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            logout(self.request)
-        return super().get(request, *args, **kwargs)
