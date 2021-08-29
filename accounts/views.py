@@ -69,7 +69,7 @@ class CustomerPhoneNumberConfirmView(FormView):
 class CustomerPasswordConfirmView(FormView):
     form_class = CustomerPasswordForm
     template_name = 'accounts/password_confirm.html'
-    success_url = None
+    success_url = reverse_lazy('accounts:profile')
 
     def form_valid(self, form):
         phone_number = self.request.session['phone_number']
@@ -83,4 +83,4 @@ class CustomerPasswordConfirmView(FormView):
 
         else:
             messages.info(self.request, 'Your password is incorrect!', 'danger')
-            return
+            return redirect('accounts:password-confirm')
