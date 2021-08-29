@@ -1,6 +1,9 @@
+from django.contrib import messages
 from django.views.generic import FormView
-from accounts.forms import CustomerLoginRegisterForm
+from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm
 from accounts.models import Customer
+from accounts.utils import check_expire_time
+from django.contrib.auth import authenticate, login
 
 
 class CustomerLoginRegisterView(FormView):
@@ -16,3 +19,40 @@ class CustomerLoginRegisterView(FormView):
             self.success_url = None
 
         return super().form_valid(form)
+
+
+class CustomerPhoneNumberConfirmView(FormView):
+    form_class = CustomerCodeConfirmForm
+    template_name = None
+    success_url = None
+
+    def dispatch(self, request, *args, **kwargs):
+        check_expire_time(request)
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        phone_number = '98' + self.request.session['phone_number']
+        form_code = int(form.changed_data['code'])
+        session_code = self.request.get('code', None)
+
+        if session_code:
+            if session_code == form_code:
+                Customer.objects.get_or_create(phone_number=phone_number)
+                self.delete_confirm_code()
+                customer = authenticate(phone_number=phone_number)
+                if customer:
+                    login(self.request, customer)
+                    messages.info(self.request, 'Login success', 'success')
+                    return super().form_valid(form)
+                else:
+                    return super().form_valid(form)
+
+            else:
+                messages.info(self.request, 'The code is incorrect!', 'danger')
+                return
+        else:
+            messages.info(self.request, 'The code is invalid! Enter your phone number again', 'danger')
+            return
+
+    def delete_confirm_code(self):
+        del self.request.session['code']
