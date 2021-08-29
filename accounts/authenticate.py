@@ -15,6 +15,6 @@ class ServiceProviderAuthentication(BaseBackend):
 
     def get_user(self, user_id):
         try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+            return ServiceProvider.objects.get(pk=user_id)
+        except ServiceProvider.DoesNotExist:
             return None
