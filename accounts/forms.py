@@ -15,6 +15,7 @@ class CustomerLoginRegisterForm(forms.Form):
 
 class CustomerCodeConfirmForm(forms.Form):
     code = forms.CharField(
+        validators=[int_list_validator(message=_('only digits are accepted'))],
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
