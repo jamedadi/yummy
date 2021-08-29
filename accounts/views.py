@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 
 class CustomerLoginRegisterView(FormView):
     form_class = CustomerLoginRegisterForm
-    template_name = None
+    template_name = 'accounts/login_register.html'
 
     def form_valid(self, form):
         try:
@@ -23,7 +23,7 @@ class CustomerLoginRegisterView(FormView):
 
 class CustomerPhoneNumberConfirmView(FormView):
     form_class = CustomerCodeConfirmForm
-    template_name = None
+    template_name = 'accounts/phone_number_confirm.html'
     success_url = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -60,7 +60,7 @@ class CustomerPhoneNumberConfirmView(FormView):
 
 class CustomerPasswordConfirmView(FormView):
     form_class = CustomerPasswordForm
-    template_name = None
+    template_name = 'accounts/password_confirm.html'
     success_url = None
 
     def form_valid(self, form):
