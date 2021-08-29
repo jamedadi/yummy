@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.views.generic import FormView
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm
 from accounts.models import Customer
@@ -9,14 +10,16 @@ from django.contrib.auth import authenticate, login
 class CustomerLoginRegisterView(FormView):
     form_class = CustomerLoginRegisterForm
     template_name = 'accounts/login_register.html'
+    success_url = reverse_lazy('accounts:code-confirm')
 
     def form_valid(self, form):
         try:
-            Customer.objects.get(phone_number=form.changed_data['phone_number'])
+            customer = Customer.objects.get(phone_number=form.changed_data['phone_number'])
         except Customer.DoesNotExist:
-            self.success_url = None
+            pass
         else:
-            self.success_url = None
+            if customer.password:
+                self.success_url = reverse_lazy('accounts:password-confirm')
 
         return super().form_valid(form)
 
