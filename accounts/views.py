@@ -15,7 +15,7 @@ from accounts.utils import check_expire_time, set_phone_number_session
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
 class ProfileView(TemplateView):
     template_name = 'accounts/customer/profile.html'
 
@@ -102,7 +102,7 @@ class CustomerPasswordConfirmView(FormView):
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
 class CustomerSetPasswordView(UpdateView):
     model = Customer
     form_class = CustomerPasswordSetForm
