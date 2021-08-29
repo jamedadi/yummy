@@ -14,7 +14,7 @@ class ServiceProviderRegistrationView(FormView):
         instance = form.save(commit=False)
         instance.password = make_password(instance.password)
         instance.save()
-        return self.form_valid(form)
+        return super().form_valid(form)
 
 
 class ServiceProviderLoginView(FormView):
