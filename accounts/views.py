@@ -20,7 +20,7 @@ class CustomerLoginRegisterView(FormView):
     def form_valid(self, form):
         phone_number = form.cleaned_data['phone_number']
         try:
-            customer = Customer.objects.get(phone_number='98' + phone_number)
+            customer = Customer.objects.get(phone_number=phone_number)
         except Customer.DoesNotExist:
             set_phone_number_session(self.request, phone_number)
         else:
@@ -43,7 +43,7 @@ class CustomerPhoneNumberConfirmView(FormView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        phone_number = '98' + self.request.session['phone_number']
+        phone_number = self.request.session['phone_number']
         form_code = int(form.cleaned_data['code'])
         session_code = self.request.session.get('code', None)
 
@@ -83,7 +83,7 @@ class CustomerPasswordConfirmView(FormView):
         if customer:
             login(self.request, customer)
             messages.info(self.request, 'Login success', 'success')
-            super().form_valid(form)
+            return super().form_valid(form)
 
         else:
             messages.info(self.request, 'Your password is incorrect!', 'danger')
