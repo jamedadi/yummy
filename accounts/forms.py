@@ -14,12 +14,22 @@ class CustomerLoginRegisterForm(forms.Form):
 
 
 class CustomerCodeConfirmForm(forms.Form):
-    class ConfirmationPhoneNumberForm(forms.Form):
-        code = forms.CharField(
-            widget=forms.TextInput(
-                attrs={
-                    'class': 'form-control',
-                    'placeholder': _('confirmation code')
-                }
-            )
+    code = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': _('confirmation code')
+            }
         )
+    )
+
+
+class CustomerPasswordForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': _('password')
+            }
+        )
+    )
