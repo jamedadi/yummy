@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm
 from accounts.models import Customer
-from accounts.utils import check_expire_time
+from accounts.utils import check_expire_time, set_phone_number_session
 from django.contrib.auth import authenticate, login
 
 
@@ -21,10 +21,12 @@ class CustomerLoginRegisterView(FormView):
         try:
             customer = Customer.objects.get(phone_number=form.cleaned_data['phone_number'])
         except Customer.DoesNotExist:
-            pass
+            set_phone_number_session(self.request, form.cleaned_data['phone_number'])
         else:
             if customer.password:
                 self.success_url = reverse_lazy('accounts:password-confirm')
+            else:
+                set_phone_number_session(self.request, form.cleaned_data['phone_number'])
 
         return super().form_valid(form)
 
