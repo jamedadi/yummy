@@ -11,3 +11,15 @@ class CustomerLoginRegisterForm(forms.Form):
                                    widget=forms.TextInput(
                                        attrs={'class': 'form-control', 'placeholder': 'phone number'})
                                    )
+
+
+class CustomerCodeConfirmForm(forms.Form):
+    class ConfirmationPhoneNumberForm(forms.Form):
+        code = forms.CharField(
+            widget=forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': _('confirmation code')
+                }
+            )
+        )
