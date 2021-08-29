@@ -1,5 +1,7 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from accounts.models import ServiceProvider
 
@@ -56,3 +58,25 @@ class ServiceProviderRegistrationForm(forms.ModelForm):
         if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
             raise ValidationError('passwords not equal!')
         return self.cleaned_data['confirm_password']
+
+
+class ServiceProviderLoginForm(forms.Form):
+    username = forms.CharField(
+        min_length=4,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Username, Email, Phone Number',
+                'class': 'form-control'}
+        )
+    )
+
+    password = forms.CharField(
+        max_length=30,
+        min_length=4,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder': 'Password',
+                'class': 'form-control'}
+        )
+    )
+
