@@ -1,10 +1,10 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView, RedirectView, TemplateView
+from django.views.generic import FormView, TemplateView
 from .forms import ServiceProviderRegistrationForm, ServiceProviderLoginForm
 
 
@@ -35,6 +35,6 @@ class ServiceProviderLoginView(FormView):
         return super().form_valid(form)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceProviderProfileView(TemplateView):
     template_name = 'accounts/service_provider/profile.html'
