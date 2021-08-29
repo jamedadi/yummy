@@ -6,7 +6,7 @@ from .forms import ServiceProviderRegistrationForm
 
 class ServiceProviderRegistrationView(FormView):
     form_class = ServiceProviderRegistrationForm
-    template_name = 'accounts/registration.html'
+    template_name = 'accounts/service_provider_registration.html'
     success_url = reverse_lazy('')
 
     def form_valid(self, form):
