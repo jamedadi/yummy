@@ -13,3 +13,11 @@ class PhoneNumberPasswordBackend(BaseBackend):
                 if customer.check_password(password):
                     return customer
             return customer
+
+    def get_user(self, user_id):
+        try:
+            customer = Customer.objects.get(pk=user_id)
+        except Customer.DoesNotExist:
+            return None
+        else:
+            return customer
