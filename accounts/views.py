@@ -1,7 +1,7 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, RedirectView
 from .forms import ServiceProviderRegistrationForm, ServiceProviderLoginForm
 
 
@@ -28,3 +28,10 @@ class ServiceProviderLoginView(FormView):
         if user_authenticated:
             login(self.request, user_authenticated)
         return self.form_valid(form)
+
+
+class UserLogoutView(RedirectView):
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated():
+            logout(self.request)
+        return super().get(request, *args, **kwargs)
