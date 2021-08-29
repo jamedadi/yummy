@@ -1,10 +1,14 @@
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time
 from django.contrib.auth import authenticate, login
+
+
+class ProfileView(TemplateView):
+    template_name = 'accounts/profile.html'
 
 
 class CustomerLoginRegisterView(FormView):
