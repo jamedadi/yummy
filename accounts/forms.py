@@ -42,6 +42,9 @@ class CustomerPasswordForm(forms.Form):
 
 
 class CustomerPasswordSetForm(forms.ModelForm):
+    error_messages = {
+        'password_mismatch': _('The two password fields didn’t match.'),
+    }
     password = forms.CharField(
         label=_("Password"),
         strip=False,
@@ -71,7 +74,7 @@ class CustomerPasswordSetForm(forms.ModelForm):
 
     def save(self, commit=True):
         customer = super().save(commit=False)
-        customer.set_password(self.cleaned_data["password1"])
+        customer.set_password(self.cleaned_data["password"])
         if commit:
             customer.save()
         return customer

@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, TemplateView
-from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm
+from django.views.generic import FormView, TemplateView, UpdateView
+from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm, \
+    CustomerPasswordSetForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time, set_phone_number_session
 from django.contrib.auth import authenticate, login
@@ -93,3 +94,9 @@ class CustomerPasswordConfirmView(FormView):
             return redirect('accounts:customer-password-confirm')
 
 
+@method_decorator(login_required, name='dispatch')
+class CustomerSetPasswordView(UpdateView):
+    model = Customer
+    form_class = CustomerPasswordSetForm
+    success_url = reverse_lazy('accounts:customer-login-register')
+    template_name = 'accounts/customer/password_set.html'
