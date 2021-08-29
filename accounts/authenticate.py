@@ -1,17 +1,16 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import BaseBackend
-from django.db.models import Q
 
-User = get_user_model()
+from accounts.models import ServiceProvider
 
 
 class ServiceProviderAuthentication(BaseBackend):
-    def authenticate(self, request, username_email=None, password=None):
+    def authenticate(self, request, username=None, password=None):
         try:
-            user = User.objects.get(Q(username=username_email) | Q(email=username_email), password=password)
+            user = ServiceProvider.objects.get(username=username, password=password)
             return user
 
-        except User.DoesNotExist:
+        except ServiceProvider.DoesNotExist:
             return None
 
     def get_user(self, user_id):
