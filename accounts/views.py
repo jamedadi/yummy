@@ -43,7 +43,7 @@ class CustomerPhoneNumberConfirmView(FormView):
     def form_valid(self, form):
         phone_number = '98' + self.request.session['phone_number']
         form_code = int(form.cleaned_data['code'])
-        session_code = self.request.get('code', None)
+        session_code = self.request.session.get('code', None)
 
         if session_code:
             if session_code == form_code:
