@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -34,6 +35,7 @@ class ServiceProviderLoginView(FormView):
         return super().form_valid(form)
 
 
+@method_decorator(login_required(), name='dispatch')
 class ServiceProviderProfileView(TemplateView):
     template_name = 'accounts/service_provider/profile.html'
 
