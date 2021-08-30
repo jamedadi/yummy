@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 from accounts.models import Customer
-from address.models import Address
+from address.models import CustomerAddress
 from library.models import BaseModel
 import uuid
 
@@ -11,7 +11,7 @@ class Invoice(BaseModel):
                                  on_delete=models.SET_NULL, null=True)
     price = models.IntegerField(verbose_name=_('price'))
     is_paid = models.BooleanField(verbose_name=_('is paid'), default=False)
-    address = models.ForeignKey(Address, verbose_name=_('address'), related_name='invoices', on_delete=models.SET_NULL,
+    address = models.ForeignKey(CustomerAddress, verbose_name=_('address'), related_name='invoices', on_delete=models.SET_NULL,
                                 null=True, blank=True)
 
     class Meta:

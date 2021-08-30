@@ -46,19 +46,13 @@ class Area(BaseModel):
         db_table = 'area'
 
 
-class BaseAddress(BaseModel):
-    state = models.ForeignKey(State, verbose_name=_('state'), related_name='addresses', on_delete=models.CASCADE)
-    city = models.ForeignKey(City, verbose_name=_('city'), related_name='addresses', on_delete=models.CASCADE)
-    area = models.ForeignKey(Area, verbose_name=_('area'), related_name='addresses', on_delete=models.CASCADE)
+class CustomerAddress(BaseModel):
+    user = models.ForeignKey(Customer, verbose_name=_('customer'), related_name='c_addresses', on_delete=models.CASCADE)
+    state = models.ForeignKey(State, verbose_name=_('state'), related_name='c_addresses', on_delete=models.CASCADE)
+    city = models.ForeignKey(City, verbose_name=_('city'), related_name='c_addresses', on_delete=models.CASCADE)
+    area = models.ForeignKey(Area, verbose_name=_('area'), related_name='c_addresses', on_delete=models.CASCADE)
     floor = models.SmallIntegerField(verbose_name=_('floor'))
     plaque = models.SmallIntegerField(verbose_name=_('plaque'))
-
-    class Meta:
-        abstract = True
-
-
-class CustomerAddress(BaseAddress):
-    user = models.ForeignKey(Customer, verbose_name=_('customer'), related_name='addresses', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.user} - {self.city} - {self.area}'
@@ -69,7 +63,12 @@ class CustomerAddress(BaseAddress):
         db_table = 'customer_address'
 
 
-class ServiceAddress(BaseAddress):
+class ServiceAddress(BaseModel):
+    state = models.ForeignKey(State, verbose_name=_('state'), related_name='s_addresses', on_delete=models.CASCADE)
+    city = models.ForeignKey(City, verbose_name=_('city'), related_name='s_addresses', on_delete=models.CASCADE)
+    area = models.ForeignKey(Area, verbose_name=_('area'), related_name='s_addresses', on_delete=models.CASCADE)
+    floor = models.SmallIntegerField(verbose_name=_('floor'))
+    plaque = models.SmallIntegerField(verbose_name=_('plaque'))
 
     def __str__(self):
         return f'{self.city} - {self.area}'

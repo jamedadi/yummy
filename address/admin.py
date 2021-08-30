@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import State, City, Area, Address
+from .models import State, City, Area, ServiceAddress, CustomerAddress
 
 
 @admin.register(State)
@@ -22,8 +22,15 @@ class AreaAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-@admin.register(Address)
+@admin.register(ServiceAddress)
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('state', 'city', 'area', 'floor', 'plaque')
+    list_filter = ('state', 'city')
+    search_fields = ('area', 'floor', 'plaque')
+
+
+@admin.register(CustomerAddress)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'state', 'city', 'area', 'floor', 'plaque')
     list_filter = ('state', 'city')
     search_fields = ('area', 'floor', 'plaque')
