@@ -80,6 +80,12 @@ class CustomerPasswordSetForm(forms.ModelForm):
         return customer
 
 
+class CustomerProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ('first_name', 'last_name')
+
+
 class ServiceProviderRegistrationForm(forms.ModelForm):
     username = forms.CharField(
         max_length=30,
