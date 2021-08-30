@@ -13,7 +13,7 @@ from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, C
     CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, \
-    IsCustomer, IsServiceProvider, can_set_password, CheckCustomerAccessPk, CheckServiceProviderAccessPk
+    IsCustomer, IsServiceProvider, CheckCustomerAccessPk, CheckServiceProviderAccessPk
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
