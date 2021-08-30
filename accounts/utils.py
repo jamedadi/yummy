@@ -57,5 +57,9 @@ def check_is_not_authenticated(user):
     return not user.is_authenticated
 
 
+def can_set_password(user, **kwargs):
+    return user.pk == kwargs['pk'] and not user.password
+
+
 def check_user_pk(user, **kwargs):
     return user.pk == kwargs['pk']

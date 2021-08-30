@@ -11,7 +11,8 @@ from django.contrib.auth.hashers import make_password
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm, \
     CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
-from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, user_test
+from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, user_test, \
+    can_set_password
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
@@ -109,6 +110,7 @@ class CustomerPasswordConfirmView(FormView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+@method_decorator(user_test(can_set_password, login_url=reverse_lazy('accounts:customer-profile')), name='dispatch')
 class CustomerSetPasswordView(UpdateView):
     model = Customer
     form_class = CustomerPasswordSetForm
