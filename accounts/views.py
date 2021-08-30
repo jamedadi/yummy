@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -126,6 +127,13 @@ class CustomerProfileUpdateView(UpdateView):
     form_class = CustomerProfileUpdateForm
     success_url = reverse_lazy('accounts:customer-profile')
     template_name = 'accounts/customer/profile_update.html'
+
+
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class CustomerChangePasswordView(PasswordChangeView):
+    template_name = 'accounts/customer/change_password.html'
+    success_url = reverse_lazy('accounts:customer-profile')
 
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')

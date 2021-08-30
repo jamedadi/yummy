@@ -11,7 +11,9 @@
     {% if not request.user.password %}
         <br>
         <a href="{% url 'accounts:customer-set-password' request.user.pk %}">Set password</a>
-        <br>
+    {% else %}
+        <a href="{% url 'accounts:customer-change-password' %}">Change password</a>
+        <br><br>
     {% endif %}
     <a href="{% url 'accounts:customer-logout' %}">Logout</a>
 
