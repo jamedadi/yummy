@@ -123,33 +123,6 @@ class ServiceProviderRegistrationForm(forms.ModelForm):
             'password': forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
         }
 
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        try:
-            ServiceProvider.objects.get(username=username)
-        except ServiceProvider.DoesNotExist:
-            return username
-        else:
-            raise ValidationError(f"username {username} already exists")
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        try:
-            ServiceProvider.objects.get(email=email)
-        except ServiceProvider.DoesNotExist:
-            return email
-        else:
-            raise ValidationError(f"email {email} already exists")
-
-    def clean_phone_number(self):
-        phone_number = self.cleaned_data['phone_number']
-        try:
-            ServiceProvider.objects.get(phone_number=phone_number)
-        except ServiceProvider.DoesNotExist:
-            return phone_number
-        else:
-            raise ValidationError(f"phone_number {phone_number} already exists")
-
     def clean_confirm_password(self):
         if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
             raise ValidationError('passwords not equal!')
