@@ -12,7 +12,7 @@ from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, C
     CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, user_test, \
-    can_set_password
+    can_set_password, check_user_pk
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
@@ -120,11 +120,12 @@ class CustomerSetPasswordView(UpdateView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+@method_decorator(user_test(check_user_pk, login_url=reverse_lazy('accounts:customer-profile')), name='dispatch')
 class CustomerProfileUpdateView(UpdateView):
     model = Customer
     form_class = CustomerProfileUpdateForm
     success_url = reverse_lazy('accounts:customer-profile')
-    template_name = None
+    template_name = 'accounts/customer/profile_update.html'
 
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
