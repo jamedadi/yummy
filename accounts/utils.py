@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.shortcuts import resolve_url
 
+from accounts.models import Customer, ServiceProvider
+
 
 def check_expire_time(request):
     try:
@@ -53,6 +55,7 @@ def user_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME
     return decorator
 
 
+# TODO: raise 403 in user_tests_functions
 def check_is_not_authenticated(user):
     return not user.is_authenticated
 
@@ -63,3 +66,11 @@ def can_set_password(user, **kwargs):
 
 def check_user_pk(user, **kwargs):
     return user.pk == kwargs['pk']
+
+
+def is_customer(user):
+    return isinstance(user, Customer)
+
+
+def is_service_provider(user):
+    return isinstance(user, ServiceProvider)

@@ -13,11 +13,12 @@ from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, C
     CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, user_test, \
-    can_set_password, check_user_pk
+    can_set_password, check_user_pk, is_customer
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+@method_decorator(user_test(is_customer), name='dispatch')
 class ProfileView(TemplateView):
     template_name = 'accounts/customer/profile.html'
 
