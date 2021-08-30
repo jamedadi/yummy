@@ -51,6 +51,8 @@ class CustomerAddress(BaseModel):
     state = models.ForeignKey(State, verbose_name=_('state'), related_name='c_addresses', on_delete=models.CASCADE)
     city = models.ForeignKey(City, verbose_name=_('city'), related_name='c_addresses', on_delete=models.CASCADE)
     area = models.ForeignKey(Area, verbose_name=_('area'), related_name='c_addresses', on_delete=models.CASCADE)
+    street = models.TextField()
+    alley = models.TextField()
     floor = models.SmallIntegerField(verbose_name=_('floor'))
     plaque = models.SmallIntegerField(verbose_name=_('plaque'))
 
@@ -67,6 +69,8 @@ class ServiceAddress(BaseModel):
     state = models.ForeignKey(State, verbose_name=_('state'), related_name='s_addresses', on_delete=models.CASCADE)
     city = models.ForeignKey(City, verbose_name=_('city'), related_name='s_addresses', on_delete=models.CASCADE)
     area = models.ForeignKey(Area, verbose_name=_('area'), related_name='s_addresses', on_delete=models.CASCADE)
+    street = models.TextField()
+    alley = models.TextField()
     floor = models.SmallIntegerField(verbose_name=_('floor'))
     plaque = models.SmallIntegerField(verbose_name=_('plaque'))
 
