@@ -2,8 +2,14 @@ from datetime import datetime, timedelta
 from random import randint
 
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.exceptions import ValidationError
 
 from accounts.models import Customer, ServiceProvider
+
+
+def phone_number_validator(value):
+    if not value.startswith('98') or len(value) != 12:
+        raise ValidationError('phone number must be like 98912*******')
 
 
 def check_expire_time(request):
