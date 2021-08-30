@@ -44,6 +44,7 @@ class ServiceAddressCreateView(CreateView):
     model = ServiceAddress
     form_class = ServiceAddressCreateUpdateForm
     template_name = 'address/create_update_form.html'
+    success_url = reverse_lazy('accounts:service-provider-profile')
     raise_exception = True
 
     def setup(self, request, *args, **kwargs):
