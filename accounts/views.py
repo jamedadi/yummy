@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test as user_test
 from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -12,14 +12,13 @@ from django.contrib.auth.hashers import make_password
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm, \
     CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
-from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, user_test, \
-    can_set_password, check_user_pk, is_customer
+from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, \
+    IsCustomer, IsServiceProvider, can_set_password, CheckCustomerAccessPk, CheckServiceProviderAccessPk
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-@method_decorator(user_test(is_customer), name='dispatch')
-class ProfileView(TemplateView):
+class CustomerProfileView(IsCustomer, TemplateView):
     template_name = 'accounts/customer/profile.html'
 
 
@@ -113,7 +112,7 @@ class CustomerPasswordConfirmView(FormView):
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
 @method_decorator(user_test(can_set_password, login_url=reverse_lazy('accounts:customer-profile')), name='dispatch')
-class CustomerSetPasswordView(UpdateView):
+class CustomerSetPasswordView(CheckCustomerAccessPk, UpdateView):
     model = Customer
     form_class = CustomerPasswordSetForm
     success_url = reverse_lazy('accounts:customer-login-register')
@@ -122,8 +121,7 @@ class CustomerSetPasswordView(UpdateView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-@method_decorator(user_test(check_user_pk, login_url=reverse_lazy('accounts:customer-profile')), name='dispatch')
-class CustomerProfileUpdateView(UpdateView):
+class CustomerProfileUpdateView(CheckCustomerAccessPk, UpdateView):
     model = Customer
     form_class = CustomerProfileUpdateForm
     success_url = reverse_lazy('accounts:customer-profile')
@@ -132,7 +130,7 @@ class CustomerProfileUpdateView(UpdateView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerChangePasswordView(PasswordChangeView):
+class CustomerChangePasswordView(IsCustomer, PasswordChangeView):
     template_name = 'accounts/customer/change_password.html'
     success_url = reverse_lazy('accounts:customer-profile')
 
@@ -170,12 +168,13 @@ class ServiceProviderLoginView(FormView):
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
-class ServiceProviderProfileView(TemplateView):
+class ServiceProviderProfileView(IsServiceProvider, TemplateView):
     template_name = 'accounts/service_provider/profile.html'
+    raise_exception = True
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class ServiceProviderChangePasswordView(PasswordChangeView):
+class ServiceProviderChangePasswordView(CheckServiceProviderAccessPk, PasswordChangeView):
     template_name = 'accounts/service_provider/change_password.html'
     success_url = reverse_lazy('accounts:service-provider-profile')

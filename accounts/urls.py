@@ -2,7 +2,7 @@ from django.urls import path, reverse_lazy
 from django.contrib.auth.views import LogoutView
 
 from accounts.views import CustomerLoginRegisterView, CustomerPhoneNumberConfirmView, CustomerPasswordConfirmView, \
-    ProfileView, CustomerSetPasswordView, ServiceProviderRegistrationView, ServiceProviderLoginView, \
+    CustomerProfileView, CustomerSetPasswordView, ServiceProviderRegistrationView, ServiceProviderLoginView, \
     ServiceProviderProfileView, CustomerProfileUpdateView, CustomerChangePasswordView, ServiceProviderChangePasswordView
 
 app_name = 'accounts'
@@ -11,7 +11,7 @@ urlpatterns = [
     path('customer/login-register/', CustomerLoginRegisterView.as_view(), name='customer-login-register'),
     path('customer/code-confirm/', CustomerPhoneNumberConfirmView.as_view(), name='customer-code-confirm'),
     path('customer/password-confirm/', CustomerPasswordConfirmView.as_view(), name='customer-password-confirm'),
-    path('customer/profile/', ProfileView.as_view(), name='customer-profile'),
+    path('customer/profile/', CustomerProfileView.as_view(), name='customer-profile'),
     path('customer/<int:pk>/profile-update/', CustomerProfileUpdateView.as_view(), name='customer-profile-update'),
     path('customer/<int:pk>/set-password/', CustomerSetPasswordView.as_view(), name='customer-set-password'),
     path('customer/change-password/', CustomerChangePasswordView.as_view(), name='customer-change-password'),
