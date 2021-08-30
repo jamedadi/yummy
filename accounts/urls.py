@@ -3,7 +3,7 @@ from django.contrib.auth.views import LogoutView
 
 from accounts.views import CustomerLoginRegisterView, CustomerPhoneNumberConfirmView, CustomerPasswordConfirmView, \
     ProfileView, CustomerSetPasswordView, ServiceProviderRegistrationView, ServiceProviderLoginView, \
-    ServiceProviderProfileView, CustomerProfileUpdateView, CustomerChangePasswordView
+    ServiceProviderProfileView, CustomerProfileUpdateView, CustomerChangePasswordView, ServiceProviderChangePasswordView
 
 app_name = 'accounts'
 
@@ -22,6 +22,8 @@ urlpatterns = [
     ),
     path('serviceprovider/login/', ServiceProviderLoginView.as_view(), name='service-provider-login'),
     path('serviceprovider/profile/', ServiceProviderProfileView.as_view(), name='service-provider-profile'),
+    path('serviceprovider/change-password/', ServiceProviderChangePasswordView.as_view(),
+         name='service-provider-change-password'),
     path('serviceprovider/logout/', LogoutView.as_view(next_page=reverse_lazy('accounts:service-provider-login')),
          name='service-provider-logout'),
 ]

@@ -171,3 +171,10 @@ class ServiceProviderLoginView(FormView):
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceProviderProfileView(TemplateView):
     template_name = 'accounts/service_provider/profile.html'
+
+
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class ServiceProviderChangePasswordView(PasswordChangeView):
+    template_name = 'accounts/service_provider/change_password.html'
+    success_url = reverse_lazy('accounts:service-provider-profile')
