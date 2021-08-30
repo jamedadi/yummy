@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm, \
-    CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm
+    CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated
 
@@ -111,6 +111,15 @@ class CustomerSetPasswordView(UpdateView):
     form_class = CustomerPasswordSetForm
     success_url = reverse_lazy('accounts:customer-login-register')
     template_name = 'accounts/customer/password_set.html'
+
+
+@method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class CustomerProfileUpdateView(UpdateView):
+    model = Customer
+    form_class = CustomerProfileUpdateForm
+    success_url = reverse_lazy('accounts:customer-profile')
+    template_name = None
 
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
