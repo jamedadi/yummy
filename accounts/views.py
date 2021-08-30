@@ -111,12 +111,15 @@ class CustomerPasswordConfirmView(FormView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-@method_decorator(user_test(can_set_password, login_url=reverse_lazy('accounts:customer-profile')), name='dispatch')
 class CustomerSetPasswordView(CheckCustomerAccessPk, UpdateView):
     model = Customer
     form_class = CustomerPasswordSetForm
     success_url = reverse_lazy('accounts:customer-login-register')
     template_name = 'accounts/customer/password_set.html'
+
+    def test_func(self):
+        test_result = super().test_func()
+        return test_result and not self.request.user.password
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
