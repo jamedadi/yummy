@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test as user_test
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -11,7 +11,7 @@ from django.contrib.auth.hashers import make_password
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm, \
     CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
-from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated
+from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, user_test
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
@@ -21,7 +21,8 @@ class ProfileView(TemplateView):
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
-@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:customer-profile')))
+@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:customer-profile')),
+                  name='dispatch')
 class CustomerLoginRegisterView(FormView):
     form_class = CustomerLoginRegisterForm
     template_name = 'accounts/customer/login_register.html'
@@ -44,7 +45,8 @@ class CustomerLoginRegisterView(FormView):
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
-@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:customer-profile')))
+@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:customer-profile')),
+                  name='dispatch')
 class CustomerPhoneNumberConfirmView(FormView):
     form_class = CustomerCodeConfirmForm
     template_name = 'accounts/customer/phone_number_confirm.html'
@@ -83,7 +85,8 @@ class CustomerPhoneNumberConfirmView(FormView):
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
-@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:customer-profile')))
+@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:customer-profile')),
+                  name='dispatch')
 class CustomerPasswordConfirmView(FormView):
     form_class = CustomerPasswordForm
     template_name = 'accounts/customer/password_confirm.html'
@@ -123,7 +126,8 @@ class CustomerProfileUpdateView(UpdateView):
 
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
-@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:service-provider-profile')))
+@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:service-provider-profile')),
+                  name='dispatch')
 class ServiceProviderRegistrationView(FormView):
     form_class = ServiceProviderRegistrationForm
     template_name = 'accounts/service_provider/registration.html'
@@ -137,7 +141,8 @@ class ServiceProviderRegistrationView(FormView):
 
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
-@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:service-provider-profile')))
+@method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:service-provider-profile')),
+                  name='dispatch')
 class ServiceProviderLoginView(FormView):
     form_class = ServiceProviderLoginForm
     template_name = 'accounts/service_provider/login.html'
