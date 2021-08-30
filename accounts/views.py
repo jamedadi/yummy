@@ -137,6 +137,10 @@ class CustomerChangePasswordView(IsCustomer, PasswordChangeView):
     template_name = 'accounts/customer/change_password.html'
     success_url = reverse_lazy('accounts:customer-profile')
 
+    def test_func(self):
+        test_result = super().test_func()
+        return test_result and self.request.user.password
+
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
 @method_decorator(user_test(check_is_not_authenticated, login_url=reverse_lazy('accounts:service-provider-profile')),
