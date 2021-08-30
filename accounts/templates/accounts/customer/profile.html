@@ -9,7 +9,6 @@
     <a href="{% url 'accounts:customer-profile-update' request.user.pk %}">Update profile</a><br><br>
 
     {% if not request.user.password %}
-        <br>
         <a href="{% url 'accounts:customer-set-password' request.user.pk %}">Set password</a>
         <br><br>
     {% else %}
