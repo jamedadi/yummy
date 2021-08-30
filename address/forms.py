@@ -3,7 +3,7 @@ from django import forms
 from address.models import CustomerAddress
 
 
-class CustomerAddressCreateForm(forms.ModelForm):
+class CustomerAddressCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomerAddress
         fields = ('state', 'city', 'area', 'street', 'alley', 'floor', 'plaque')
