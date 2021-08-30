@@ -46,15 +46,21 @@ class Area(BaseModel):
         db_table = 'area'
 
 
-class CustomerAddress(BaseModel):
+class BaseAddress(BaseModel):
+    street = models.CharField(max_length=50)
+    alley = models.CharField(max_length=30)
+    floor = models.SmallIntegerField(verbose_name=_('floor'))
+    plaque = models.SmallIntegerField(verbose_name=_('plaque'))
+
+    class Meta:
+        abstract = True
+
+
+class CustomerAddress(BaseAddress):
     user = models.ForeignKey(Customer, verbose_name=_('customer'), related_name='c_addresses', on_delete=models.CASCADE)
     state = models.ForeignKey(State, verbose_name=_('state'), related_name='c_addresses', on_delete=models.CASCADE)
     city = models.ForeignKey(City, verbose_name=_('city'), related_name='c_addresses', on_delete=models.CASCADE)
     area = models.ForeignKey(Area, verbose_name=_('area'), related_name='c_addresses', on_delete=models.CASCADE)
-    street = models.TextField()
-    alley = models.TextField()
-    floor = models.SmallIntegerField(verbose_name=_('floor'))
-    plaque = models.SmallIntegerField(verbose_name=_('plaque'))
 
     def __str__(self):
         return f'{self.user} - {self.city} - {self.area}'
@@ -65,14 +71,10 @@ class CustomerAddress(BaseModel):
         db_table = 'customer_address'
 
 
-class ServiceAddress(BaseModel):
+class ServiceAddress(BaseAddress):
     state = models.ForeignKey(State, verbose_name=_('state'), related_name='s_addresses', on_delete=models.CASCADE)
     city = models.ForeignKey(City, verbose_name=_('city'), related_name='s_addresses', on_delete=models.CASCADE)
     area = models.ForeignKey(Area, verbose_name=_('area'), related_name='s_addresses', on_delete=models.CASCADE)
-    street = models.TextField()
-    alley = models.TextField()
-    floor = models.SmallIntegerField(verbose_name=_('floor'))
-    plaque = models.SmallIntegerField(verbose_name=_('plaque'))
 
     def __str__(self):
         return f'{self.city} - {self.area}'
