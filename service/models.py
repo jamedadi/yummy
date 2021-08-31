@@ -36,7 +36,8 @@ class Service(BaseModel):
         verbose_name=_('address'),
         related_name='services',
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
+        blank=True
     )
 
     def __str__(self):
