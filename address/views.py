@@ -25,7 +25,7 @@ class CustomerAddressCreateView(BaseAddress, IsCustomer, CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        instance.user = self.request.user
+        instance.customer_user = self.request.user
         instance.save()
         return super().form_valid(form)
 
@@ -56,6 +56,16 @@ class CustomerAddressDeleteView(IsCustomer, DeleteView):
         result = super().test_func()
         obj = self.get_object()
         return result and obj.customer_user == self.request.user
+
+
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class CustomerAddressListView(ListView):
+    model = CustomerAddress
+    template_name = 'address/customer_address_list.html'
+    context_object_name = 'addresses'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(customer_user=self.request.user)
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
@@ -98,12 +108,3 @@ class ServiceAddressUpdateView(IsServiceProvider, UpdateView):
         result = super().test_func()
         obj = self.get_object()
         return result and obj.services.service_provider == self.request.user
-
-
-class CustomerAddressListView(ListView):
-    model = CustomerAddress
-    template_name = 'address/customer_address_list.html'
-    context_object_name = 'addresses'
-
-    def get_queryset(self):
-        return super().get_queryset().filter(customer_user=self.request.user)
