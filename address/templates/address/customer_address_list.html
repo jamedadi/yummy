@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+        <ul class="list-group">
+            {% for address in addresses %}
+                <li class="list-group-item">
+                    {{ address.state.name }} - {{ address.city.name }} - {{ address.area.name }} - {{ address.street }}
+                    - {{ address.alley }} - {{ address.floor }} - {{ address.plaque }}
+                    <a href="{% url 'address:customer-address-update' address.id %}" class="btn btn-warning" style="margin-left: 100px; margin-right: 10px">Update</a>
+                    <a href="{% url 'address:customer-address-delete' address.id %}" class="btn btn-danger">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+{% endblock %}

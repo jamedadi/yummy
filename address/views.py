@@ -3,7 +3,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, ListView
 
 from accounts.models import ServiceProvider
 from accounts.utils import IsCustomer, IsServiceProvider
@@ -32,7 +32,7 @@ class CustomerAddressCreateView(BaseAddress, IsCustomer, CreateView):
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
 class CustomerAddressUpdateView(BaseAddress, IsCustomer, UpdateView):
-    success_url = reverse_lazy('accounts:customer-profile')
+    success_url = reverse_lazy('address:customer-address-list')
 
     def test_func(self):
         result = super().test_func()
@@ -47,7 +47,7 @@ class CustomerAddressUpdateView(BaseAddress, IsCustomer, UpdateView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerAddressDeleteView(IsServiceProvider, DeleteView):
+class CustomerAddressDeleteView(IsCustomer, DeleteView):
     model = CustomerAddress
     template_name = 'address/delete_form.html'
     success_url = reverse_lazy('accounts:customer-profile')
@@ -98,3 +98,12 @@ class ServiceAddressUpdateView(IsServiceProvider, UpdateView):
         result = super().test_func()
         obj = self.get_object()
         return result and obj.services.service_provider == self.request.user
+
+
+class CustomerAddressListView(ListView):
+    model = CustomerAddress
+    template_name = 'address/customer_address_list.html'
+    context_object_name = 'addresses'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(customer_user=self.request.user)
