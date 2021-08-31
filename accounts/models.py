@@ -26,7 +26,7 @@ class CustomerManager(UserManager):
 
 
 class Customer(AbstractBaseUser):
-    phone_number = models.CharField(max_length=13, verbose_name=_('phone number'), unique=True)
+    phone_number = models.CharField(max_length=12, verbose_name=_('phone number'), unique=True)
     first_name = models.CharField(_('first name'), max_length=150, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
     is_staff = models.BooleanField(
@@ -75,7 +75,7 @@ class ServiceProvider(AbstractBaseUser):
         },
     )
     email = models.EmailField(_('email address'), blank=True, unique=True)
-    phone_number = models.CharField(max_length=13, verbose_name=_('phone number'), unique=True)
+    phone_number = models.CharField(max_length=12, verbose_name=_('phone number'), unique=True)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,

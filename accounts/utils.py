@@ -1,6 +1,16 @@
 from datetime import datetime, timedelta
 from random import randint
 
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core.exceptions import ValidationError
+
+from accounts.models import Customer, ServiceProvider
+
+
+def phone_number_validator(value):
+    if not value.startswith('98') or len(value) != 12:
+        raise ValidationError('phone number must be like 98912*******')
+
 
 def check_expire_time(request):
     try:
@@ -21,3 +31,25 @@ def set_phone_number_session(request, phone_number):
     request.session['created_time'] = str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     print(request.session['code'])
     print(request.session['created_time'])
+
+
+def check_is_not_authenticated(user):
+    return not user.is_authenticated
+
+
+def can_set_password(user):
+    return not user.password
+
+
+class IsCustomer(UserPassesTestMixin):
+    raise_exception = True
+
+    def test_func(self):
+        return isinstance(self.request.user, Customer)
+
+
+class IsServiceProvider(UserPassesTestMixin):
+    raise_exception = True
+
+    def test_func(self):
+        return isinstance(self.request.user, ServiceProvider)

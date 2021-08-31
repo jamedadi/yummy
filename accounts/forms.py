@@ -6,13 +6,15 @@ from django.core.validators import int_list_validator
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import ServiceProvider, Customer
+from accounts.utils import phone_number_validator
 
 
 class CustomerLoginRegisterForm(forms.Form):
-    phone_number = forms.CharField(max_length=11,
-                                   min_length=11,
-                                   validators=[int_list_validator(message=_('only digits are accepted'))],
-                                   error_messages={'min_length': _('phone number must have 11 digits')},
+    phone_number = forms.CharField(max_length=12,
+                                   validators=[
+                                       int_list_validator(message=_('only digits are accepted')),
+                                       phone_number_validator
+                                   ],
                                    widget=forms.TextInput(
                                        attrs={'class': 'form-control', 'placeholder': 'phone number'})
                                    )
@@ -80,6 +82,12 @@ class CustomerPasswordSetForm(forms.ModelForm):
         return customer
 
 
+class CustomerProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ('first_name', 'last_name')
+
+
 class ServiceProviderRegistrationForm(forms.ModelForm):
     username = forms.CharField(
         max_length=30,
@@ -90,6 +98,14 @@ class ServiceProviderRegistrationForm(forms.ModelForm):
                 'class': 'form-control'}
         )
     )
+    phone_number = forms.CharField(max_length=12,
+                                   validators=[
+                                       int_list_validator(message=_('only digits are accepted')),
+                                       phone_number_validator
+                                   ],
+                                   widget=forms.TextInput(
+                                       attrs={'class': 'form-control', 'placeholder': 'phone number'})
+                                   )
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
@@ -106,14 +122,6 @@ class ServiceProviderRegistrationForm(forms.ModelForm):
             'phone_number': forms.TextInput(attrs={'placeholder': 'Phone Number', 'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
         }
-
-    def clean_phone_number(self):
-        phone = self.cleaned_data['phone_number']
-
-        if phone.startswith('98') and len(phone) == 12:
-            return self.cleaned_data['phone_number']
-        else:
-            raise ValidationError('phone_number invalid!')
 
     def clean_confirm_password(self):
         if self.cleaned_data['password'] != self.cleaned_data['confirm_password']:
