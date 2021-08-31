@@ -1,9 +1,9 @@
-{% extends 'accounts/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
-    <h2>Your Profile</h2>
-    <h4> your username: {{ request.user.username }}</h4>
-    <h4> your email: {{ request.user.email }}</h4>
-    <h4> your phone number: {{ request.user.phone_number }}</h4>
+    <h4 class="text-warning"> Profile</h4>
+    <p> Your username : {{ request.user.username }}</p>
+    <p> Your email : {{ request.user.email }}</p>
+    <p> Your phone number : {{ request.user.phone_number }}</p>
     <br><br>
     <a href="{% url 'accounts:service-provider-change-password' %}">Change password</a>
 {% endblock %}

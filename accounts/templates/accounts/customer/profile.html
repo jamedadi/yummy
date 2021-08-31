@@ -1,4 +1,4 @@
-{% extends 'accounts/base.html' %}
+{% extends 'base.html' %}
 {% block title %} Profile {% endblock %}
 {% block content %}
     <h4 class="text-warning"> Profile</h4>
@@ -6,6 +6,8 @@
     <p>First name : {{ request.user.first_name }}</p>
     <p>Last name : {{ request.user.last_name }}</p>
     <br>
+    <a href="{% url 'address:customer-address-list' %}">Address list</a><br><br>
+
     <a href="{% url 'accounts:customer-profile-update' %}">Update profile</a><br><br>
 
     {% if not request.user.password %}
@@ -15,6 +17,5 @@
         <a href="{% url 'accounts:customer-change-password' %}">Change password</a>
         <br><br>
     {% endif %}
-    <a href="{% url 'accounts:customer-logout' %}">Logout</a>
 
 {% endblock %}
