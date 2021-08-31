@@ -25,6 +25,7 @@ class CustomerAddressCreateView(BaseAddress, CreateView):
     def test_func(self):
         if not isinstance(self.request.user, Customer):
             return False
+        return True
 
     def form_valid(self, form):
         instance = form.save(commit=False)
@@ -44,6 +45,7 @@ class CustomerAddressUpdateView(BaseAddress, UpdateView):
         obj = self.get_object()
         if obj.services.service_provider != self.request.user:
             return False
+        return True
 
     def form_valid(self, form):
         instance = form.save(commit=False)
@@ -65,6 +67,7 @@ class CustomerAddressDeleteView(CustomUserPasses, DeleteView):
         obj = self.get_object()
         if obj.customer_user != self.request.user:
             return False
+        return True
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
@@ -86,6 +89,7 @@ class ServiceAddressCreateView(CustomUserPasses, CreateView):
             return False
         if self.service.address:
             return False, True, reverse_lazy('accounts:service-provider-profile')
+        return True
 
     def form_valid(self, form):
         with transaction.atomic():
@@ -109,3 +113,4 @@ class ServiceAddressUpdateView(CustomUserPasses, UpdateView):
         obj = self.get_object()
         if obj.services.service_provider != self.request.user:
             return False
+        return True
