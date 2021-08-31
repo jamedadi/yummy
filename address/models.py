@@ -57,13 +57,18 @@ class BaseAddress(BaseModel):
 
 
 class CustomerAddress(BaseAddress):
-    user = models.ForeignKey(Customer, verbose_name=_('customer'), related_name='c_addresses', on_delete=models.CASCADE)
+    customer_user = models.ForeignKey(
+        Customer,
+        verbose_name=_('customer'),
+        related_name='c_addresses',
+        on_delete=models.CASCADE
+    )
     state = models.ForeignKey(State, verbose_name=_('state'), related_name='c_addresses', on_delete=models.CASCADE)
     city = models.ForeignKey(City, verbose_name=_('city'), related_name='c_addresses', on_delete=models.CASCADE)
     area = models.ForeignKey(Area, verbose_name=_('area'), related_name='c_addresses', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user} - {self.city} - {self.area}'
+        return f'{self.customer_user} - {self.city} - {self.area}'
 
     class Meta:
         verbose_name = _('CustomerAddress')

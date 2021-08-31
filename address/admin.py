@@ -23,14 +23,14 @@ class AreaAdmin(admin.ModelAdmin):
 
 
 @admin.register(ServiceAddress)
-class AddressAdmin(admin.ModelAdmin):
+class ServiceAddressAdmin(admin.ModelAdmin):
     list_display = ('state', 'city', 'area', 'floor', 'plaque')
     list_filter = ('state', 'city')
     search_fields = ('area', 'floor', 'plaque')
 
 
 @admin.register(CustomerAddress)
-class AddressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'state', 'city', 'area', 'floor', 'plaque')
+class CustomerAddressAdmin(admin.ModelAdmin):
+    list_display = ('customer_user', 'state', 'city', 'area', 'floor', 'plaque')
     list_filter = ('state', 'city')
     search_fields = ('area', 'floor', 'plaque')
