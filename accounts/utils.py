@@ -53,19 +53,3 @@ class IsServiceProvider(UserPassesTestMixin):
 
     def test_func(self):
         return isinstance(self.request.user, ServiceProvider)
-
-
-class CheckCustomerAccessPk(UserPassesTestMixin):
-    raise_exception = True
-
-    def test_func(self):
-        user = self.request.user
-        return isinstance(user, Customer) and user.pk == self.kwargs['pk']
-
-
-class CheckServiceProviderAccessPk(UserPassesTestMixin):
-    raise_exception = True
-
-    def test_func(self):
-        user = self.request.user
-        return isinstance(user, ServiceProvider) and user.pk == self.kwargs['pk']

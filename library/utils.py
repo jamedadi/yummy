@@ -18,9 +18,6 @@ class CustomUserPasses(ABC, UserPassesTestMixin):
     def dispatch(self, request, *args, **kwargs):
         user_test_result = self.test_func()
 
-        if user_test_result is None:
-            return super().dispatch(request, *args, **kwargs)
-
         if isinstance(self.test_func(), tuple):
             user_test_bool, redirect, path_url = user_test_result
             if not user_test_bool:

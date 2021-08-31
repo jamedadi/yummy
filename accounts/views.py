@@ -13,7 +13,7 @@ from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, C
     CustomerPasswordSetForm, ServiceProviderRegistrationForm, ServiceProviderLoginForm, CustomerProfileUpdateForm
 from accounts.models import Customer
 from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, \
-    IsCustomer, IsServiceProvider, CheckCustomerAccessPk, CheckServiceProviderAccessPk
+    IsCustomer, IsServiceProvider
 from library.utils import CustomUserPasses
 
 
@@ -121,21 +121,25 @@ class CustomerSetPasswordView(CustomUserPasses, UpdateView):
     def test_func(self):
         if not isinstance(self.request.user, Customer):
             return False
-        if self.kwargs['pk'] != self.request.user.pk:
-            return False
         if self.request.user.password:
             return False, True, reverse_lazy("accounts:customer-change-password")
 
         return True
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerProfileUpdateView(CheckCustomerAccessPk, UpdateView):
+class CustomerProfileUpdateView(IsCustomer, UpdateView):
     model = Customer
     form_class = CustomerProfileUpdateForm
     success_url = reverse_lazy('accounts:customer-profile')
     template_name = 'accounts/customer/profile_update.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
@@ -148,7 +152,7 @@ class CustomerChangePasswordView(CustomUserPasses, PasswordChangeView):
         if not isinstance(self.request.user, Customer):
             return False
         if not self.request.user.password:
-            return False, True, reverse_lazy("accounts:customer-set-password", kwargs={'pk': self.request.user.pk})
+            return False, True, reverse_lazy("accounts:customer-set-password")
         return True
 
 
@@ -192,6 +196,6 @@ class ServiceProviderProfileView(IsServiceProvider, TemplateView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class ServiceProviderChangePasswordView(CheckServiceProviderAccessPk, PasswordChangeView):
+class ServiceProviderChangePasswordView(IsServiceProvider, PasswordChangeView):
     template_name = 'accounts/service_provider/change_password.html'
     success_url = reverse_lazy('accounts:service-provider-profile')

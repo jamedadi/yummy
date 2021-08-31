@@ -6,10 +6,10 @@
     <p>First name : {{ request.user.first_name }}</p>
     <p>Last name : {{ request.user.last_name }}</p>
     <br>
-    <a href="{% url 'accounts:customer-profile-update' request.user.pk %}">Update profile</a><br><br>
+    <a href="{% url 'accounts:customer-profile-update' %}">Update profile</a><br><br>
 
     {% if not request.user.password %}
-        <a href="{% url 'accounts:customer-set-password' request.user.pk %}">Set password</a>
+        <a href="{% url 'accounts:customer-set-password' %}">Set password</a>
         <br><br>
     {% else %}
         <a href="{% url 'accounts:customer-change-password' %}">Change password</a>
