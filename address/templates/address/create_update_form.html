@@ -1,8 +1,10 @@
-{% extends 'address/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="submit" class="btn btn-warning">
     </form>
+    <a href="{% url 'address:customer-address-list' %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+
 {% endblock %}
