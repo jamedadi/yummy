@@ -5,7 +5,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, UpdateView, DeleteView
 
-from accounts.models import Customer, ServiceProvider
+from accounts.models import ServiceProvider
+from accounts.utils import IsCustomer, IsServiceProvider
 from address.forms import CustomerAddressCreateUpdateForm, ServiceAddressCreateUpdateForm
 from address.models import CustomerAddress, ServiceAddress
 from library.utils import CustomUserPasses
@@ -19,13 +20,8 @@ class BaseAddress:
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerAddressCreateView(BaseAddress, CreateView):
+class CustomerAddressCreateView(BaseAddress, IsCustomer, CreateView):
     success_url = reverse_lazy('accounts:customer-profile')
-
-    def test_func(self):
-        if not isinstance(self.request.user, Customer):
-            return False
-        return True
 
     def form_valid(self, form):
         instance = form.save(commit=False)
@@ -35,17 +31,13 @@ class CustomerAddressCreateView(BaseAddress, CreateView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerAddressUpdateView(BaseAddress, UpdateView):
+class CustomerAddressUpdateView(BaseAddress, IsCustomer, UpdateView):
     success_url = reverse_lazy('accounts:customer-profile')
 
     def test_func(self):
-        if not isinstance(self.request.user, Customer):
-            return False
-
+        result = super().test_func()
         obj = self.get_object()
-        if obj.services.service_provider != self.request.user:
-            return False
-        return True
+        return result and obj.customer_user == self.request.user
 
     def form_valid(self, form):
         instance = form.save(commit=False)
@@ -55,19 +47,15 @@ class CustomerAddressUpdateView(BaseAddress, UpdateView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerAddressDeleteView(CustomUserPasses, DeleteView):
+class CustomerAddressDeleteView(IsServiceProvider, DeleteView):
     model = CustomerAddress
     template_name = 'address/delete_form.html'
     success_url = reverse_lazy('accounts:customer-profile')
 
     def test_func(self):
-        if not isinstance(self.request.user, Customer):
-            return False
-
+        result = super().test_func()
         obj = self.get_object()
-        if obj.customer_user != self.request.user:
-            return False
-        return True
+        return result and obj.customer_user == self.request.user
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
@@ -100,17 +88,13 @@ class ServiceAddressCreateView(CustomUserPasses, CreateView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
-class ServiceAddressUpdateView(CustomUserPasses, UpdateView):
+class ServiceAddressUpdateView(IsServiceProvider, UpdateView):
     model = ServiceAddress
     form_class = ServiceAddressCreateUpdateForm
     template_name = 'address/create_update_form.html'
     success_url = reverse_lazy('accounts:service-provider-profile')
 
     def test_func(self):
-        if not isinstance(self.request.user, ServiceProvider):
-            return False
-
+        result = super().test_func()
         obj = self.get_object()
-        if obj.services.service_provider != self.request.user:
-            return False
-        return True
+        return result and obj.services.service_provider == self.request.user
