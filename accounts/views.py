@@ -14,6 +14,7 @@ from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, C
 from accounts.models import Customer
 from accounts.utils import check_expire_time, set_phone_number_session, check_is_not_authenticated, \
     IsCustomer, IsServiceProvider, CheckCustomerAccessPk, CheckServiceProviderAccessPk
+from library.utils import CustomUserPasses
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
@@ -111,15 +112,21 @@ class CustomerPasswordConfirmView(FormView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerSetPasswordView(CheckCustomerAccessPk, UpdateView):
+class CustomerSetPasswordView(CustomUserPasses, UpdateView):
     model = Customer
     form_class = CustomerPasswordSetForm
     success_url = reverse_lazy('accounts:customer-login-register')
     template_name = 'accounts/customer/password_set.html'
 
     def test_func(self):
-        test_result = super().test_func()
-        return test_result and not self.request.user.password
+        if not isinstance(self.request.user, Customer):
+            return False
+        if self.kwargs['pk'] != self.request.user.pk:
+            return False
+        if self.request.user.password:
+            return False, True, reverse_lazy("accounts:customer-change-password")
+
+        return True
 
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
@@ -133,13 +140,16 @@ class CustomerProfileUpdateView(CheckCustomerAccessPk, UpdateView):
 
 @method_decorator(require_http_methods(['GET', 'POST']), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CustomerChangePasswordView(IsCustomer, PasswordChangeView):
+class CustomerChangePasswordView(CustomUserPasses, PasswordChangeView):
     template_name = 'accounts/customer/change_password.html'
     success_url = reverse_lazy('accounts:customer-profile')
 
     def test_func(self):
-        test_result = super().test_func()
-        return test_result and self.request.user.password
+        if not isinstance(self.request.user, Customer):
+            return False
+        if not self.request.user.password:
+            return False, True, reverse_lazy("accounts:customer-set-password", kwargs={'pk': self.request.user.pk})
+        return True
 
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
