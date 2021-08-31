@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import CustomerAddressCreateView, CustomerAddressUpdateView, CustomerAddressDeleteView, \
-    ServiceAddressCreateView, ServiceAddressUpdateView
+    ServiceAddressCreateView, ServiceAddressUpdateView, CustomerAddressListView
 
 app_name = 'address'
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path('service/update/<int:pk>/', ServiceAddressUpdateView.as_view(), name='service-address-update'),
 
     path('customer/delete/<int:pk>/', CustomerAddressDeleteView.as_view(), name='customer-address-delete'),
+    path('customer/list/', CustomerAddressListView.as_view(), name='customer-address-list'),
 ]
