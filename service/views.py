@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 from accounts.utils import IsServiceProvider
 from service.forms import ServiceCreateForm
@@ -20,3 +20,13 @@ class ServiceCreateView(IsServiceProvider, CreateView):
         instance.service_provider = self.request.user
         instance.save()
         return super().form_valid(form)
+
+
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
+class ServiceListView(IsServiceProvider, ListView):
+    model = Service
+    context_object_name = 'services'
+    template_name = 'service/list.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(service_provider=self.request.user)
