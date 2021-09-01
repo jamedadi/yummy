@@ -3,7 +3,7 @@ from django import forms
 from service.models import Service
 
 
-class ServiceCreateForm(forms.ModelForm):
+class ServiceCreateUpdateForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = ('name', 'service_type', 'minimum_purchase')
