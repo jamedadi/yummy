@@ -5,19 +5,24 @@ from service.models import ServiceCategory
 
 
 class ItemCreateForm(forms.ModelForm):
+    quantity = forms.IntegerField(initial=0)
+
     class Meta:
-        quantity = forms.IntegerField(initial=0)
         model = Item
         fields = ('name', 'price', 'description', 'available', 'image')
 
 
-class ItemUpdateForm(forms.ModelForm):
-    class Meta:
-        quantity = forms.IntegerField()
-        model = Item
-        fields = ('category', 'name', 'price', 'description', 'available', 'image')
+def item_update_form_factory(service=None):
+    class ItemUpdateForm(forms.ModelForm):
+        quantity = forms.IntegerField(initial=0)
 
-    def __init__(self, service=None, *args, **kwargs):
-        super().__init__(service, *args, **kwargs)
-        if service:
-            self.fields['category'].queryset = ServiceCategory.objects.filter(service=service)
+        class Meta:
+            model = Item
+            fields = ('category', 'name', 'price', 'description', 'available', 'image')
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            if service:
+                self.fields['category'].queryset = ServiceCategory.objects.filter(service=service)
+
+    return ItemUpdateForm

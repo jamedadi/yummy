@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import FormView, UpdateView, DetailView
 
 from accounts.utils import IsServiceProvider
-from item.forms import ItemCreateForm, ItemUpdateForm
+from item.forms import ItemCreateForm, item_update_form_factory
 from item.models import Item, ItemLine
 from service.models import Service, ServiceCategory
 
@@ -41,17 +41,26 @@ class ItemUpdateView(IsServiceProvider, UpdateView):
     model = Item
     template_name = 'item/update_form.html'
 
-    def test_func(self):
-        result = super().test_func()
-        return result and self.object.service.service_provider == self.request.user
-
-    def get_form_class(self):
-        return ItemUpdateForm(service=self.object.service)
-
     def get_initial(self):
         initial = super().get_initial()
-        initial['quantity'] = self.object.stock
+        initial['quantity'] = self.get_object().stock
         return initial
+
+    def get_form_class(self):
+        return item_update_form_factory(service=self.get_object().service)
+
+    def form_valid(self, form):
+        item = form.save(commit=False)
+        item.line.quantity = form.cleaned_data['quantity']
+        item.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.get_object().get_absolute_url()
+
+    def test_func(self):
+        result = super().test_func()
+        return result and self.get_object().service.service_provider == self.request.user
 
 
 class ItemDetailView(DetailView):

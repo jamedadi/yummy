@@ -25,11 +25,11 @@
                         <a class="nav-link" href="/admin">Admin Panel</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:customer-logout' %}">Log out</a>
+                        <a class="nav-link" href="/admin/logout">Log out</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'accounts:customer-login-register' %}">Sign up/Login</a>
+                        <a class="nav-link" href="/admin/login">Login</a>
                     </li>
                 {% endif %}
             </ul>

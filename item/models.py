@@ -2,6 +2,7 @@ import random
 import string
 
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 
 from library.models import BaseModel
@@ -30,6 +31,10 @@ class Item(BaseModel):
         verbose_name_plural = _('Items')
         db_table = 'item'
 
+    @property
+    def stock(self):
+        return self.line.quantity
+
     def __str__(self):
         return self.name
 
@@ -40,9 +45,8 @@ class Item(BaseModel):
             self.upc = int(random_digits)
         return super().save(force_insert, force_update, using, update_fields)
 
-    @property
-    def stock(self):
-        return self.line.quantity
+    def get_absolute_url(self):
+        return reverse_lazy("item:detail", kwargs={'pk': self.pk})
 
 
 class ItemLine(BaseModel):

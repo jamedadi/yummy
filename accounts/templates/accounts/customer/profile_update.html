@@ -1,7 +1,7 @@
 {% extends 'accounts/base.html' %}
 {% block title %} Profile Update {% endblock %}
 {% block content %}
-    <h3> Update your pfoile</h3>
+    <h3> Update your profile</h3>
     <form method="post">
         {% csrf_token %}
         {% for field in form %}
