@@ -1,3 +1,5 @@
+from abc import ABC
+
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -56,10 +58,13 @@ class ServiceListView(IsServiceProvider, ListView):
         return super().get_queryset().filter(service_provider=self.request.user)
 
 
-class BaseServiceCategory(IsServiceProvider):
+class BaseServiceCategory(ABC, IsServiceProvider):
     model = ServiceCategory
     form_class = ServiceCategoryCreateUpdateForm
     template_name = 'service_category/create_update_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
 
 
 class ServiceCategoryCreateView(BaseServiceCategory, CreateView):
@@ -87,13 +92,9 @@ class ServiceCategoryCreateView(BaseServiceCategory, CreateView):
 
 
 class ServiceCategoryUpdateView(BaseServiceCategory, UpdateView):
-
     def test_func(self):
         obj = self.get_object()
         return obj.service.service_provider == self.request.user and super().test_func()
-
-    def get_success_url(self):
-        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
 
 
 class ServiceCategoryDeleteView(BaseServiceCategory, DeleteView):
@@ -104,20 +105,23 @@ class ServiceCategoryDeleteView(BaseServiceCategory, DeleteView):
         obj = self.get_object()
         return obj.service.service_provider == self.request.user and super().test_func()
 
-    def get_success_url(self):
-        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
 
-
-class ServiceCategoryDetailView(IsServiceProvider, DetailView):
-    model = ServiceCategory
+class ServiceCategoryDetailView(BaseServiceCategory, DetailView):
     context_object_name = 'category'
     template_name = 'service_category/detail.html'
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.service.service_provider == self.request.user and super().test_func()
 
-class BaseDeliveryArea(IsServiceProvider):
+
+class BaseDeliveryArea(ABC, IsServiceProvider):
     model = DeliveryArea
     form_class = DeliveryAreaCreateUpdateForm
     template_name = 'delivery_area/create_update_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
 
 
 class DeliveryAreaCreate(BaseDeliveryArea, CreateView):
@@ -145,8 +149,14 @@ class DeliveryAreaCreate(BaseDeliveryArea, CreateView):
 
 
 class DeliveryUpdateView(BaseDeliveryArea, UpdateView):
-    def get_success_url(self):
-        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
+    def test_func(self):
+        obj = self.get_object()
+        return obj.service.service_provider == self.request.user and super().test_func()
+
+
+class DeliveryDeleteView(BaseDeliveryArea, DeleteView):
+    context_object_name = 'delivery'
+    template_name = 'delivery_area/delete_form.html'
 
     def test_func(self):
         obj = self.get_object()
