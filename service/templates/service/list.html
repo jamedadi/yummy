@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+    <ul class="list-group">
+        {% for service in services %}
+            <li class="list-group-item">
+                    {{ service.name }}
+                    <div align="right">
+                        <a href="#" class="btn btn-warning" style="margin-right: 10px">Update</a>
+                        <a href="#" class="btn btn-danger">Delete</a>
+                    </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
