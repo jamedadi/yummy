@@ -35,7 +35,6 @@ class Item(BaseModel):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-
         if self.pk is None:  # only when we the instance is created
             random_digits = ''.join(random.choice(string.digits) for _ in range(5))
             self.upc = int(random_digits)
@@ -54,3 +53,6 @@ class ItemLine(BaseModel):
         verbose_name = _('Item line')
         verbose_name_plural = _('Item lines')
         db_table = 'item_line'
+
+    def __str__(self):
+        return f"{self.quantity}"
