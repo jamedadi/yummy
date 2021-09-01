@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, UpdateView, DetailView
+from django.views.generic import FormView, UpdateView, DetailView, DeleteView
 
 from accounts.utils import IsServiceProvider
 from item.forms import ItemCreateForm, item_update_form_factory
@@ -70,3 +70,14 @@ class ItemDetailView(DetailView):
 
     def get_queryset(self):
         return Item.objects.available()
+
+
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
+class ItemDeleteView(IsServiceProvider, DeleteView):
+    model = Item
+    template_name = 'item/delete.html'
+    success_url = reverse_lazy('accounts:service-provider-profile')
+
+    def test_func(self):
+        result = super().test_func()
+        return result and self.get_object().service.service_provider == self.request.user

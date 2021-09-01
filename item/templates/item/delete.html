@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <p>Are you sure to delete this item from your menu?</p>
+            <p>{{ object.name }}</p>
+
+            <input type="submit" value="delete" class="btn btn-danger">
+        </form>
+        <a href="{% url 'item:detail' object.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+    </div>
+{% endblock %}
