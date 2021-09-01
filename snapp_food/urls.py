@@ -22,4 +22,5 @@ urlpatterns = [
     path('home/', TemplateView.as_view(template_name='base.html'), name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('address/', include('address.urls', namespace='address')),
+    path('item/', include('item.urls', namespace='item'))
 ]
