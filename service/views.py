@@ -56,13 +56,13 @@ class ServiceListView(IsServiceProvider, ListView):
         return super().get_queryset().filter(service_provider=self.request.user)
 
 
-class BaseServiceCategory:
+class BaseServiceCategory(IsServiceProvider):
     model = ServiceCategory
     form_class = ServiceCategoryCreateUpdateForm
     template_name = 'service_category/create_update_form.html'
 
 
-class ServiceCategoryCreateView(BaseServiceCategory, IsServiceProvider, CreateView):
+class ServiceCategoryCreateView(BaseServiceCategory, CreateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -86,7 +86,7 @@ class ServiceCategoryCreateView(BaseServiceCategory, IsServiceProvider, CreateVi
         return super().form_valid(form)
 
 
-class ServiceCategoryUpdateView(BaseServiceCategory, IsServiceProvider, UpdateView):
+class ServiceCategoryUpdateView(BaseServiceCategory, UpdateView):
 
     def test_func(self):
         obj = self.get_object()
@@ -96,8 +96,7 @@ class ServiceCategoryUpdateView(BaseServiceCategory, IsServiceProvider, UpdateVi
         return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
 
 
-class ServiceCategoryDeleteView(IsServiceProvider, DeleteView):
-    model = ServiceCategory
+class ServiceCategoryDeleteView(BaseServiceCategory, DeleteView):
     context_object_name = 'category'
     template_name = 'service_category/delete_form.html'
 
@@ -115,10 +114,13 @@ class ServiceCategoryDetailView(IsServiceProvider, DetailView):
     template_name = 'service_category/detail.html'
 
 
-class DeliveryAreaCreate(IsServiceProvider, CreateView):
+class BaseDeliveryArea(IsServiceProvider):
     model = DeliveryArea
     form_class = DeliveryAreaCreateUpdateForm
     template_name = 'delivery_area/create_update_form.html'
+
+
+class DeliveryAreaCreate(BaseDeliveryArea, CreateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
