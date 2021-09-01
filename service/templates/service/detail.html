@@ -31,7 +31,8 @@
                 <li class="list-group-item">
                     {{ category.name }}
                     <div align="right">
-                        <a href="#" class="btn btn-warning" style="margin-right: 10px">Update</a>
+                        <a href="{% url 'service:service-category-update' category.pk %}" class="btn btn-warning"
+                           style="margin-right: 10px">Update</a>
                         <a href="#" class="btn btn-danger">Delete</a>
                     </div>
                 </li>
