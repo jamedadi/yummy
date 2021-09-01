@@ -58,3 +58,6 @@ class ItemDetailView(DetailView):
     model = Item
     template_name = None
     context_object_name = 'item'
+
+    def get_queryset(self):
+        return Item.objects.available()
