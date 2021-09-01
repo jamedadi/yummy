@@ -142,3 +142,12 @@ class DeliveryAreaCreate(BaseDeliveryArea, CreateView):
         instance.service = self.service
         instance.save()
         return super().form_valid(form)
+
+
+class DeliveryUpdateView(BaseDeliveryArea, UpdateView):
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.service.service_provider == self.request.user and super().test_func()
