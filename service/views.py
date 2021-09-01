@@ -14,7 +14,7 @@ class ServiceCreateView(IsServiceProvider, CreateView):
     model = Service
     form_class = ServiceCreateUpdateForm
     template_name = 'service/create_update_form.html'
-    success_url = reverse_lazy('accounts:service-provider-profile')
+    success_url = reverse_lazy('service:service-list')
 
     def form_valid(self, form):
         instance = form.save(commit=False)
