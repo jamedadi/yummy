@@ -2,10 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, UpdateView, DetailView, DeleteView
+from django.views.generic import FormView, UpdateView, DetailView, DeleteView, ListView
 
 from accounts.utils import IsServiceProvider
-from item.forms import ItemCreateForm, item_update_form_factory
+from item.forms import ItemCreateForm, ItemUpdateForm
 from item.models import Item, ItemLine
 from service.models import Service, ServiceCategory
 
@@ -40,6 +40,7 @@ class ItemCreateView(IsServiceProvider, FormView):
 class ItemUpdateView(IsServiceProvider, UpdateView):
     model = Item
     template_name = 'item/update_form.html'
+    form_class = ItemUpdateForm
 
     def get_initial(self):
         initial = super().get_initial()
@@ -47,7 +48,10 @@ class ItemUpdateView(IsServiceProvider, UpdateView):
         return initial
 
     def get_form_class(self):
-        return item_update_form_factory(service=self.get_object().service)
+        form = super().get_form_class()
+        queryset = form.base_fields['category'].queryset
+        form.base_fields['category'].queryset = queryset.filter(service=self.get_object().service)
+        return form
 
     def form_valid(self, form):
         item = form.save(commit=False)
@@ -81,3 +85,15 @@ class ItemDeleteView(IsServiceProvider, DeleteView):
     def test_func(self):
         result = super().test_func()
         return result and self.get_object().service.service_provider == self.request.user
+
+
+class BaseItemListView(ListView):
+    model = Item
+    context_object_name = 'items'
+
+
+class ServiceItemListView(BaseItemListView):
+    template_name = 'item/service_item_list.html'
+
+    def get_queryset(self):
+        return Item.objects.available().filter(service_id=self.kwargs['pk'])
