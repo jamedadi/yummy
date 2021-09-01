@@ -88,3 +88,16 @@ class ServiceCategoryUpdateView(BaseServiceCategory, IsServiceProvider, UpdateVi
 
     def get_success_url(self):
         return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
+
+
+class ServiceCategoryDeleteView(IsServiceProvider, DeleteView):
+    model = ServiceCategory
+    context_object_name = 'category'
+    template_name = 'service_category/delete_form.html'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.service.service_provider == self.request.user and super().test_func()
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
