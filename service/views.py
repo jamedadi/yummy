@@ -12,7 +12,7 @@ from service.models import Service
 class ServiceCreateView(IsServiceProvider, CreateView):
     model = Service
     form_class = ServiceCreateUpdateForm
-    template_name = 'service/create_form.html'
+    template_name = 'service/service_create_update_form.html'
     success_url = reverse_lazy('accounts:service-provider-profile')
 
     def form_valid(self, form):
@@ -26,7 +26,7 @@ class ServiceCreateView(IsServiceProvider, CreateView):
 class ServiceUpdateView(IsServiceProvider, UpdateView):
     model = Service
     form_class = ServiceCreateUpdateForm
-    template_name = 'service/create_form.html'
+    template_name = 'service/service_create_update_form.html'
     success_url = reverse_lazy('service:service-list')
 
     def test_func(self):
