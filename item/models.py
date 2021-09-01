@@ -59,3 +59,4 @@ class ItemLine(BaseModel):
         verbose_name = _('Item line')
         verbose_name_plural = _('Item lines')
         db_table = 'item_line'
+
