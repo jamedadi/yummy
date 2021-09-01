@@ -101,3 +101,11 @@ class ServiceCategoryDeleteView(IsServiceProvider, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
+
+
+class ServiceCategoryDetailView(IsServiceProvider, DetailView):
+    model = ServiceCategory
+    context_object_name = 'category'
+    template_name = 'service_category/detail.html'
+
+
