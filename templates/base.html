@@ -17,11 +17,15 @@
 
 {% is_customer request.user as customer_flag %}
 {% is_service_provider request.user as service_provider_flag %}
+{% is_admin_user request.user as admin_flag %}
+
 
 {% if service_provider_flag %}
     {% include 'inc/service_provider_navbar.html' %}
 {% elif customer_flag %}
     {% include 'inc/customer_navbar.html' %}
+{% elif admin_flag %}
+    {% include 'inc/admin_navbar.html' %}
 {% else %}
     {% include 'inc/customer_navbar.html' %}
 {% endif %}
