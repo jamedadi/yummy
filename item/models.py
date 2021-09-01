@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -30,13 +33,18 @@ class Item(BaseModel):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
         """
-        create a ItemLine instance and map it to this item
+        create an ItemLine instance and map it to this item
         when it hasn't any one yet
         """
+        if force_insert:
+            random_digits = ''.join(random.choice(string.digits) for _ in range(5))
+            self.upc = int(random_digits)
         if not ItemLine.objects.filter(item=self).exists():
             ItemLine.objects.create(item=self)
+        return super().save(force_insert, force_update, using, update_fields)
 
     @property
     def stock(self):
