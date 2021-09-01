@@ -30,6 +30,14 @@ class Item(BaseModel):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        """
+        create a ItemLine instance and map it to this item
+        when it hasn't any one yet
+        """
+        if not ItemLine.objects.filter(item=self).exists():
+            ItemLine.objects.create(item=self)
+
     @property
     def stock(self):
         return self.line.quantity
