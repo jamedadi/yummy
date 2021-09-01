@@ -20,5 +20,22 @@
             <p>Your service yet not has address!<a
                     href="{% url 'address:service-address-create' service.pk %}">Create Address</a></p>
         {% endif %}
+
+        <br><br>
+        <h4 class="text-warning">Service Categories</h4>
+        <br><br>
+        <a href="{% url 'service:service-category-create' service.pk %}">Create new category</a>
+        <br><br>
+        <ul class="list-group">
+            {% for category in service.categories.all %}
+                <li class="list-group-item">
+                    {{ category.name }}
+                    <div align="right">
+                        <a href="#" class="btn btn-warning" style="margin-right: 10px">Update</a>
+                        <a href="#" class="btn btn-danger">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}
