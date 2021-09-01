@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 from accounts.models import ServiceProvider
 from library.models import BaseModel
@@ -56,6 +57,10 @@ class ServiceCategory(BaseModel):
 
     def __str__(self):
         return f'{self.name} - {self.service.name}'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name, allow_unicode=True)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _('ServiceCategory')
