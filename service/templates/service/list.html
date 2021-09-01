@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <a href="{% url 'service:service-create' %}">Create new service</a>
+    <br><br>
     <ul class="list-group">
         {% for service in services %}
             <li class="list-group-item">
