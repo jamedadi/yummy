@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView, UpdateView, DetailView
 
 from accounts.utils import IsServiceProvider
 from item.forms import ItemCreateForm, ItemUpdateForm
@@ -52,3 +52,9 @@ class ItemUpdateView(IsServiceProvider, UpdateView):
         initial = super().get_initial()
         initial['quantity'] = self.object.stock
         return initial
+
+
+class ItemDetailView(DetailView):
+    model = Item
+    template_name = None
+    context_object_name = 'item'
