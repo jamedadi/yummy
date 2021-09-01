@@ -14,7 +14,7 @@ class ItemManager(models.Manager):
 
 
 class Item(BaseModel):
-    upc = models.BigIntegerField(verbose_name=_('upc'), unique=True, db_index=True)
+    upc = models.BigIntegerField(verbose_name=_('upc'), unique=True, db_index=True, editable=False)
     available = models.BooleanField(verbose_name=_('available'), default=True)
     name = models.CharField(verbose_name=_('name'), max_length=50)
     description = models.TextField(verbose_name=_('description'), blank=True)
@@ -59,4 +59,3 @@ class ItemLine(BaseModel):
         verbose_name = _('Item line')
         verbose_name_plural = _('Item lines')
         db_table = 'item_line'
-

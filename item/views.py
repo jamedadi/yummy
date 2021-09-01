@@ -39,7 +39,7 @@ class ItemCreateView(IsServiceProvider, FormView):
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ItemUpdateView(IsServiceProvider, UpdateView):
     model = Item
-    template_name = None
+    template_name = 'item/update_form.html'
 
     def test_func(self):
         result = super().test_func()
@@ -56,7 +56,7 @@ class ItemUpdateView(IsServiceProvider, UpdateView):
 
 class ItemDetailView(DetailView):
     model = Item
-    template_name = None
+    template_name = 'item/detail.html'
     context_object_name = 'item'
 
     def get_queryset(self):
