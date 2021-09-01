@@ -8,6 +8,8 @@
                     <div align="right">
                         <a href="{% url 'service:service-update' service.pk %}"
                            class="btn btn-warning" style="margin-right: 10px">Update</a>
+                        <a href="{% url 'service:service-detail' service.pk %}"
+                           class="btn btn-primary" style="margin-right: 10px">Detail</a>
                         <a href="{% url 'service:service-delete' service.pk %}"
                            class="btn btn-danger">Delete</a>
                     </div>

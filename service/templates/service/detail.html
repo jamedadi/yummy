@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <h4 class="text-warning">Service Detail</h4>
+        <p>Service name : {{ service.name }}</p>
+        <p>Service minimum purchase : {{ service.minimum_purchase }}</p>
+        <p>Service minimum purchase : {{ service.get_service_type_display }}</p>
+        <br>
+        <h4 class="text-warning">Service Address</h4>
+        {% if service.address %}
+            <p>state : {{ service.address.state.name }}</p>
+            <p>city : {{ service.address.city.name }}</p>
+            <p>area : {{ service.address.area.name }}</p>
+            <p>street : {{ service.address.street }}</p>
+            <p>alley : {{ service.address.alley }}</p>
+            <p>floor : {{ service.address.floor }}</p>
+            <p>plaque : {{ service.address.plaque }}</p>
+            <a href="{% url 'address:service-address-update' service.address.pk %}">Update Address</a>
+        {% else %}
+            <p>Your service yet not has address!<a
+                    href="{% url 'address:service-address-create' service.pk %}">Create Address</a></p>
+        {% endif %}
+    </div>
+{% endblock %}
