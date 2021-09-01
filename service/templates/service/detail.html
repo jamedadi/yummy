@@ -59,8 +59,10 @@
                         <li class="list-group-item">
                             {{ delivery.area.name }}
                             <div align="right">
-                                <a href="{% url 'service:delivery-area-update' delivery.pk %}" class="btn btn-warning" style="margin-right: 10px">Update</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <a href="{% url 'service:delivery-area-update' delivery.pk %}"
+                                   class="btn btn-warning" style="margin-right: 10px">Update</a>
+                                <a href="{% url 'service:delivery-area-delete' delivery.pk %}"
+                                   class="btn btn-danger">Delete</a>
                             </div>
                         </li>
                     {% endfor %}

@@ -5,9 +5,9 @@
         {{ form.as_p }}
         <input type="submit" value="submit" class="btn btn-warning">
     </form>
-    {% if object %}
-        <a href="{% url 'service:service-detail' service.service.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
-    {% else %}
+    {% if service %}
         <a href="{% url 'service:service-detail' service.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+    {% else %}
+        <a href="{% url 'service:service-detail' object.service.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
     {% endif %}
 {% endblock %}
