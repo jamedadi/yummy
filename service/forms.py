@@ -1,6 +1,6 @@
 from django import forms
 
-from service.models import Service
+from service.models import Service, ServiceCategory
 
 
 class ServiceCreateUpdateForm(forms.ModelForm):
@@ -12,3 +12,10 @@ class ServiceCreateUpdateForm(forms.ModelForm):
             'service_type': forms.Select(attrs={'class': 'form-control'}),
             'minimum_purchase': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
+
+class ServiceCategoryCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = ServiceCategory
+        fields = ('name',)
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control'})}
