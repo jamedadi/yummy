@@ -1,6 +1,7 @@
 from django import forms
 
-from service.models import Service, ServiceCategory
+from address.models import Area
+from service.models import Service, ServiceCategory, DeliveryArea
 
 
 class ServiceCreateUpdateForm(forms.ModelForm):
@@ -19,3 +20,10 @@ class ServiceCategoryCreateUpdateForm(forms.ModelForm):
         model = ServiceCategory
         fields = ('name',)
         widgets = {'name': forms.TextInput(attrs={'class': 'form-control'})}
+
+
+class DeliveryAreaCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = DeliveryArea
+        fields = ('area',)
+        widgets = {'area': forms.Select(attrs={'class': 'form-control'})}
