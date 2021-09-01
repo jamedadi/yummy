@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 
 from accounts.utils import IsServiceProvider
 from service.forms import ServiceCreateUpdateForm
 from service.models import Service
+from service.utils import CustomServiceIsServiceProvider
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
@@ -23,27 +24,25 @@ class ServiceCreateView(IsServiceProvider, CreateView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
-class ServiceUpdateView(IsServiceProvider, UpdateView):
+class ServiceUpdateView(CustomServiceIsServiceProvider, UpdateView):
     model = Service
     form_class = ServiceCreateUpdateForm
     template_name = 'service/create_update_form.html'
     success_url = reverse_lazy('service:service-list')
 
-    def test_func(self):
-        result = super().test_func()
-        obj = self.get_object()
-        return obj.service_provider == self.request.user and result
 
-
-class ServiceDeleteView(IsServiceProvider, DeleteView):
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
+class ServiceDeleteView(CustomServiceIsServiceProvider, DeleteView):
     model = Service
     template_name = 'service/delete_form.html'
     success_url = reverse_lazy('service:service-list')
 
-    def test_func(self):
-        result = super().test_func()
-        obj = self.get_object()
-        return obj.service_provider == self.request.user and result
+
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
+class ServiceDetailView(CustomServiceIsServiceProvider, DetailView):
+    model = Service
+    context_object_name = 'service'
+    template_name = 'service/detail.html'
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
