@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h5 class="text-warning">Items</h5>
+    <br><br>
+    <ul class="list-group list-group-flush">
+        {% for item in items %}
+            <a href="{{ item.get_absolute_url }}" class="list-group-item list-group-item-action">
+                {{ item.name }} {{ item.price }}
+            </a>
+            <p class="list-group-item">{{ item.description | truncatewords:10 }}</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

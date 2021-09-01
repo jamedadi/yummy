@@ -7,6 +7,7 @@ from django.views.generic import FormView, UpdateView, DetailView, DeleteView, L
 from accounts.utils import IsServiceProvider
 from item.forms import ItemCreateForm, ItemUpdateForm
 from item.models import Item, ItemLine
+from library.utils import CustomUserPasses
 from service.models import Service, ServiceCategory
 
 
@@ -32,8 +33,7 @@ class ItemCreateView(IsServiceProvider, FormView):
     def test_func(self):
         result = super().test_func()
         service_check = self.kwargs['service'].service_provider == self.request.user
-        category_check = self.kwargs['category'].service == self.kwargs['service']
-        return result and service_check and category_check
+        return result and service_check
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
@@ -91,9 +91,30 @@ class BaseItemListView(ListView):
     model = Item
     context_object_name = 'items'
 
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.kwargs['service'] = get_object_or_404(Service, id=self.kwargs['service_pk'])
+        self.kwargs['category'] = get_object_or_404(ServiceCategory, id=self.kwargs['category_pk'],
+                                                    service=self.kwargs['service'])
 
-class ServiceItemListView(BaseItemListView):
-    template_name = 'item/service_item_list.html'
+
+class ItemListView(BaseItemListView):
+    template_name = 'item/item_list.html'
 
     def get_queryset(self):
-        return Item.objects.available().filter(service_id=self.kwargs['pk'])
+        return Item.objects.available().filter(service=self.kwargs['service'], category=self.kwargs['category'])
+
+
+class ServiceCategoryItemListView(IsServiceProvider, BaseItemListView):
+    """
+    This view is for service-provider panel
+    """
+    template_name = 'item/service_category_item_list.html'
+
+    def get_queryset(self):
+        return Item.objects.filter(service=self.kwargs['service'], category=self.kwargs['category'])
+
+    def test_func(self):
+        result = super().test_func()
+        service_check = self.kwargs['service'].service_provider == self.request.user
+        return result and service_check
