@@ -33,7 +33,10 @@
                     <div align="right">
                         <a href="{% url 'service:service-category-update' category.pk %}" class="btn btn-warning"
                            style="margin-right: 10px">Update</a>
-                        <a href="{% url 'service:service-category-delete' category.pk %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'service:service-category-detail' category.pk %}" class="btn btn-primary"
+                           style="margin-right: 10px">Detail</a>
+                        <a href="{% url 'service:service-category-delete' category.pk %}"
+                           class="btn btn-danger">Delete</a>
                     </div>
                 </li>
             {% endfor %}
