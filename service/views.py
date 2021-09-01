@@ -5,8 +5,8 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView, D
 from django.shortcuts import get_object_or_404
 
 from accounts.utils import IsServiceProvider
-from service.forms import ServiceCreateUpdateForm, ServiceCategoryCreateUpdateForm
-from service.models import Service, ServiceCategory
+from service.forms import ServiceCreateUpdateForm, ServiceCategoryCreateUpdateForm, DeliveryAreaCreateUpdateForm
+from service.models import Service, ServiceCategory, DeliveryArea
 from service.utils import CustomServiceIsServiceProvider
 
 
@@ -68,6 +68,11 @@ class ServiceCategoryCreateView(BaseServiceCategory, IsServiceProvider, CreateVi
         super().setup(request, *args, **kwargs)
         self.service = get_object_or_404(Service, pk=self.kwargs['service_pk'])
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['service'] = self.service
+        return context
+
     def test_func(self):
         return self.service.service_provider == self.request.user and super().test_func()
 
@@ -82,6 +87,7 @@ class ServiceCategoryCreateView(BaseServiceCategory, IsServiceProvider, CreateVi
 
 
 class ServiceCategoryUpdateView(BaseServiceCategory, IsServiceProvider, UpdateView):
+
     def test_func(self):
         obj = self.get_object()
         return obj.service.service_provider == self.request.user and super().test_func()
@@ -109,3 +115,28 @@ class ServiceCategoryDetailView(IsServiceProvider, DetailView):
     template_name = 'service_category/detail.html'
 
 
+class DeliveryAreaCreate(IsServiceProvider, CreateView):
+    model = DeliveryArea
+    form_class = DeliveryAreaCreateUpdateForm
+    template_name = 'delivery_area/create_update_form.html'
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.service = get_object_or_404(Service, pk=self.kwargs['service_pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['service'] = self.service
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.service.pk})
+
+    def test_func(self):
+        return self.service.service_provider == self.request.user and super().test_func()
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.service = self.service
+        instance.save()
+        return super().form_valid(form)
