@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
 from accounts.utils import IsServiceProvider
 from service.forms import ServiceCreateUpdateForm
@@ -12,7 +12,7 @@ from service.models import Service
 class ServiceCreateView(IsServiceProvider, CreateView):
     model = Service
     form_class = ServiceCreateUpdateForm
-    template_name = 'service/service_create_update_form.html'
+    template_name = 'service/create_update_form.html'
     success_url = reverse_lazy('accounts:service-provider-profile')
 
     def form_valid(self, form):
@@ -26,7 +26,18 @@ class ServiceCreateView(IsServiceProvider, CreateView):
 class ServiceUpdateView(IsServiceProvider, UpdateView):
     model = Service
     form_class = ServiceCreateUpdateForm
-    template_name = 'service/service_create_update_form.html'
+    template_name = 'service/create_update_form.html'
+    success_url = reverse_lazy('service:service-list')
+
+    def test_func(self):
+        result = super().test_func()
+        obj = self.get_object()
+        return obj.service_provider == self.request.user and result
+
+
+class ServiceDeleteView(IsServiceProvider, DeleteView):
+    model = Service
+    template_name = 'service/delete_form.html'
     success_url = reverse_lazy('service:service-list')
 
     def test_func(self):
