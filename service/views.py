@@ -56,10 +56,13 @@ class ServiceListView(IsServiceProvider, ListView):
         return super().get_queryset().filter(service_provider=self.request.user)
 
 
-class ServiceCategoryCreateView(IsServiceProvider, CreateView):
+class BaseServiceCategory:
     model = ServiceCategory
     form_class = ServiceCategoryCreateUpdateForm
     template_name = 'service_category/create_update_form.html'
+
+
+class ServiceCategoryCreateView(BaseServiceCategory, IsServiceProvider, CreateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -76,3 +79,12 @@ class ServiceCategoryCreateView(IsServiceProvider, CreateView):
         instance.service = self.service
         instance.save()
         return super().form_valid(form)
+
+
+class ServiceCategoryUpdateView(BaseServiceCategory, IsServiceProvider, UpdateView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.service.service_provider == self.request.user and super().test_func()
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
