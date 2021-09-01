@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import ServiceCreateView, ServiceUpdateView, ServiceDeleteView, ServiceDetailView, ServiceListView,\
-    ServiceCategoryCreateView
+    ServiceCategoryCreateView, ServiceCategoryUpdateView
 
 app_name = 'service'
 
@@ -13,4 +13,5 @@ urlpatterns = (
     path('list/', ServiceListView.as_view(), name='service-list'),
 
     path('category/create/<int:service_pk>/', ServiceCategoryCreateView.as_view(), name='service-category-create'),
+    path('category/update/<int:pk>/', ServiceCategoryUpdateView.as_view(), name='service-category-update'),
 )
