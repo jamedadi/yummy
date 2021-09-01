@@ -6,7 +6,7 @@ from django.views.generic import FormView, UpdateView, DetailView
 
 from accounts.utils import IsServiceProvider
 from item.forms import ItemCreateForm, ItemUpdateForm
-from item.models import Item
+from item.models import Item, ItemLine
 from service.models import Service, ServiceCategory
 
 
@@ -25,7 +25,7 @@ class ItemCreateView(IsServiceProvider, FormView):
         item = form.save(commit=False)
         item.service = self.kwargs['service']
         item.category = self.kwargs['category']
-        item.line.quantity += form.cleaned_data['quantity']
+        ItemLine.objects.create(item=item, quantity=form.cleaned_data['quantity'])
         item.save()
         return super().form_valid(form)
 

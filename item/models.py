@@ -35,15 +35,10 @@ class Item(BaseModel):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        """
-        create an ItemLine instance and map it to this item
-        when it hasn't any one yet
-        """
-        if force_insert:
+
+        if self.pk is None:  # only when we the instance is created
             random_digits = ''.join(random.choice(string.digits) for _ in range(5))
             self.upc = int(random_digits)
-        if not ItemLine.objects.filter(item=self).exists():
-            ItemLine.objects.create(item=self)
         return super().save(force_insert, force_update, using, update_fields)
 
     @property
