@@ -44,6 +44,15 @@ class BaseDeliveryArea(ABC, IsServiceProvider):
         return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
 
 
+class BaseServiceAvailableTime(ABC, IsServiceProvider):
+    model = ServiceAvailableTime
+    form_class = ServiceAvailableTimeCreateUpdateForm
+    template_name = 'service_available_time/create_update_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
+
+
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceCreateView(IsServiceProvider, CreateView):
     model = Service
@@ -167,13 +176,6 @@ class DeliveryDeleteView(BaseDeliveryArea, DeleteView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
-class BaseServiceAvailableTime(ABC, IsServiceProvider):
-    model = ServiceAvailableTime
-    form_class = ServiceAvailableTimeCreateUpdateForm
-    template_name = 'service_available_time/create_update_form.html'
-
-
-@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceAvailableTimeCreateView(BaseServiceAvailableTime, BaseCreateView, CreateView):
     def test_func(self):
         return self.service.service_provider == self.request.user and super().test_func()
@@ -190,3 +192,10 @@ class ServiceAvailableTimeCreateView(BaseServiceAvailableTime, BaseCreateView, C
             instance.service = self.service
             instance.save()
             return super().form_valid(form)
+
+
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
+class ServiceAvailableTimeUpdateView(BaseServiceAvailableTime, UpdateView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.service.service_provider == self.request.user and super().test_func()
