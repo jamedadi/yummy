@@ -1,14 +1,18 @@
 from abc import ABC
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 from accounts.utils import IsServiceProvider
-from service.forms import ServiceCreateUpdateForm, ServiceCategoryCreateUpdateForm, DeliveryAreaCreateUpdateForm
-from service.models import Service, ServiceCategory, DeliveryArea
+from service.forms import ServiceCreateUpdateForm, ServiceCategoryCreateUpdateForm, DeliveryAreaCreateUpdateForm, \
+    ServiceAvailableTimeCreateUpdateForm
+from service.models import Service, ServiceCategory, DeliveryArea, ServiceAvailableTime
 from service.utils import CustomServiceIsServiceProvider
 
 
@@ -161,3 +165,36 @@ class DeliveryDeleteView(BaseDeliveryArea, DeleteView):
     def test_func(self):
         obj = self.get_object()
         return obj.service.service_provider == self.request.user and super().test_func()
+
+
+class BaseServiceAvailableTime(ABC, IsServiceProvider):
+    model = ServiceAvailableTime
+    form_class = ServiceAvailableTimeCreateUpdateForm
+    template_name = 'service_available_time/create_update_form.html'
+
+
+class ServiceAvailableTimeCreateView(BaseServiceAvailableTime, CreateView):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.service = get_object_or_404(Service, pk=self.kwargs['service_pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['service'] = self.service
+        return context
+
+    def test_func(self):
+        return self.service.service_provider == self.request.user and super().test_func()
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.service.pk})
+
+    def form_valid(self, form):
+        with transaction.atomic():
+            instance = form.save(commit=False)
+            if self.service.available_times.filter(day=instance.day).exists():
+                messages.info(self.request, f'This Service {self.service.name} has this day time', 'danger')
+                return redirect(self.get_success_url())
+            instance.service = self.service
+            instance.save()
+            return super().form_valid(form)
