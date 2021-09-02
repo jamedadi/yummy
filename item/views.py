@@ -7,7 +7,6 @@ from django.views.generic import FormView, UpdateView, DetailView, DeleteView, L
 from accounts.utils import IsServiceProvider
 from item.forms import ItemCreateForm, ItemUpdateForm
 from item.models import Item, ItemLine
-from library.utils import CustomUserPasses
 from service.models import Service, ServiceCategory
 
 
@@ -60,7 +59,7 @@ class ItemUpdateView(IsServiceProvider, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return self.get_object().get_absolute_url()
+        return reverse_lazy('item:detail-service-provider', kwargs={'pk': self.object.pk})
 
     def test_func(self):
         result = super().test_func()
