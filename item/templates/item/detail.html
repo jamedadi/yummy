@@ -3,6 +3,8 @@
 {% block content %}
     <h4 class="text-warning"> {{ item.name }}</h4>
     <p>Category : {{ item.category.name }}</p>
+    <img style="max-width: 350px; margin-bottom: 10px" class="img" src="{{ item.image.url }}"
+         alt="{{ item.name }} image">
     <p>Description : {{ item.description }}</p>
     <p>Price : {{ item.price }}</p>
     <a href="#" class="btn btn-warning">Add to cart</a>
