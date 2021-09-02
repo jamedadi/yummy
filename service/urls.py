@@ -1,29 +1,51 @@
 from django.urls import path
 
-from .views import ServiceCreateView, ServiceUpdateView, ServiceDeleteView, ServiceDetailView, ServiceListView, \
-    ServiceCategoryCreateView, ServiceCategoryUpdateView, ServiceCategoryDeleteView, ServiceCategoryDetailView, \
-    DeliveryAreaCreate, DeliveryUpdateView, DeliveryDeleteView, ServiceAvailableTimeCreateView,\
-    ServiceAvailableTimeUpdateView, ServiceAvailableTimeDeleteView
+from .views import ServiceProviderServiceCreateView, ServiceProviderServiceUpdateView, ServiceProviderServiceDeleteView, \
+    ServiceProviderServiceDetailView, ServiceProviderServiceListView, ServiceProviderServiceCategoryCreateView, \
+    ServiceProviderServiceCategoryUpdateView, ServiceProviderServiceCategoryDeleteView, \
+    ServiceProviderServiceCategoryDetailView, ServiceProviderDeliveryAreaCreate, ServiceProviderDeliveryUpdateView, \
+    ServiceProviderDeliveryDeleteView, ServiceProviderServiceAvailableTimeCreateView, \
+    ServiceProviderServiceAvailableTimeUpdateView, ServiceProviderServiceAvailableTimeDeleteView
 
 app_name = 'service'
 
 urlpatterns = (
-    path('create/', ServiceCreateView.as_view(), name='service-create'),
-    path('update/<int:pk>', ServiceUpdateView.as_view(), name='service-update'),
-    path('delete/<int:pk>', ServiceDeleteView.as_view(), name='service-delete'),
-    path('detail/<int:pk>', ServiceDetailView.as_view(), name='service-detail'),
-    path('list/', ServiceListView.as_view(), name='service-list'),
+    path('serviceprovider/create/', ServiceProviderServiceCreateView.as_view(),
+         name='service-provider-service-create'),
+    path('serviceprovider/update/<int:pk>', ServiceProviderServiceUpdateView.as_view(),
+         name='service-provider-service-update'),
+    path('serviceprovider/delete/<int:pk>', ServiceProviderServiceDeleteView.as_view(),
+         name='service-provider-service-delete'),
+    path('serviceprovider/detail/<int:pk>', ServiceProviderServiceDetailView.as_view(),
+         name='service-provider-service-detail'),
+    path('serviceprovider/list/', ServiceProviderServiceListView.as_view(), name='service-provider-service-list'),
 
-    path('category/create/<int:service_pk>/', ServiceCategoryCreateView.as_view(), name='service-category-create'),
-    path('category/update/<int:pk>/', ServiceCategoryUpdateView.as_view(), name='service-category-update'),
-    path('category/delete/<int:pk>/', ServiceCategoryDeleteView.as_view(), name='service-category-delete'),
-    path('category/detail/<int:pk>', ServiceCategoryDetailView.as_view(), name='service-category-detail'),
 
-    path('deliveryarea/create/<int:service_pk>', DeliveryAreaCreate.as_view(), name='delivery-area-create'),
-    path('deliveryarea/update/<int:pk>', DeliveryUpdateView.as_view(), name='delivery-area-update'),
-    path('deliveryarea/delete/<int:pk>', DeliveryDeleteView.as_view(), name='delivery-area-delete'),
+    path('serviceprovider/category/create/<int:service_pk>/', ServiceProviderServiceCategoryCreateView.as_view(),
+         name='service-provider-service-category-create'),
+    path('serviceprovider/category/update/<int:pk>/', ServiceProviderServiceCategoryUpdateView.as_view(),
+         name='service-provider-service-category-update'),
+    path('serviceprovider/category/delete/<int:pk>/', ServiceProviderServiceCategoryDeleteView.as_view(),
+         name='service-provider-service-category-delete'),
+    path('serviceprovider/category/detail/<int:pk>', ServiceProviderServiceCategoryDetailView.as_view(),
+         name='service-provider-service-category-detail'),
 
-    path('availabletime/create/<int:service_pk>', ServiceAvailableTimeCreateView.as_view(), name='available-time-create'),
-    path('availabletime/update/<int:pk>', ServiceAvailableTimeUpdateView.as_view(), name='available-time-update'),
-    path('availabletime/delete/<int:pk>', ServiceAvailableTimeDeleteView.as_view(), name='available-time-delete'),
+
+    path('serviceprovider/deliveryarea/create/<int:service_pk>', ServiceProviderDeliveryAreaCreate.as_view(),
+         name='service-provider-delivery-area-create'),
+    path('serviceprovider/deliveryarea/update/<int:pk>', ServiceProviderDeliveryUpdateView.as_view(),
+         name='service-provider-delivery-area-update'),
+    path('serviceprovider/deliveryarea/delete/<int:pk>', ServiceProviderDeliveryDeleteView.as_view(),
+         name='service-provider-delivery-area-delete'),
+
+
+    path(
+        'serviceprovider/availabletime/create/<int:service_pk>',
+        ServiceProviderServiceAvailableTimeCreateView.as_view(),
+        name='service-provider-available-time-create'
+    ),
+    path('serviceprovider/availabletime/update/<int:pk>', ServiceProviderServiceAvailableTimeUpdateView.as_view(),
+         name='service-provider-available-time-update'),
+    path('serviceprovider/availabletime/delete/<int:pk>', ServiceProviderServiceAvailableTimeDeleteView.as_view(),
+         name='service-provider-available-time-delete'),
 )

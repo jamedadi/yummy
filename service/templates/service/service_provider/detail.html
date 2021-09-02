@@ -27,18 +27,18 @@
         <div class="service-category" style="margin-top: 20px; margin-bottom: 20px">
             <h4 class="text-warning">Service Categories</h4>
             <br><br>
-            <a href="{% url 'service:service-category-create' service.pk %}">Create new category</a>
+            <a href="{% url 'service:service-provider-service-category-create' service.pk %}">Create new category</a>
             <br><br>
             <ul class="list-group">
                 {% for category in service.categories.all %}
                     <li class="list-group-item">
                         {{ category.name }}
                         <div align="right">
-                            <a href="{% url 'service:service-category-update' category.pk %}" class="btn btn-warning"
+                            <a href="{% url 'service:service-provider-service-category-update' category.pk %}" class="btn btn-warning"
                                style="margin-right: 10px">Update</a>
-                            <a href="{% url 'service:service-category-detail' category.pk %}" class="btn btn-primary"
+                            <a href="{% url 'service:service-provider-service-category-detail' category.pk %}" class="btn btn-primary"
                                style="margin-right: 10px">Detail</a>
-                            <a href="{% url 'service:service-category-delete' category.pk %}"
+                            <a href="{% url 'service:service-provider-service-category-delete' category.pk %}"
                                class="btn btn-danger">Delete</a>
                         </div>
                     </li>
@@ -50,7 +50,7 @@
             <h4 class="text-warning">Service Delivery Area</h4>
             <br>
             <br>
-            <a href="{% url 'service:delivery-area-create' service.pk %}"> Create new delivery area</a>
+            <a href="{% url 'service:service-provider-delivery-area-create' service.pk %}"> Create new delivery area</a>
             <br>
             <br>
             {% with deliveries=service.delivery_areas.all %}
@@ -59,9 +59,9 @@
                         <li class="list-group-item">
                             {{ delivery.area.name }}
                             <div align="right">
-                                <a href="{% url 'service:delivery-area-update' delivery.pk %}"
+                                <a href="{% url 'service:service-provider-delivery-area-update' delivery.pk %}"
                                    class="btn btn-warning" style="margin-right: 10px">Update</a>
-                                <a href="{% url 'service:delivery-area-delete' delivery.pk %}"
+                                <a href="{% url 'service:service-provider-delivery-area-delete' delivery.pk %}"
                                    class="btn btn-danger">Delete</a>
                             </div>
                         </li>
@@ -72,10 +72,10 @@
         </div>
         <hr>
         <div class="available-time" style="margin-top: 20px; margin-bottom: 20px">
-            <h4 class="text-warning">Service Delivery Area</h4>
+            <h4 class="text-warning">Service Available Time</h4>
             <br>
             <br>
-            <a href="{% url 'service:available-time-create' service.pk %}"> Create new available time</a>
+            <a href="{% url 'service:service-provider-available-time-create' service.pk %}"> Create new available time</a>
             <br>
             <br>
             {% with availabletimes=service.available_times.all %}
@@ -85,9 +85,9 @@
                             {{ availabletime.get_day_display }} | open at : {{ availabletime.open_time }} | close at
                             : {{ availabletime.close_time }} | is close : {{ availabletime.is_close }}
                             <div align="right">
-                                <a href="{% url 'service:available-time-update' availabletime.pk %}"
+                                <a href="{% url 'service:service-provider-available-time-update' availabletime.pk %}"
                                    class="btn btn-warning" style="margin-right: 10px">Update</a>
-                                <a href="{% url 'service:available-time-delete' availabletime.pk %}"
+                                <a href="{% url 'service:service-provider-available-time-delete' availabletime.pk %}"
                                    class="btn btn-danger">Delete</a>
                             </div>
                         </li>

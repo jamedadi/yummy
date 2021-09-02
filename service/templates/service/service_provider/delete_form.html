@@ -6,6 +6,6 @@
             <p>Are you sure to delete service ({{ service.name }})?</p>
             <input type="submit" value="delete" class="btn btn-danger">
         </form>
-        <a href="{% url 'service:service-list' %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+        <a href="{% url 'service:service-provider-service-list' %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
     </div>
 {% endblock %}
