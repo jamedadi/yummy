@@ -8,6 +8,8 @@
 
             <input type="submit" value="delete" class="btn btn-danger">
         </form>
-        <a href="{% url 'item:detail' object.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+        <br>
+        <a href="{% url 'item:service-provider-list'  item.service.pk   item.category.pk %}"
+       class="btn btn-primary">Cancel</a>
     </div>
 {% endblock %}

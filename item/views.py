@@ -25,9 +25,15 @@ class ItemCreateView(IsServiceProvider, FormView):
         item = form.save(commit=False)
         item.service = self.kwargs['service']
         item.category = self.kwargs['category']
+        item.save()
         ItemLine.objects.create(item=item, quantity=form.cleaned_data['quantity'])
         item.save()
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('item:service-provider-list',
+                            kwargs={'service_pk': self.kwargs['service'].pk, 'category_pk': self.kwargs['category'].pk}
+                            )
 
     def test_func(self):
         result = super().test_func()
@@ -55,6 +61,7 @@ class ItemUpdateView(IsServiceProvider, UpdateView):
     def form_valid(self, form):
         item = form.save(commit=False)
         item.line.quantity = form.cleaned_data['quantity']
+        item.line.save()
         item.save()
         return super().form_valid(form)
 
@@ -90,11 +97,15 @@ class ServiceProviderItemDetailView(IsServiceProvider, DetailView):
 class ItemDeleteView(IsServiceProvider, DeleteView):
     model = Item
     template_name = 'item/delete.html'
-    success_url = reverse_lazy('accounts:service-provider-profile')
 
     def test_func(self):
         result = super().test_func()
         return result and self.get_object().service.service_provider == self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('item:service-provider-list',
+                            kwargs={'service_pk': self.object.service.pk, 'category_pk': self.object.category.pk}
+                            )
 
 
 class BaseItemListView(ListView):
@@ -115,11 +126,12 @@ class ItemListView(BaseItemListView):
         return Item.objects.available().filter(service=self.kwargs['service'], category=self.kwargs['category'])
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceCategoryItemListView(IsServiceProvider, BaseItemListView):
     """
     This view is for service-provider panel
     """
-    template_name = 'item/service_category_item_list.html'
+    template_name = 'item/service_provider_item_list.html'
 
     def get_queryset(self):
         return Item.objects.filter(service=self.kwargs['service'], category=self.kwargs['category'])
@@ -128,3 +140,8 @@ class ServiceCategoryItemListView(IsServiceProvider, BaseItemListView):
         result = super().test_func()
         service_check = self.kwargs['service'].service_provider == self.request.user
         return result and service_check
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['category'] = self.kwargs['category']
+        return context
