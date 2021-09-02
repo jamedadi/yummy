@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import ServiceCreateView, ServiceUpdateView, ServiceDeleteView, ServiceDetailView, ServiceListView, \
     ServiceCategoryCreateView, ServiceCategoryUpdateView, ServiceCategoryDeleteView, ServiceCategoryDetailView, \
-    DeliveryAreaCreate, DeliveryUpdateView, DeliveryDeleteView
+    DeliveryAreaCreate, DeliveryUpdateView, DeliveryDeleteView, ServiceAvailableTimeCreateView
 
 app_name = 'service'
 
@@ -21,4 +21,6 @@ urlpatterns = (
     path('deliveryarea/create/<int:service_pk>', DeliveryAreaCreate.as_view(), name='delivery-area-create'),
     path('deliveryarea/update/<int:pk>', DeliveryUpdateView.as_view(), name='delivery-area-update'),
     path('deliveryarea/delete/<int:pk>', DeliveryDeleteView.as_view(), name='delivery-area-delete'),
+
+    path('availabletime/create/<int:service_pk>', ServiceAvailableTimeCreateView.as_view(), name='available-time-create'),
 )
