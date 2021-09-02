@@ -199,3 +199,13 @@ class ServiceAvailableTimeUpdateView(BaseServiceAvailableTime, UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.service.service_provider == self.request.user and super().test_func()
+
+
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
+class ServiceAvailableTimeDeleteView(BaseServiceAvailableTime, DeleteView):
+    context_object_name = 'available_time'
+    template_name = 'service_available_time/delete_form.html'
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.service.service_provider == self.request.user and super().test_func()
