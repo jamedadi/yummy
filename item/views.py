@@ -77,6 +77,17 @@ class ItemDetailView(DetailView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
+class ServiceProviderItemDetailView(IsServiceProvider, DetailView):
+    model = Item
+    template_name = 'item/service_provider_detail.html'
+    context_object_name = 'item'
+
+    def test_func(self):
+        result = super().test_func()
+        return result and self.get_object().service.service_provider == self.request.user
+
+
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ItemDeleteView(IsServiceProvider, DeleteView):
     model = Item
     template_name = 'item/delete.html'

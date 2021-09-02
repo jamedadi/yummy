@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+    <h5 class="text-warning">Items</h5>
+    <br>
+
+    {% for item in items %}
+        <div class="card" style="width: 25rem;">
+            <div class="card-body">
+                <h5 class="card-title text-danger">{{ item.name }}</h5>
+                <br>
+                <h6 class="card-subtitle mb-2 text-muted">Price : {{ item.price }}</h6>
+                <p class="card-text">{{ item.description | truncatewords:11 }}</p>
+                <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Detail</a>
+                <a style="margin-left: 15px" href="#" class="btn btn-success">
+                    Add to cart
+                </a>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+
+{% endblock %}
