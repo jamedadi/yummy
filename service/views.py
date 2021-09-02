@@ -2,7 +2,6 @@ from abc import ABC
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -14,6 +13,35 @@ from service.forms import ServiceCreateUpdateForm, ServiceCategoryCreateUpdateFo
     ServiceAvailableTimeCreateUpdateForm
 from service.models import Service, ServiceCategory, DeliveryArea, ServiceAvailableTime
 from service.utils import CustomServiceIsServiceProvider
+
+
+class BaseCreateView(ABC):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.service = get_object_or_404(Service, pk=self.kwargs['service_pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['service'] = self.service
+        return context
+
+
+class BaseServiceCategory(ABC, IsServiceProvider):
+    model = ServiceCategory
+    form_class = ServiceCategoryCreateUpdateForm
+    template_name = 'service_category/create_update_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
+
+
+class BaseDeliveryArea(ABC, IsServiceProvider):
+    model = DeliveryArea
+    form_class = DeliveryAreaCreateUpdateForm
+    template_name = 'delivery_area/create_update_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
@@ -62,26 +90,7 @@ class ServiceListView(IsServiceProvider, ListView):
         return super().get_queryset().filter(service_provider=self.request.user)
 
 
-class BaseServiceCategory(ABC, IsServiceProvider):
-    model = ServiceCategory
-    form_class = ServiceCategoryCreateUpdateForm
-    template_name = 'service_category/create_update_form.html'
-
-    def get_success_url(self):
-        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
-
-
-class ServiceCategoryCreateView(BaseServiceCategory, CreateView):
-
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        self.service = get_object_or_404(Service, pk=self.kwargs['service_pk'])
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['service'] = self.service
-        return context
-
+class ServiceCategoryCreateView(BaseServiceCategory, BaseCreateView, CreateView):
     def test_func(self):
         return self.service.service_provider == self.request.user and super().test_func()
 
@@ -96,6 +105,7 @@ class ServiceCategoryCreateView(BaseServiceCategory, CreateView):
 
 
 class ServiceCategoryUpdateView(BaseServiceCategory, UpdateView):
+
     def test_func(self):
         obj = self.get_object()
         return obj.service.service_provider == self.request.user and super().test_func()
@@ -119,25 +129,7 @@ class ServiceCategoryDetailView(BaseServiceCategory, DetailView):
         return obj.service.service_provider == self.request.user and super().test_func()
 
 
-class BaseDeliveryArea(ABC, IsServiceProvider):
-    model = DeliveryArea
-    form_class = DeliveryAreaCreateUpdateForm
-    template_name = 'delivery_area/create_update_form.html'
-
-    def get_success_url(self):
-        return reverse_lazy('service:service-detail', kwargs={'pk': self.object.service.pk})
-
-
-class DeliveryAreaCreate(BaseDeliveryArea, CreateView):
-
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        self.service = get_object_or_404(Service, pk=self.kwargs['service_pk'])
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['service'] = self.service
-        return context
+class DeliveryAreaCreate(BaseDeliveryArea, BaseCreateView, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('service:service-detail', kwargs={'pk': self.service.pk})
@@ -173,16 +165,7 @@ class BaseServiceAvailableTime(ABC, IsServiceProvider):
     template_name = 'service_available_time/create_update_form.html'
 
 
-class ServiceAvailableTimeCreateView(BaseServiceAvailableTime, CreateView):
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        self.service = get_object_or_404(Service, pk=self.kwargs['service_pk'])
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['service'] = self.service
-        return context
-
+class ServiceAvailableTimeCreateView(BaseServiceAvailableTime, BaseCreateView, CreateView):
     def test_func(self):
         return self.service.service_provider == self.request.user and super().test_func()
 
