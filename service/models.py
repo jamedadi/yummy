@@ -117,3 +117,4 @@ class ServiceAvailableTime(BaseModel):
         verbose_name = _('ServiceAvailableTime')
         verbose_name_plural = _('ServiceAvailableTimes')
         db_table = 'service_available_time'
+        ordering = ('day',)
