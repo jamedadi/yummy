@@ -83,7 +83,7 @@ class DeliveryArea(BaseModel):
         db_table = 'delivery_area'
 
 
-class AvailableTime(BaseModel):
+class ServiceAvailableTime(BaseModel):
     SAT_DAY = 0
     SUN_DAY = 1
     MON_DAY = 2
@@ -101,29 +101,17 @@ class AvailableTime(BaseModel):
         (THU_DAY, _('thursday')),
         (FRI_DAY, _('friday'))
     )
-    day = models.PositiveSmallIntegerField(verbose_name=_('day'), choices=DAYS)
-    open_time = models.DateTimeField(verbose_name=_('open time'))
-    close_time = models.DateTimeField(verbose_name=_('close time'))
-    close_day = models.BooleanField(verbose_name=_('close day'), blank=True, null=True)
-
-    def __str__(self):
-        return f'{self.get_day_display()} - ' \
-               f'{self.close_day if self.close_time else self.open_time and "-" and self.close_time}'
-
-    class Meta:
-        verbose_name = _('AvailableTime')
-        verbose_name_plural = _('AvailableTimes')
-        db_table = 'available_time'
-
-
-class ServiceAvailableTime(BaseModel):
     service = models.ForeignKey(
         Service, verbose_name=_('service'), related_name='available_times', on_delete=models.CASCADE
     )
-    available_time = models.ForeignKey(AvailableTime, verbose_name=_('available time'), on_delete=models.PROTECT)
+    day = models.PositiveSmallIntegerField(verbose_name=_('day'), choices=DAYS, null=True)
+    open_time = models.TimeField(verbose_name=_('open time'), null=True)
+    close_time = models.TimeField(verbose_name=_('close time'), null=True)
+    is_close = models.BooleanField(verbose_name=_('close day'), blank=True, null=True)
 
     def __str__(self):
-        return f'{self.service.name} - {self.available_time.open_time} - {self.available_time.close_time}'
+        return f'{self.service.name} - {self.get_day_display()} - ' \
+               f'{self.is_close if self.close_time else self.open_time and "-" and self.close_time}'
 
     class Meta:
         verbose_name = _('ServiceAvailableTime')
