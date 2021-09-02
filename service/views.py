@@ -57,7 +57,7 @@ class BaseServiceAvailableTime(ABC, IsServiceProvider):
 class ServiceCreateView(IsServiceProvider, CreateView):
     model = Service
     form_class = ServiceCreateUpdateForm
-    template_name = 'service/create_update_form.html'
+    template_name = 'service/service_provider/create_update_form.html'
     success_url = reverse_lazy('service:service-list')
 
     def form_valid(self, form):
@@ -71,14 +71,14 @@ class ServiceCreateView(IsServiceProvider, CreateView):
 class ServiceUpdateView(CustomServiceIsServiceProvider, UpdateView):
     model = Service
     form_class = ServiceCreateUpdateForm
-    template_name = 'service/create_update_form.html'
+    template_name = 'service/service_provider/create_update_form.html'
     success_url = reverse_lazy('service:service-list')
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceDeleteView(CustomServiceIsServiceProvider, DeleteView):
     model = Service
-    template_name = 'service/delete_form.html'
+    template_name = 'service/service_provider/delete_form.html'
     success_url = reverse_lazy('service:service-list')
 
 
@@ -86,14 +86,14 @@ class ServiceDeleteView(CustomServiceIsServiceProvider, DeleteView):
 class ServiceDetailView(CustomServiceIsServiceProvider, DetailView):
     model = Service
     context_object_name = 'service'
-    template_name = 'service/detail.html'
+    template_name = 'service/service_provider/detail.html'
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceListView(IsServiceProvider, ListView):
     model = Service
     context_object_name = 'services'
-    template_name = 'service/list.html'
+    template_name = 'service/service_provider/list.html'
 
     def get_queryset(self):
         return super().get_queryset().filter(service_provider=self.request.user)
