@@ -70,5 +70,29 @@
                 {% endif %}
             {% endwith %}
         </div>
+        <hr>
+        <div class="available-time" style="margin-top: 20px; margin-bottom: 20px">
+            <h4 class="text-warning">Service Delivery Area</h4>
+            <br>
+            <br>
+            <a href="{% url 'service:available-time-create' service.pk %}"> Create new available time</a>
+            <br>
+            <br>
+            {% with availabletimes=service.available_times.all %}
+                {% if availabletimes %}
+                    {% for availabletime in availabletimes %}
+                        <li class="list-group-item">
+                            {{ availabletime.get_day_display }} | open at : {{ availabletime.open_time }} | close at
+                            : {{ availabletime.close_time }} | is close : {{ availabletime.is_close }}
+                            <div align="right">
+                                <a href="#" class="btn btn-warning" style="margin-right: 10px">Update</a>
+                                <a href="#" class="btn btn-danger">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                {% endif %}
+            {% endwith %}
+        </div>
     </div>
 {% endblock %}
