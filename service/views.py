@@ -90,6 +90,7 @@ class ServiceListView(IsServiceProvider, ListView):
         return super().get_queryset().filter(service_provider=self.request.user)
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceCategoryCreateView(BaseServiceCategory, BaseCreateView, CreateView):
     def test_func(self):
         return self.service.service_provider == self.request.user and super().test_func()
@@ -104,6 +105,7 @@ class ServiceCategoryCreateView(BaseServiceCategory, BaseCreateView, CreateView)
         return super().form_valid(form)
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceCategoryUpdateView(BaseServiceCategory, UpdateView):
 
     def test_func(self):
@@ -111,6 +113,7 @@ class ServiceCategoryUpdateView(BaseServiceCategory, UpdateView):
         return obj.service.service_provider == self.request.user and super().test_func()
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceCategoryDeleteView(BaseServiceCategory, DeleteView):
     context_object_name = 'category'
     template_name = 'service_category/delete_form.html'
@@ -120,6 +123,7 @@ class ServiceCategoryDeleteView(BaseServiceCategory, DeleteView):
         return obj.service.service_provider == self.request.user and super().test_func()
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceCategoryDetailView(BaseServiceCategory, DetailView):
     context_object_name = 'category'
     template_name = 'service_category/detail.html'
@@ -129,6 +133,7 @@ class ServiceCategoryDetailView(BaseServiceCategory, DetailView):
         return obj.service.service_provider == self.request.user and super().test_func()
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class DeliveryAreaCreate(BaseDeliveryArea, BaseCreateView, CreateView):
 
     def get_success_url(self):
@@ -144,12 +149,14 @@ class DeliveryAreaCreate(BaseDeliveryArea, BaseCreateView, CreateView):
         return super().form_valid(form)
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class DeliveryUpdateView(BaseDeliveryArea, UpdateView):
     def test_func(self):
         obj = self.get_object()
         return obj.service.service_provider == self.request.user and super().test_func()
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class DeliveryDeleteView(BaseDeliveryArea, DeleteView):
     context_object_name = 'delivery'
     template_name = 'delivery_area/delete_form.html'
@@ -159,12 +166,14 @@ class DeliveryDeleteView(BaseDeliveryArea, DeleteView):
         return obj.service.service_provider == self.request.user and super().test_func()
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class BaseServiceAvailableTime(ABC, IsServiceProvider):
     model = ServiceAvailableTime
     form_class = ServiceAvailableTimeCreateUpdateForm
     template_name = 'service_available_time/create_update_form.html'
 
 
+@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceAvailableTimeCreateView(BaseServiceAvailableTime, BaseCreateView, CreateView):
     def test_func(self):
         return self.service.service_provider == self.request.user and super().test_func()
