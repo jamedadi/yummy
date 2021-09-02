@@ -85,7 +85,8 @@
                             {{ availabletime.get_day_display }} | open at : {{ availabletime.open_time }} | close at
                             : {{ availabletime.close_time }} | is close : {{ availabletime.is_close }}
                             <div align="right">
-                                <a href="#" class="btn btn-warning" style="margin-right: 10px">Update</a>
+                                <a href="{% url 'service:available-time-update' availabletime.pk %}"
+                                   class="btn btn-warning" style="margin-right: 10px">Update</a>
                                 <a href="#" class="btn btn-danger">Delete</a>
                             </div>
                         </li>
