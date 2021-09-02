@@ -1,7 +1,7 @@
 from django import forms
 
 from address.models import Area
-from service.models import Service, ServiceCategory, DeliveryArea
+from service.models import Service, ServiceCategory, DeliveryArea, ServiceAvailableTime
 
 
 class ServiceCreateUpdateForm(forms.ModelForm):
@@ -27,3 +27,16 @@ class DeliveryAreaCreateUpdateForm(forms.ModelForm):
         model = DeliveryArea
         fields = ('area',)
         widgets = {'area': forms.Select(attrs={'class': 'form-control'})}
+
+
+class ServiceAvailableTimeCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = ServiceAvailableTime
+        fields = ('day', 'open_time', 'close_time', 'is_close')
+        widgets = {
+            'day': forms.Select(attrs={'class': 'form-control'}),
+            'open_time': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'close_time': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'is_close': forms.NullBooleanSelect(attrs={'class': 'form-control'})
+        }
+
