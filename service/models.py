@@ -31,6 +31,9 @@ class Service(BaseModel):
     name = models.CharField(max_length=40, verbose_name=_('name'))
     service_type = models.PositiveSmallIntegerField(verbose_name=_('service type'), choices=SERVICE_TYPES)
     minimum_purchase = models.DecimalField(max_digits=9, decimal_places=0, verbose_name=_('minimum purchase'))
+    available = models.BooleanField(default=False, verbose_name=_('available'))
+    logo = models.ImageField(verbose_name=_('logo'), upload_to='service/logos/', null=True, blank=True)
+    banner = models.ImageField(verbose_name=_('banner'), upload_to='service/banners/', null=True, blank=True)
 
     address = models.OneToOneField(
         ServiceAddress,
@@ -48,6 +51,7 @@ class Service(BaseModel):
         verbose_name = _('Service')
         verbose_name_plural = _('Services')
         db_table = 'service'
+        ordering = ('created_time',)
 
 
 class ServiceCategory(BaseModel):
