@@ -53,7 +53,7 @@
                             <a href="{% url 'service:service-provider-service-category-update' category.pk %}"
                                class="btn btn-warning"
                                style="margin-right: 10px">Update</a>
-                            <a href="{% url 'service:service-provider-service-category-detail' category.pk %}"
+                            <a href="{% url 'item:service-provider-list' service.pk category.pk %}"
                                class="btn btn-primary"
                                style="margin-right: 10px">Detail</a>
                             <a href="{% url 'service:service-provider-service-category-delete' category.pk %}"

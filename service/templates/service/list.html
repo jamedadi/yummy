@@ -2,14 +2,22 @@
 {% load static %}
 {% load service_delivary_area %}
 {% block content %}
-    <div class="row">
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="filter" style="margin-bottom: 30px; border:1px solid #c4c4c8; border-radius: 15px; padding: 20px">
+            <form method="get">
+                {{ filter.form.as_p }}
+                <button type="submit" class="btn btn-warning">Filter</button>
+            </form>
+        </div>
+
         {% for service in services %}
             <div class="col-lg-4">
                 <div class="card" style="width: 25rem;margin-bottom: 20px">
-                    <div class="card-body" align="center">
+                    <div class="card-body text-center">
                         {% if service.logo %}
                             <img src="{{ service.logo.url }}" width="103px" height="103px">
-{#                        {% else %}#}
+                        {% else %}
+                            <img src="" width="103px" height="103px">
                         {% endif %}
                         <h5 class="card-title text-danger">{{ service.name }}</h5>
                         <br>
@@ -17,7 +25,7 @@
                         {% delivery_area_string service as areas %}
                         <p class="card-text">{{ areas | truncatechars:15 }}</p>
                         <p class="card-text">{{ service.areas | truncatechars:20 }}</p>
-                        <a href="#" class="btn btn-primary">Menu</a>
+                        <a href="{% url 'item:list' service.pk service.categories.first.pk %}" class="btn btn-primary">Menu</a>
                     </div>
                 </div>
                 <br>
