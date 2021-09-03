@@ -25,7 +25,7 @@
                         {% delivery_area_string service as areas %}
                         <p class="card-text">{{ areas | truncatechars:15 }}</p>
                         <p class="card-text">{{ service.areas | truncatechars:20 }}</p>
-                        <a href="{% url 'item:list' service.pk service.categories.first.pk %}" class="btn btn-primary">Menu</a>
+                        <a href="{% url 'item:list' service.pk %}" class="btn btn-primary">Menu</a>
                     </div>
                 </div>
                 <br>
