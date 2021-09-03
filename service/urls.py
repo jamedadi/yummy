@@ -3,7 +3,7 @@ from django.urls import path
 from .views import ServiceProviderServiceCreateView, ServiceProviderServiceUpdateView, ServiceProviderServiceDeleteView, \
     ServiceProviderServiceDetailView, ServiceProviderServiceListView, ServiceProviderServiceCategoryCreateView, \
     ServiceProviderServiceCategoryUpdateView, ServiceProviderServiceCategoryDeleteView, \
-    ServiceProviderServiceCategoryDetailView, ServiceProviderDeliveryAreaCreate, ServiceProviderDeliveryUpdateView, \
+    ServiceProviderDeliveryAreaCreate, ServiceProviderDeliveryUpdateView, \
     ServiceProviderDeliveryDeleteView, ServiceProviderServiceAvailableTimeCreateView, \
     ServiceProviderServiceAvailableTimeUpdateView, ServiceProviderServiceAvailableTimeDeleteView, ServiceListView
 
@@ -26,8 +26,6 @@ urlpatterns = (
          name='service-provider-service-category-update'),
     path('serviceprovider/category/delete/<int:pk>/', ServiceProviderServiceCategoryDeleteView.as_view(),
          name='service-provider-service-category-delete'),
-    path('serviceprovider/category/detail/<int:pk>', ServiceProviderServiceCategoryDetailView.as_view(),
-         name='service-provider-service-category-detail'),
 
     path('serviceprovider/deliveryarea/create/<int:service_pk>', ServiceProviderDeliveryAreaCreate.as_view(),
          name='service-provider-delivery-area-create'),
