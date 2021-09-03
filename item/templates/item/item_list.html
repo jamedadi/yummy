@@ -28,8 +28,8 @@
     {% for category in service.categories.all %}
         <div class="row" id="{{ category.slug }}-{{ category.pk }}">
         <h4 class="text-warning">{{ category.name }}</h4>
-            {% filter_category items category as items %}
-            {% for item in items %}
+            {% filter_category items category as category_items %}
+            {% for item in category_items %}
                 <div class="col-lg-4">
                     <div class="card text-center" style="width: 25rem;margin-bottom: 20px">
                         <div class="card-body">
