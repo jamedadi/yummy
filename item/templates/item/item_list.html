@@ -6,10 +6,17 @@
     <div class="row">
         {% for item in items %}
             <div class="col-lg-4">
-                <div class="card" style="width: 25rem;margin-bottom: 20px">
+                <div class="card bg-secondary" style="width: 25rem;margin-bottom: 20px">
                     <div class="card-body">
                         <h5 class="card-title text-danger">{{ item.name }}</h5>
                         <br>
+                        {% if item.image %}
+                            <img style="width: 190px; height: 120px; margin-bottom: 15px" class="img"
+                                 src="{{ item.image.url }}"
+                                 alt="{{ item.name }} image">
+                        {% else %}
+                            <img style="width: 190px; height: 120px; margin-bottom: 15px" class="img">
+                        {% endif %}
                         <h6 class="card-subtitle mb-2 text-muted">Price : {{ item.price }}</h6>
                         <p class="card-text">{{ item.description | truncatewords:11 }}</p>
                         <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Detail</a>
