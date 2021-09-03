@@ -10,6 +10,6 @@
     <p>Description : {{ item.description }}</p>
     <p>Price : {{ item.price }}</p>
     <a href="#" class="btn btn-success">Add to cart</a><br><br>
-    <a href="{% url 'item:list'  item.service.pk   item.category.pk %}"
+    <a href="{% url 'item:list'  item.service.pk %}"
        class="btn btn-warning">Back to List</a>
 {% endblock %}
