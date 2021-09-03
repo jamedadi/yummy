@@ -112,18 +112,21 @@ class BaseItemListView(ListView):
     model = Item
     context_object_name = 'items'
 
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        self.kwargs['service'] = get_object_or_404(Service, id=self.kwargs['service_pk'])
-        self.kwargs['category'] = get_object_or_404(ServiceCategory, id=self.kwargs['category_pk'],
-                                                    service=self.kwargs['service'])
-
 
 class ItemListView(BaseItemListView):
     template_name = 'item/item_list.html'
 
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.kwargs['service'] = get_object_or_404(Service, id=self.kwargs['service_pk'])
+
     def get_queryset(self):
-        return Item.objects.available().filter(service=self.kwargs['service'], category=self.kwargs['category'])
+        return Item.objects.available().filter(service=self.kwargs['service'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['service'] = self.kwargs['service']
+        return context
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
@@ -132,6 +135,12 @@ class ServiceCategoryItemListView(IsServiceProvider, BaseItemListView):
     This view is for service-provider panel
     """
     template_name = 'item/service_provider_item_list.html'
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.kwargs['service'] = get_object_or_404(Service, id=self.kwargs['service_pk'])
+        self.kwargs['category'] = get_object_or_404(ServiceCategory, id=self.kwargs['category_pk'],
+                                                    service=self.kwargs['service'])
 
     def get_queryset(self):
         return Item.objects.filter(service=self.kwargs['service'], category=self.kwargs['category'])
