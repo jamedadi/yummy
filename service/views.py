@@ -182,3 +182,10 @@ class ServiceProviderServiceAvailableTimeUpdateView(BaseServiceAvailableTime, Up
 class ServiceProviderServiceAvailableTimeDeleteView(BaseServiceAvailableTime, DeleteView):
     context_object_name = 'available_time'
     template_name = 'service_available_time/delete_form.html'
+
+
+class ServiceListView(ListView):
+    model = Service
+    context_object_name = 'services'
+    template_name = 'service/list.html'
+    queryset = Service.objects.filter(available=True)
