@@ -5,7 +5,7 @@ from .views import ServiceProviderServiceCreateView, ServiceProviderServiceUpdat
     ServiceProviderServiceCategoryUpdateView, ServiceProviderServiceCategoryDeleteView, \
     ServiceProviderServiceCategoryDetailView, ServiceProviderDeliveryAreaCreate, ServiceProviderDeliveryUpdateView, \
     ServiceProviderDeliveryDeleteView, ServiceProviderServiceAvailableTimeCreateView, \
-    ServiceProviderServiceAvailableTimeUpdateView, ServiceProviderServiceAvailableTimeDeleteView
+    ServiceProviderServiceAvailableTimeUpdateView, ServiceProviderServiceAvailableTimeDeleteView, ServiceListView
 
 app_name = 'service'
 
@@ -20,7 +20,6 @@ urlpatterns = (
          name='service-provider-service-detail'),
     path('serviceprovider/list/', ServiceProviderServiceListView.as_view(), name='service-provider-service-list'),
 
-
     path('serviceprovider/category/create/<int:service_pk>/', ServiceProviderServiceCategoryCreateView.as_view(),
          name='service-provider-service-category-create'),
     path('serviceprovider/category/update/<int:pk>/', ServiceProviderServiceCategoryUpdateView.as_view(),
@@ -30,14 +29,12 @@ urlpatterns = (
     path('serviceprovider/category/detail/<int:pk>', ServiceProviderServiceCategoryDetailView.as_view(),
          name='service-provider-service-category-detail'),
 
-
     path('serviceprovider/deliveryarea/create/<int:service_pk>', ServiceProviderDeliveryAreaCreate.as_view(),
          name='service-provider-delivery-area-create'),
     path('serviceprovider/deliveryarea/update/<int:pk>', ServiceProviderDeliveryUpdateView.as_view(),
          name='service-provider-delivery-area-update'),
     path('serviceprovider/deliveryarea/delete/<int:pk>', ServiceProviderDeliveryDeleteView.as_view(),
          name='service-provider-delivery-area-delete'),
-
 
     path(
         'serviceprovider/availabletime/create/<int:service_pk>',
@@ -48,4 +45,6 @@ urlpatterns = (
          name='service-provider-available-time-update'),
     path('serviceprovider/availabletime/delete/<int:pk>', ServiceProviderServiceAvailableTimeDeleteView.as_view(),
          name='service-provider-available-time-delete'),
+
+    path('list/', ServiceListView.as_view(), name='service-list')
 )
