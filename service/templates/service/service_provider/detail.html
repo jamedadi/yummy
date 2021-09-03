@@ -5,6 +5,22 @@
         <p>Service name : {{ service.name }}</p>
         <p>Service minimum purchase : {{ service.minimum_purchase }}</p>
         <p>Service minimum purchase : {{ service.get_service_type_display }}</p>
+        {% if service.available %}
+            <p>Service available : Yes</p>
+        {% else %}
+            <p>Service available : No</p>
+        {% endif %}
+        {% if service.logo %}
+            <p>Service Logo Image : <img src="{{ service.logo.url }}"></p>
+        {% else %}
+            <p>Service Logo Image : Not Yet Uploaded</p>
+        {% endif %}
+        {% if service.banner %}
+            <p>Service Banner Image : <img src="{{ service.banner.url }}"></p>
+        {% else %}
+            <p>Service Logo Image : Not Yet Uploaded</p>
+        {% endif %}
+
         <br>
         <hr>
         <div style="margin-top: 20px; margin-bottom: 20px">
@@ -34,9 +50,11 @@
                     <li class="list-group-item">
                         {{ category.name }}
                         <div align="right">
-                            <a href="{% url 'service:service-provider-service-category-update' category.pk %}" class="btn btn-warning"
+                            <a href="{% url 'service:service-provider-service-category-update' category.pk %}"
+                               class="btn btn-warning"
                                style="margin-right: 10px">Update</a>
-                            <a href="{% url 'service:service-provider-service-category-detail' category.pk %}" class="btn btn-primary"
+                            <a href="{% url 'service:service-provider-service-category-detail' category.pk %}"
+                               class="btn btn-primary"
                                style="margin-right: 10px">Detail</a>
                             <a href="{% url 'service:service-provider-service-category-delete' category.pk %}"
                                class="btn btn-danger">Delete</a>
@@ -75,7 +93,8 @@
             <h4 class="text-warning">Service Available Time</h4>
             <br>
             <br>
-            <a href="{% url 'service:service-provider-available-time-create' service.pk %}"> Create new available time</a>
+            <a href="{% url 'service:service-provider-available-time-create' service.pk %}"> Create new available
+                time</a>
             <br>
             <br>
             {% with availabletimes=service.available_times.all %}
