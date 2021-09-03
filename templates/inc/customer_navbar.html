@@ -25,6 +25,9 @@
                         <a class="nav-link" href="{% url 'accounts:customer-profile' %}">Profile</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'address:customer-address-list' %}">Addresses</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'accounts:customer-logout' %}">Log out</a>
                     </li>
                 {% else %}
