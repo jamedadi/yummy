@@ -2,7 +2,7 @@
 {% block title %} Update Item {% endblock %}
 {% block content %}
     <h3> Update item</h3>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             <label class="text-warning">{{ field.label }}</label>
