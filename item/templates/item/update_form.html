@@ -1,8 +1,8 @@
-{% extends 'accounts/base.html' %}
-{% block title %} Profile Update {% endblock %}
+{% extends 'base.html' %}
+{% block title %} Update Item {% endblock %}
 {% block content %}
-    <h3> Update your profile</h3>
-    <form method="post">
+    <h3> Update item</h3>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             <label class="text-warning">{{ field.label }}</label>

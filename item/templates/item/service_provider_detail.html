@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} {{ item.name }} {% endblock %}
+{% block content %}
+    <h4 class="text-warning"> {{ item.name }}</h4>
+    {% if item.image %}
+        <img style="max-width: 350px; margin-bottom: 10px" class="img" src="{{ item.image.url }}"
+             alt="{{ item.name }} image">
+    {% endif %}
+    <p>Stock : {{ item.stock }}</p>
+    <p>Category : {{ item.category.name }}</p>
+    <p>Description : {{ item.description }}</p>
+    <p>Price : {{ item.price }}</p><br>
+    <a href="{% url 'item:service-provider-list'  item.service.pk   item.category.pk %}"
+       class="btn btn-warning">Back to List</a>
+{% endblock %}

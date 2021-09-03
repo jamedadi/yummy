@@ -1,8 +1,8 @@
-{% extends 'accounts/base.html' %}
-{% block title %} Profile Update {% endblock %}
+{% extends 'base.html' %}
+{% block title %} Add item {% endblock %}
 {% block content %}
-    <h3> Update your profile</h3>
-    <form method="post">
+    <h3> Add new item</h3>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             <label class="text-warning">{{ field.label }}</label>
@@ -16,7 +16,7 @@
         {% if form.errors %}
             {% block form_error %} {% endblock %}
         {% endif %}
-        <button type="submit" class="btn btn-warning">Update</button>
+        <button type="submit" class="btn btn-warning">Add</button>
 
     </form>
 {% endblock %}

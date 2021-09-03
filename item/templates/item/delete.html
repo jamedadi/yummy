@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <p>Are you sure to delete this item from your menu?</p>
+            <p>{{ object.name }}</p>
+
+            <input type="submit" value="delete" class="btn btn-danger">
+        </form>
+        <br>
+        <a href="{% url 'item:service-provider-list'  item.service.pk   item.category.pk %}"
+       class="btn btn-primary">Cancel</a>
+    </div>
+{% endblock %}
