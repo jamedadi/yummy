@@ -82,7 +82,7 @@ class ServiceAddress(BaseAddress):
     area = models.ForeignKey(Area, verbose_name=_('area'), related_name='s_addresses', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.city} - {self.area}'
+        return f'{self.area.name}، {self.street}، {self.alley}'
 
     class Meta:
         verbose_name = _('ServiceAddress')

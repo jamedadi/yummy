@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <a href="{% url 'service:service-provider-service-create' %}">Create new service</a>
+    <br><br>
+    <ul class="list-group">
+        {% for service in services %}
+            <li class="list-group-item">
+                    {{ service.name }}
+                    <div align="right">
+                        <a href="{% url 'service:service-provider-service-update' service.pk %}"
+                           class="btn btn-warning" style="margin-right: 10px">Update</a>
+                        <a href="{% url 'service:service-provider-service-detail' service.pk %}"
+                           class="btn btn-primary" style="margin-right: 10px">Detail</a>
+                        <a href="{% url 'service:service-provider-service-delete' service.pk %}"
+                           class="btn btn-danger">Delete</a>
+                    </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

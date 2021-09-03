@@ -8,6 +8,6 @@
     {% if service %}
         <a href="{% url 'service:service-provider-service-detail' service.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
     {% else %}
-        <a href="{% url 'service:service-provider-service-detail' object.services.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+        <a href="{% url 'service:service-provider-service-detail' object.service.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
     {% endif %}
 {% endblock %}

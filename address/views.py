@@ -80,6 +80,11 @@ class ServiceAddressCreateView(CustomUserPasses, CreateView):
         super().setup(request, *args, **kwargs)
         self.service = get_object_or_404(Service, id=self.kwargs['service_pk'])
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['service'] = self.service
+        return context
+
     def test_func(self):
         if not isinstance(self.request.user, ServiceProvider):
             return False

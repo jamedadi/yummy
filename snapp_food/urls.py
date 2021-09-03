@@ -23,6 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin-panel'),
     path('home/', TemplateView.as_view(template_name='base.html'), name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('service/', include('service.urls', namespace='service')),
     path('address/', include('address.urls', namespace='address')),
-    path('item/', include('item.urls', namespace='item'))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('item/', include('item.urls', namespace='item')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

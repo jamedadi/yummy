@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load service_delivary_area %}
+{% block content %}
+    <div class="row">
+        {% for service in services %}
+            <div class="col-lg-4">
+                <div class="card" style="width: 25rem;margin-bottom: 20px">
+                    <div class="card-body" align="center">
+                        {% if service.logo %}
+                            <img src="{{ service.logo.url }}" width="103px" height="103px">
+{#                        {% else %}#}
+                        {% endif %}
+                        <h5 class="card-title text-danger">{{ service.name }}</h5>
+                        <br>
+                        <p class="card-text">{{ service.address | truncatechars:30 }}</p>
+                        {% delivery_area_string service as areas %}
+                        <p class="card-text">{{ areas | truncatechars:15 }}</p>
+                        <p class="card-text">{{ service.areas | truncatechars:20 }}</p>
+                        <a href="#" class="btn btn-primary">Menu</a>
+                    </div>
+                </div>
+                <br>
+            </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}

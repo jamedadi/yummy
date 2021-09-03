@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <p>Are you sure to delete service available time ({{ available_time.get_day_display }})?</p>
+            <input type="submit" value="delete" class="btn btn-danger">
+        </form>
+        <a href="{% url 'service:service-provider-service-detail' available_time.service.pk %}" class="btn btn-warning"
+           style="margin-top: 20px">cancel</a>
+    </div>
+{% endblock %}
