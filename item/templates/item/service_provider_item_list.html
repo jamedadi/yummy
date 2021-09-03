@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <h4 class="text-warning">Category Detail</h4>
+    <h6>Category Name : {{ category.name }}</h6>
+    <br>
     <h5 class="text-warning">Items</h5>
     <br>
     <a class="btn btn-success" href="{% url 'item:create' category.service.pk category.pk %}">Add item</a>

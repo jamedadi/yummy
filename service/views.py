@@ -8,9 +8,12 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.shortcuts import get_object_or_404, redirect
 
+from django_filters.views import FilterView
+
 from accounts.utils import IsServiceProvider
 from service.forms import ServiceCreateUpdateForm, ServiceCategoryCreateUpdateForm, DeliveryAreaCreateUpdateForm, \
     ServiceAvailableTimeCreateUpdateForm
+from service.filters import ServiceFilter
 from service.models import Service, ServiceCategory, DeliveryArea, ServiceAvailableTime
 from service.utils import CustomServiceIsServiceProvider
 
@@ -127,12 +130,6 @@ class ServiceProviderServiceCategoryDeleteView(BaseServiceCategory, DeleteView):
 
 
 @method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
-class ServiceProviderServiceCategoryDetailView(BaseServiceCategory, DetailView):
-    context_object_name = 'category'
-    template_name = 'service_category/detail.html'
-
-
-@method_decorator(login_required(login_url=reverse_lazy('accounts:service-provider-login')), name='dispatch')
 class ServiceProviderDeliveryAreaCreate(BaseCreateView, CreateView):
     model = DeliveryArea
     form_class = DeliveryAreaCreateUpdateForm
@@ -184,8 +181,9 @@ class ServiceProviderServiceAvailableTimeDeleteView(BaseServiceAvailableTime, De
     template_name = 'service_available_time/delete_form.html'
 
 
-class ServiceListView(ListView):
+class ServiceListView(FilterView):
     model = Service
     context_object_name = 'services'
     template_name = 'service/list.html'
+    filterset_class = ServiceFilter
     queryset = Service.objects.filter(available=True)
