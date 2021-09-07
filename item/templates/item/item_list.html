@@ -105,7 +105,12 @@
                         <h5>Cart <i class="fa fa-shopping-cart" style="font-size:24px; color: deeppink"></i></h5>
                     </div>
                     <div style="border-bottom: 2px solid #d9d9d9">
-                        <a class="text-decoration-none" href="#" style="color: deeppink">Empty cart</a>
+                        <form method="post" action="{% url 'cart:empty-cart' cart.pk %}">
+                            {% csrf_token %}
+                            <button style="color: deeppink; background-color: white; border: 0px"
+                                    type="submit">Empty Cart
+                            </button>
+                        </form>
                     </div>
 
                     <ul class="nav nav-pills flex-column mb-auto">

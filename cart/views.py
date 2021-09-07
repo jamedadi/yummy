@@ -59,11 +59,12 @@ class EmptyCartView(View):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.kwargs['object'] = get_object_or_404(CartLine, id=self.kwargs['pk'])
+        self.kwargs['object'] = get_object_or_404(Cart, id=self.kwargs['pk'])
 
     def get_success_url(self):
-        return reverse_lazy('item:list', kwargs={'service_pk': self.kwargs['object'].service})
+        return reverse_lazy('item:list', kwargs={'service_pk': self.kwargs['object'].service.pk})
 
     def post(self, request, *args, **kwargs):
         self.kwargs['object'].empty_cart()
+        self.kwargs['object'].save()
         return HttpResponseRedirect(self.get_success_url())
