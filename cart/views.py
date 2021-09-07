@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
-from django.views.generic import View
+from django.views.generic import View, DeleteView
 
 from cart.models import Cart, CartLine
 from item.models import Item
@@ -22,3 +22,12 @@ class AddToCartView(View):
 
         return HttpResponseRedirect(
             reverse_lazy('item:list', kwargs={'service_pk': item.service.pk}))
+
+
+@method_decorator(require_http_methods(('POST',)), name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class CartLineDeleteView(DeleteView):
+    model = CartLine
+
+    def get_success_url(self):
+        return reverse_lazy('item:list', kwargs={'service_pk': self.object.item.service.pk})
