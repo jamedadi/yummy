@@ -104,6 +104,9 @@
                     <div style="border-bottom: 2px solid #d9d9d9">
                         <h5>Cart <i class="fa fa-shopping-cart" style="font-size:24px; color: deeppink"></i></h5>
                     </div>
+                    <div style="border-bottom: 2px solid #d9d9d9">
+                        <a class="text-decoration-none" href="#" style="color: deeppink">Empty cart</a>
+                    </div>
 
                     <ul class="nav nav-pills flex-column mb-auto">
                         {% for line in cart.lines.all %}
@@ -167,7 +170,7 @@
                     </di>
                 </div>
 
-                <a href="#" class="btn" style="background-color: deeppink; width: 150px; color: white">Paid</a>
+                <a href="#" class="btn" style="background-color: deeppink; width: 150px; color: white">check out</a>
             {% else %}
                 <div style="border-top: 2px solid #d9d9d9; border-bottom: 1px solid #d9d9d9; border-right: 2px solid #d9d9d9; border-left: 2px solid #d9d9d9; background-color: white;">
 
