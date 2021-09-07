@@ -36,17 +36,19 @@ class CartLineDeleteView(DeleteView):
 
 @method_decorator(require_http_methods(('POST',)), name='dispatch')
 @method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
-class CartLineDecreaseView(DetailView):
+class CartLineDecreaseView(View):
     model = CartLine
 
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.kwargs['object'] = get_object_or_404(CartLine, id=self.kwargs['pk'])
+
     def get_success_url(self):
-        return reverse_lazy('item:list', kwargs={'service_pk': self.object.item.service.pk})
+        return reverse_lazy('item:list', kwargs={'service_pk': self.kwargs['object'].item.service.pk})
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
         with transaction.atomic():
-            if self.object.quantity >= 2:
-                self.object.quantity += -1
-                self.object.save()
+            if self.kwargs['object'].quantity >= 2:
+                self.kwargs['object'].quantity -= 1
+                self.kwargs['object'].save()
         return HttpResponseRedirect(self.get_success_url())
