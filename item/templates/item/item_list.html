@@ -122,7 +122,7 @@
 
                                 </div>
                                 <div style="text-align: left;">{{ line.item.name }}</div>
-                                <div style="float: left; margin-top: 10px">{{ line.item.price }} $</div>
+                                <div style="float: left; margin-top: 10px">{{ line.price }} $</div>
                                 <div style="height: 30px; margin-right: 10px">
                                     <form method="post" action="{% url 'cart:add-to-cart' line.item.pk %}">
                                         {% csrf_token %}
