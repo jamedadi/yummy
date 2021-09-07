@@ -12,12 +12,12 @@
             </div>
             <div style="width: 150px; height: 150px; position: absolute; top: 25px; left: 450px;z-index: 9; margin-bottom: 10px">
                 <div style="float: left;">
-                {% if service.logo %}
-                    <img src="{{ service.logo.url }}" width="150px"
-                         height="150px" style="border: 1px solid #dadada">
-                {% else %}
-                    <img src="" width="95px" height="95px">
-                {% endif %}
+                    {% if service.logo %}
+                        <img src="{{ service.logo.url }}" width="150px"
+                             height="150px" style="border: 1px solid #dadada">
+                    {% else %}
+                        <img src="" width="95px" height="95px">
+                    {% endif %}
                 </div>
                 <div style="width:400px;margin-left: 180px;margin-top: 38px">
                     <h3>{{ service.name.title }} {{ service.get_service_type_display.title }}</h3>
@@ -109,7 +109,7 @@
                         {% for line in cart.lines.all %}
                             <div style="height: 80px; padding: 10px 10px 10px 10px; border-bottom: 1px solid #d9d9d9">
                                 <div>
-                                    <form method="post" action="">
+                                    <form method="post" action="{% url 'cart:cart-line-delete' line.pk %}">
                                         {% csrf_token %}
                                         <div style="float: left; height: 60px; text-align: end; margin-right: 10px; color: deeppink">
                                             <button type="submit"
@@ -136,7 +136,7 @@
                                     <div style="float: right; margin: 10px 15px 10px 15px; width: 20px">{{ line.quantity }}</div>
                                     <div style="float: right;color: deeppink;">
                                         {% if line.quantity == 1 %}
-                                            <form method="post" action="">
+                                            <form method="post" action="{% url 'cart:cart-line-delete' line.pk %}">
                                                 {% csrf_token %}
                                                 <button type="submit"
                                                         style="font-size: 25px;color: deeppink; background-color: white; border: 0px">
@@ -144,7 +144,7 @@
                                                 </button>
                                             </form>
                                         {% else %}
-                                            <form method="post" action="">
+                                            <form method="post" action="{% url 'cart:cart-line-decrease' line.pk %}">
                                                 {% csrf_token %}
                                                 <button type="submit"
                                                         style="font-size: 25px;color: deeppink; background-color: white; border: 0px">
