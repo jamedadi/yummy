@@ -79,4 +79,4 @@ class CartLine(BaseModel):
         verbose_name_plural = _('Cart lines')
         db_table = 'cart_line'
         ordering = ('created_time', 'modified_time')
-        unique_together = ('item', 'cart')
+        unique_together = ('item', 'cart')  # each cart can have one cart line with the same item
