@@ -67,16 +67,16 @@ class CartLine(BaseModel):
     cart = models.ForeignKey(Cart, verbose_name=_('cart'), related_name='lines', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, verbose_name=_('quantity'))
 
-    def save(self, **kwargs):
-        self.price = self.item.price * self.quantity
-        return super().save(**kwargs)
-
     def __str__(self):
         return f"{self.item} - {self.quantity}"
+
+    @property
+    def price(self):
+        return self.item.price * self.quantity
 
     class Meta:
         verbose_name = _('Cart line')
         verbose_name_plural = _('Cart lines')
         db_table = 'cart_line'
         ordering = ('created_time', 'modified_time')
-        unique_together = ('item', 'cart')
+        unique_together = ('item', 'cart')  # each cart can have one cart line with the same item
