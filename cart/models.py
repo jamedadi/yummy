@@ -36,8 +36,11 @@ class Cart(BaseModel):
         return f"{self.customer} - {'Paid' if self.is_paid else 'Not paid'}"
 
     @classmethod
-    def get_cart(cls, user):
-        cart, create = cls.objects.get_or_create(customer=user, is_paid=False)
+    def get_cart(cls, cart_id):
+        if cart_id is None:
+            cart = cls.objects.create()
+        else:
+            created, cart = cls.objects.get_or_create(pk=cart_id)
         return cart
 
     def create_or_increase(self, item):
