@@ -40,7 +40,7 @@ class Cart(BaseModel):
         if cart_id is None:
             cart = cls.objects.create()
         else:
-            created, cart = cls.objects.get_or_create(pk=cart_id)
+            cart, created = cls.objects.get_or_create(pk=cart_id)
         return cart
 
     def create_or_increase(self, item):

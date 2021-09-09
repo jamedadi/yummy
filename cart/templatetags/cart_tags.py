@@ -1,16 +1,20 @@
 from django import template
 from django.db.models import Sum, F
 
-from accounts.models import Customer
+
+from cart.models import Cart
 
 register = template.Library()
 
 
 @register.simple_tag
 def get_cart(request, service):
-    if request.user.is_authenticated and isinstance(request.user, Customer):
-        cart = request.user.carts.filter(is_paid=False).last()
-        if cart and cart.lines.filter(item__service=service).exists():
+    try:
+        cart = Cart.objects.get(id=request.COOKIES.get('cart_id', None))
+    except Cart.DoesNotExist:
+        return None
+    else:
+        if cart.lines.filter(item__service=service).exists():
             return cart
     return None
 

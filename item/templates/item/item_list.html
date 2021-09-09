@@ -75,8 +75,9 @@
 
                                     <form method="post"
                                           style="flex-direction: column; align-items: stretch; height: 40px;"
-                                          action="{% url 'cart:add-to-cart' item.pk %}">
+                                          action="{% url 'cart:add-to-cart' %}">
                                         {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ item.pk }}">
                                         <div style="float:left; text-align: center">
                                             <button type="submit"
                                                     style="color: deeppink;font-size: 23px; text-align: left; border:  #d9d9d9; background-color: #d9d9d9">
@@ -103,7 +104,7 @@
                         <h5>Cart <i class="fa fa-shopping-cart" style="font-size:24px; color: deeppink"></i></h5>
                     </div>
                     <div style="border-bottom: 2px solid #d9d9d9">
-                        <form method="post" action="{% url 'cart:empty-cart' cart.pk %}">
+                        <form method="post" action="{% url 'cart:empty-cart' %}">
                             {% csrf_token %}
                             <button style="color: deeppink; background-color: white; border: 0px"
                                     type="submit">Empty Cart
@@ -130,8 +131,9 @@
                                 <div style="text-align: left;">{{ line.item.name }}</div>
                                 <div style="float: left; margin-top: 10px">{{ line.price }} $</div>
                                 <div style="height: 30px; margin-right: 10px">
-                                    <form method="post" action="{% url 'cart:add-to-cart' line.item.pk %}">
+                                    <form method="post" action="{% url 'cart:add-to-cart' %}">
                                         {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ line.item.pk }}">
                                         <div style="float: right; padding-top: 5px">
                                             <button type="submit"
                                                     style=" font-size: 20px;color: deeppink; background-color: white; border: 0px">
