@@ -3,7 +3,6 @@ from django.utils.translation import gettext as _
 from accounts.models import Customer
 from item.models import Item
 from library.models import BaseModel
-from payment.models import Invoice
 from service.models import Service
 
 
