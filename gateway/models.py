@@ -21,3 +21,8 @@ class Gateway(BaseModel):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = _('Gateway')
+        verbose_name_plural = _('Gateways')
+        db_table = 'gateway'
