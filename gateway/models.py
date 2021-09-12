@@ -18,3 +18,6 @@ class Gateway(BaseModel):
     gateway_code = models.CharField(max_length=20, verbose_name=_('gateway code'), choices=GATEWAY_FUNCTIONS_CHOICES)
     is_enable = models.BooleanField(verbose_name=_('is enable'), default=True)
     auth_data = models.TextField(verbose_name=_('auth data'), blank=True)
+
+    def __str__(self):
+        return self.title
