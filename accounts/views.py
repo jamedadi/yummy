@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test as user_test
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, LogoutView
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView, UpdateView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 
 from accounts.forms import CustomerLoginRegisterForm, CustomerCodeConfirmForm, CustomerPasswordForm, \
@@ -154,6 +155,18 @@ class CustomerChangePasswordView(CustomUserPasses, PasswordChangeView):
         if not self.request.user.password:
             return False, True, reverse_lazy("accounts:customer-set-password")
         return True
+
+
+class CustomerLogoutView(LogoutView):
+    next_page = reverse_lazy('accounts:customer-login-register')
+
+    def dispatch(self, request, *args, **kwargs):
+        logout(request)
+        next_page = self.get_next_page()
+        response = HttpResponseRedirect(next_page)
+        if request.COOKIES.get('cart_id', None) is not None:
+            response.delete_cookie('cart_id')
+        return response
 
 
 @method_decorator(require_http_methods(['POST', 'GET']), name='dispatch')
