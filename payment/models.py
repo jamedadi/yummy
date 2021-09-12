@@ -3,6 +3,7 @@ from django.utils.translation import gettext as _
 from accounts.models import Customer
 from address.models import CustomerAddress
 from cart.models import Cart
+from gateway.models import Gateway
 from library.models import BaseModel
 import uuid
 
@@ -32,6 +33,8 @@ class Payment(BaseModel):
     customer = models.ForeignKey(Customer, verbose_name=_('customer'), related_name='payments',
                                  on_delete=models.SET_NULL, null=True)
     is_paid = models.BooleanField(verbose_name=_('is paid'), default=False)
+    gateway = models.ForeignKey(Gateway, verbose_name=_('gateway'), related_name='payments', on_delete=models.SET_NULL,
+                                null=True)
     payment_log = models.TextField(verbose_name=_('logs'), blank=True)
     authority = models.CharField(max_length=64, verbose_name=_('authority'), blank=True)
 
