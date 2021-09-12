@@ -16,14 +16,6 @@ class Cart(BaseModel):
         on_delete=models.CASCADE
     )
     is_paid = models.BooleanField(default=False, verbose_name=_('is paid'))
-    invoice = models.OneToOneField(
-        Invoice,
-        verbose_name=_('invoice'),
-        related_name='cart',
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
-    )
     service = models.ForeignKey(
         Service,
         verbose_name=_('service'),

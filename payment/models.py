@@ -11,8 +11,9 @@ class Invoice(BaseModel):
                                  on_delete=models.SET_NULL, null=True)
     price = models.IntegerField(verbose_name=_('price'))
     is_paid = models.BooleanField(verbose_name=_('is paid'), default=False)
-    address = models.ForeignKey(CustomerAddress, verbose_name=_('address'), related_name='invoices', on_delete=models.SET_NULL,
-                                null=True, blank=True)
+    cart = models.OneToOneField(verbose_name=_('cart'), related_name='invoice', on_delete=models.PROTECT)
+    address = models.ForeignKey(CustomerAddress, verbose_name=_('address'), related_name='invoices',
+                                on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Invoice')
