@@ -137,3 +137,5 @@ AUTHENTICATION_BACKENDS = [
     'accounts.authenticate.PhoneNumberPasswordBackend',
     'accounts.authenticate.ServiceProviderAuthentication',
 ]
+
+CALL_BACK = 'http://127.0.0.1:8000/payment/verify/'
