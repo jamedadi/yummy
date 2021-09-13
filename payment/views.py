@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.db import transaction
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -45,6 +46,22 @@ class CheckoutView(CustomUserPasses, View):
         if address_form.is_valid() and gateway_form.is_valid():
             address = address_form.cleaned_data['address']
             gateway = gateway_form.cleaned_data['gateway']
-            Invoice.create(request.user, self.cart, address=address, gateway=gateway)
+            with transaction.atomic():
+                payment = Invoice.create(request.user, self.cart, address=address, gateway=gateway)
+                bank_url = payment.bank_page
 
-        return HttpResponse("Payment created !!!")
+            return HttpResponseRedirect(bank_url)
+        return self.get(request, *args, **kwargs)
+
+
+@method_decorator(require_http_methods(['GET']), name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class PaymentVerify(View):
+    def get(self, request, *args, **kwargs):
+        authority = self.request.GET.get('Authority', None)
+        if authority:
+            payment = get_object_or_404(Payment, authority=authority)
+            is_paid, ref_id = payment.verify()
+            response = render(request, 'payment/verify.html', {'is_paid': is_paid, 'ref_id': ref_id})
+            response.delete_cookie('cart_id')
+            return response
