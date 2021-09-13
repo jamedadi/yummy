@@ -6,7 +6,11 @@
     <br><br>
     <p> status : {{ order.get_status_display }} </p>
     <p> order date time : {{ order.created_time }} </p>
-    <p> address : {{ order.invoice.address }} </p>
+    <p> address : {{ order.invoice.address.state.name }} - {{ order.invoice.address.city.name }}
+        - {{ order.invoice.address.area.name }} - {{ order.invoice.address.street }}
+        - {{ order.invoice.address.alley }} - {{ order.invoice.address.floor }}
+        - {{ order.invoice.address.plaque }}
+    </p>
     <br><br>
     <table class="table table-warning">
         <thead>
