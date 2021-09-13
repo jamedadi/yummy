@@ -7,6 +7,8 @@ from gateway.models import Gateway
 from library.models import BaseModel
 import uuid
 
+from snapp_food.settings import CALL_BACK
+
 
 class Invoice(BaseModel):
     customer = models.ForeignKey(Customer, verbose_name=_('customer'), related_name='invoices',
@@ -57,3 +59,44 @@ class Payment(BaseModel):
 
     def __str__(self):
         return f"{self.price} - {'Paid' if self.is_paid else 'Not paid'}"
+
+    def get_request_handler_data(self):
+        return dict(
+            amount=self.price, description=self.description, user_email='mohammad@agmil.com',
+            user_phone_number=self.customer.phone_number, REQUEST_URL=self.gateway.gateway_request_url,
+            MERCHANT_ID=self.gateway.auth_data, CALL_BACK=CALL_BACK,
+        )
+
+    @property
+    def bank_page(self):
+        handler = self.gateway.get_request_handler()
+        if handler:
+            link, authority = handler(**self.get_request_handler_data())
+            if authority:
+                self.authority = authority
+                self.save()
+            return link
+
+    def get_verify_handler_data(self):
+        return dict(
+            amount=self.price, authority=self.authority, REQUEST_URL=self.gateway.gateway_request_url,
+            MERCHANT_ID=self.gateway.auth_data
+        )
+
+    def verify(self):
+        handler = self.gateway.get_verify_handler()
+        if handler:
+            is_paid, ref_id = handler(**self.get_verify_handler_data())
+            if is_paid:
+                with transaction.atomic():
+                    self.is_paid = True
+                    self.invoice.is_paid = True
+                    self.invoice.cart.is_paid = True
+                    self.invoice.cart.save()
+                    self.invoice.save()
+                    self.save()
+            return is_paid, ref_id
+
+    @property
+    def description(self):
+        return 'buy of snapp food service'
