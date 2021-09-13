@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.utils.translation import gettext as _
 from accounts.models import Customer
 from address.models import CustomerAddress
@@ -21,6 +21,18 @@ class Invoice(BaseModel):
         verbose_name = _('Invoice')
         verbose_name_plural = _('Invoices')
         db_table = 'invoice'
+
+    @classmethod
+    def create_payment(cls, invoice, gateway):
+        return Payment.objects.create(invoice=invoice, price=invoice.price, customer=invoice.customer, gateway=gateway)
+
+    @classmethod
+    def create(cls, user, cart, address, gateway):
+        with transaction.atomic():
+            invoice = cls.objects.create(customer=user, cart=cart, price=cart.total_price, address=address)
+            payment = cls.create_payment(invoice=invoice, gateway=gateway)
+
+        return payment
 
     def __str__(self):
         return f"{self.customer} - {self.price} - {'Paid' if self.is_paid else 'Not paid'}"
