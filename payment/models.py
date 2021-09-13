@@ -84,6 +84,7 @@ class Payment(BaseModel):
         )
 
     def verify(self):
+        from order.models import Order
         handler = self.gateway.get_verify_handler()
         if handler:
             is_paid, ref_id = handler(**self.get_verify_handler_data())
@@ -95,6 +96,7 @@ class Payment(BaseModel):
                     self.invoice.cart.save()
                     self.invoice.save()
                     self.save()
+                    Order.create(invoice=self.invoice)
             return is_paid, ref_id
 
     @property
