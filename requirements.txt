@@ -5,3 +5,4 @@ Pillow==8.3.1
 psycopg2-binary==2.9.1
 pytz==2021.1
 sqlparse==0.4.1
+suds-jurko==0.6
