@@ -23,13 +23,14 @@ class CheckoutView(CustomUserPasses, View):
             return False
         return True
 
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
         cart_id = self.request.COOKIES.get('cart_id', None)
         self.cart = get_object_or_404(Cart, pk=cart_id)
         if self.cart.customer is None:
             self.cart.customer = request.user
             self.cart.save()
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         address_form = AddressSelectForm()
