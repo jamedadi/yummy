@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'item.apps.ItemConfig',
     'cart.apps.CartConfig',
     'payment.apps.PaymentConfig',
-
+    'gateway.apps.GatewayConfig',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +137,5 @@ AUTHENTICATION_BACKENDS = [
     'accounts.authenticate.PhoneNumberPasswordBackend',
     'accounts.authenticate.ServiceProviderAuthentication',
 ]
+
+CALL_BACK = 'http://127.0.0.1:8000/payment/verify/'
