@@ -1,4 +1,5 @@
 from django.db import models, transaction
+from django.db.models import Sum, F
 from django.utils.translation import gettext as _
 from accounts.models import Customer
 from item.models import Item
@@ -25,6 +26,11 @@ class Cart(BaseModel):
 
     def __str__(self):
         return f"{self.customer} - {'Paid' if self.is_paid else 'Not paid'}"
+
+    @property
+    def total_price(self):
+        return self.lines.all().annotate(price=F('quantity') * F('item__price')).aggregate(
+            total_price=Sum('price')).get('total_price')
 
     @classmethod
     def get_cart(cls, cart_id):
