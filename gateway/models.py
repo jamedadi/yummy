@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 
+from gateway.utils.zarrinpal import zarrinpal_request_handler, zarrinpal_payment_verify
 from library.models import BaseModel
 
 
@@ -21,6 +22,20 @@ class Gateway(BaseModel):
 
     def __str__(self):
         return self.title
+
+    def get_request_handler(self):
+        handlers = {
+            self.FUNCTION_ZARRINPAL: zarrinpal_request_handler,
+            self.FUNCTION_SAMAN: None,
+        }
+        return handlers[self.gateway_code]
+
+    def get_verify_handler(self):
+        handlers = {
+            self.FUNCTION_ZARRINPAL: zarrinpal_payment_verify,
+            self.FUNCTION_SAMAN: None,
+        }
+        return handlers[self.gateway_code]
 
     class Meta:
         verbose_name = _('Gateway')
