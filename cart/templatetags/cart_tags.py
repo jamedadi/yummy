@@ -10,7 +10,7 @@ register = template.Library()
 @register.simple_tag
 def get_cart(request, service):
     try:
-        cart = Cart.objects.get(id=request.COOKIES.get('cart_id', None))
+        cart = Cart.objects.get(id=request.COOKIES.get('cart_id', None), is_paid=False)
     except Cart.DoesNotExist:
         return None
     else:
