@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %} Orders {% endblock %}
+
+{% block content %}
+    <h4 style="color: deeppink;" class="text-center">Active orders</h4>
+    {% if active_orders %}
+        <ul class="list-group">
+            {% for order in active_orders %}
+                <li class="list-group-item">
+                    <a href="{% url 'item:list'  order.invoice.cart.service.pk %}"
+                       class="text-decoration-none text-black"><h5>{{ order.invoice.cart.service }}</h5></a>
+                    <p>Status : {{ order.get_status_display }}</p>
+                    <div align="right">
+                        <a href="{% url 'order:customer-detail' order.pk %}"
+                           class="btn btn-warning" style="margin-right: 10px">Detail</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <br>
+        <h6 class="text-center">You have no active orders :(</h6>
+    {% endif %}
+    <h4 style="color: deeppink; padding-top: 20px" class="text-center">Delivered orders</h4>
+    {% if delivered_orders %}
+        <ul class="list-group">
+            {% for order in delivered_orders %}
+                <li class="list-group-item">
+                    <a href="{% url 'item:list'  order.invoice.cart.service.pk %}"
+                       class="text-decoration-none text-black"><h5>{{ order.invoice.cart.service }}</h5></a>
+                    <p>Status : {{ order.get_status_display }}</p>
+                    <div align="right">
+                        <a href="{% url 'order:customer-detail' order.pk %}"
+                           class="btn btn-warning" style="margin-right: 10px">Detail</a>
+                        <a href="#"
+                           class="btn btn-primary" style="margin-right: 10px">Leave Comment</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <br>
+        <h6 class="text-center">You have no delivered orders </h6>
+    {% endif %}
+{% endblock %}
