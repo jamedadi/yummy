@@ -1,5 +1,5 @@
 """
-WSGI config for snapp_food project.
+WSGI config for yummy project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'snapp_food.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yummy.settings')
 
 application = get_wsgi_application()

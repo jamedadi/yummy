@@ -7,7 +7,7 @@ from gateway.models import Gateway
 from library.models import BaseModel
 import uuid
 
-from snapp_food.settings import CALL_BACK
+from yummy.settings import CALL_BACK
 
 
 class Invoice(BaseModel):
