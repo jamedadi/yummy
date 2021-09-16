@@ -62,7 +62,7 @@ class Payment(BaseModel):
 
     def get_request_handler_data(self):
         return dict(
-            amount=self.price, description=self.description, user_email='mohammad@agmil.com',
+            amount=self.price, description=self.description, user_email=getattr(self.customer, 'email', ''),
             user_phone_number=self.customer.phone_number, REQUEST_URL=self.gateway.gateway_request_url,
             MERCHANT_ID=self.gateway.auth_data, CALL_BACK=CALL_BACK,
         )
