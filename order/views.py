@@ -17,6 +17,10 @@ from service.models import Service
 
 from library.utils import CustomUserPasses
 
+from accounts.models import Customer
+from accounts.utils import IsCustomer
+
+
 
 class BaseOrderServiceList(CustomUserPasses):
     model = Order
@@ -91,3 +95,37 @@ class OrderServiceUpdateView(BaseOrderDetailUpdate, UpdateView):
     def get_success_url(self):
         order = self.get_object()
         return reverse_lazy('order:service-order-list', kwargs={'service_pk': order.invoice.cart.service.id})
+
+
+
+
+@method_decorator(require_http_methods(['GET']), name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class CustomerOrdersListView(IsCustomer, ListView):
+    template_name = 'order/customer/order_list.html'
+    context_object_name = 'active_orders'
+
+    def get_queryset(self):
+        return Order.objects.select_related('invoice__cart').filter(customer=self.request.user, status__in=(0, 1))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['delivered_orders'] = Order.objects.select_related('invoice__cart').filter(customer=self.request.user,
+                                                                                           status=2)
+        return context
+
+
+@method_decorator(require_http_methods(['GET']), name='dispatch')
+@method_decorator(login_required(login_url=reverse_lazy('accounts:customer-login-register')), name='dispatch')
+class CustomerOrderDetailView(CustomUserPasses, DetailView):
+    model = Order
+    template_name = 'order/customer/order_detail.html'
+    context_object_name = 'order'
+
+    def test_func(self):
+        user = self.request.user
+        if not isinstance(user, Customer):
+            return False
+        if self.get_object().customer != self.request.user:
+            return False
+        return True
