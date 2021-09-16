@@ -62,7 +62,7 @@ class Payment(BaseModel):
 
     def get_request_handler_data(self):
         return dict(
-            amount=self.price, description=self.description, user_email='mohammad@agmil.com',
+            amount=self.price, description=self.description, user_email=getattr(self.customer, 'email', None),
             user_phone_number=self.customer.phone_number, REQUEST_URL=self.gateway.gateway_request_url,
             MERCHANT_ID=self.gateway.auth_data, CALL_BACK=CALL_BACK,
         )
@@ -84,6 +84,7 @@ class Payment(BaseModel):
         )
 
     def verify(self):
+        from order.models import Order
         handler = self.gateway.get_verify_handler()
         if handler:
             is_paid, ref_id = handler(**self.get_verify_handler_data())
@@ -95,6 +96,7 @@ class Payment(BaseModel):
                     self.invoice.cart.save()
                     self.invoice.save()
                     self.save()
+                    Order.create(invoice=self.invoice)
             return is_paid, ref_id
 
     @property
