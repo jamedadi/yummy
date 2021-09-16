@@ -13,7 +13,7 @@ class Order(BaseModel):
 
     STATUS = (
         (PREPARING_FOOD, _('preparing food')),
-        (PREPARING_FOOD, _('sending')),
+        (SENDING, _('sending')),
     )
     invoice = models.OneToOneField(Invoice, verbose_name=_('invoice'), related_name='order', on_delete=models.PROTECT)
     customer = models.ForeignKey(Customer, verbose_name=_('customer'), related_name='orders', on_delete=models.PROTECT)
