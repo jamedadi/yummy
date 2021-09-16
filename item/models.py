@@ -1,4 +1,8 @@
+import random
+import string
+
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 
 from library.models import BaseModel
@@ -11,7 +15,7 @@ class ItemManager(models.Manager):
 
 
 class Item(BaseModel):
-    upc = models.BigIntegerField(verbose_name=_('upc'), unique=True, db_index=True)
+    upc = models.BigIntegerField(verbose_name=_('upc'), unique=True, db_index=True, editable=False)
     available = models.BooleanField(verbose_name=_('available'), default=True)
     name = models.CharField(verbose_name=_('name'), max_length=50)
     description = models.TextField(verbose_name=_('description'), blank=True)
@@ -27,12 +31,22 @@ class Item(BaseModel):
         verbose_name_plural = _('Items')
         db_table = 'item'
 
-    def __str__(self):
-        return self.name
-
     @property
     def stock(self):
         return self.line.quantity
+
+    def __str__(self):
+        return self.name
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.pk is None:  # only when we the instance is created
+            random_digits = ''.join(random.choice(string.digits) for _ in range(5))
+            self.upc = int(random_digits)
+        return super().save(force_insert, force_update, using, update_fields)
+
+    def get_absolute_url(self):
+        return reverse_lazy("item:detail", kwargs={'pk': self.pk})
 
 
 class ItemLine(BaseModel):
@@ -43,3 +57,6 @@ class ItemLine(BaseModel):
         verbose_name = _('Item line')
         verbose_name_plural = _('Item lines')
         db_table = 'item_line'
+
+    def __str__(self):
+        return f"{self.quantity}"

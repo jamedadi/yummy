@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %} Profile {% endblock %}
+{% block content %}
+    <h4 class="text-warning"> Profile</h4>
+    <p>Phone number : {{ request.user.phone_number }}</p>
+    <p>First name : {{ request.user.first_name }}</p>
+    <p>Last name : {{ request.user.last_name }}</p>
+    <br>
+    <a class="btn btn-primary" href="{% url 'address:customer-address-list' %}">Address list</a><br><br>
+    <a class="btn btn-primary" href="{% url 'order:customer-list' %}">Orders</a><br><br>
+    <a class="btn btn-primary" href="{% url 'address:customer-address-create' %}">Create new address</a><br><br>
+
+    <a class="btn btn-primary" href="{% url 'accounts:customer-profile-update' %}">Update profile</a><br><br>
+
+    {% if not request.user.password %}
+        <a class="btn btn-primary" href="{% url 'accounts:customer-set-password' %}">Set password</a>
+        <br><br>
+    {% else %}
+        <a class="btn btn-primary" href="{% url 'accounts:customer-change-password' %}">Change password</a>
+        <br><br>
+    {% endif %}
+
+{% endblock %}

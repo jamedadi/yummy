@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <h4 class="text-warning">Category Detail</h4>
+        <p>Category name : {{ category.name }}</p>
+        <br>
+        <h4 class="text-warning">Service Items</h4>
+        {% if category.items.all %}
+            <ul class="list-group">
+            {% for item in category.items.all %}
+                <li class="list-group-item">
+                    {{ category.name }}
+                    <div align="right">
+                        <a href="#" class="btn btn-warning" style="margin-right: 10px">Update</a>
+                        <a href="#" class="btn btn-danger">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>Your category yet not has item!<a href="#">Create Item</a></p>
+        {% endif %}
+    </div>
+{% endblock %}

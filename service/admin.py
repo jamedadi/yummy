@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, ServiceCategory, DeliveryArea, ServiceAvailableTime, AvailableTime
+from .models import Service, ServiceCategory, DeliveryArea, ServiceAvailableTime
 
 
 @admin.register(Service)
@@ -23,12 +23,8 @@ class DeliveryAreaAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceAvailableTime)
 class ServiceAvailableTimeAdmin(admin.ModelAdmin):
-    list_display = ('service', 'available_time')
-    list_filter = ('available_time',)
+    list_display = ('service', 'day', 'open_time', 'close_time', 'is_close')
+    list_filter = ('day', 'is_close')
     search_fields = ('service',)
 
 
-@admin.register(AvailableTime)
-class AvailableTimeAdmin(admin.ModelAdmin):
-    list_display = ('day', 'open_time', 'close_time', 'close_day')
-    list_filter = ('day', 'close_time')

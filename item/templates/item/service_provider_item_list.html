@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h4 class="text-warning">Category Detail</h4>
+    <h6>Category Name : {{ category.name }}</h6>
+    <br>
+    <h5 class="text-warning">Items</h5>
+    <br>
+    <a class="btn btn-success" href="{% url 'item:create' category.service.pk category.pk %}">Add item</a>
+    <br><br>
+    <div class="row">
+        {% for item in items %}
+            <div class="col-lg-4">
+                <div class="card" style="width: 25rem; margin-bottom: 20px">
+                    <div class="card-body text-center">
+                        {% if item.image %}
+                            <img style="width: 190px; height: 120px; margin-bottom: 15px" class="img"
+                                 src="{{ item.image.url }}"
+                                 alt="{{ item.name }} image">
+                        {% else %}
+                            <img style="width: 190px; height: 120px; margin-bottom: 15px" class="img">
+                        {% endif %}
+                        <h5 class="card-title text-danger">{{ item.name }}</h5><br>
+
+                        <h6 class="card-subtitle mb-2 text-muted">Price : {{ item.price }}</h6>
+                        <p class="card-text">{{ item.description | truncatechars:30 }}</p>
+                        <a href="{% url 'item:detail-service-provider' item.pk %}" class="btn btn-primary">Detail</a>
+                        <a style="margin-left: 15px" href="{% url 'item:update' item.pk %}"
+                           class="btn btn-warning">Update</a>
+                        <a style="margin-left: 15px" href="{% url 'item:delete' item.pk %}"
+                           class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

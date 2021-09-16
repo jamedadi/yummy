@@ -1,9 +1,10 @@
 from django.db import models
+from django.utils.text import slugify
 
 from accounts.models import ServiceProvider
 from library.models import BaseModel
 from django.utils.translation import ugettext_lazy as _
-from address.models import Address, Area
+from address.models import ServiceAddress, Area
 import uuid
 
 
@@ -22,13 +23,26 @@ class Service(BaseModel):
 
     uuid = models.UUIDField(default=uuid.uuid4, verbose_name=_('uuid'), unique=True, db_index=True)
     service_provider = models.ForeignKey(
-        ServiceProvider, verbose_name=_('service provider'), related_name='services', on_delete=models.CASCADE
+        ServiceProvider,
+        verbose_name=_('service provider'),
+        related_name='services',
+        on_delete=models.CASCADE
     )
     name = models.CharField(max_length=40, verbose_name=_('name'))
     service_type = models.PositiveSmallIntegerField(verbose_name=_('service type'), choices=SERVICE_TYPES)
     minimum_purchase = models.DecimalField(max_digits=9, decimal_places=0, verbose_name=_('minimum purchase'))
-    address = models.ForeignKey(Address, verbose_name=_('address'), related_name='services', on_delete=models.SET_NULL,
-                                null=True)
+    available = models.BooleanField(default=False, verbose_name=_('available'))
+    logo = models.ImageField(verbose_name=_('logo'), upload_to='service/logos/', null=True, blank=True)
+    banner = models.ImageField(verbose_name=_('banner'), upload_to='service/banners/', null=True, blank=True)
+
+    address = models.OneToOneField(
+        ServiceAddress,
+        verbose_name=_('address'),
+        related_name='services',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f'{self.name} - {self.get_service_type_display()}'
@@ -37,6 +51,7 @@ class Service(BaseModel):
         verbose_name = _('Service')
         verbose_name_plural = _('Services')
         db_table = 'service'
+        ordering = ('created_time',)
 
 
 class ServiceCategory(BaseModel):
@@ -46,6 +61,10 @@ class ServiceCategory(BaseModel):
 
     def __str__(self):
         return f'{self.name} - {self.service.name}'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name, allow_unicode=True)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = _('ServiceCategory')
@@ -68,7 +87,7 @@ class DeliveryArea(BaseModel):
         db_table = 'delivery_area'
 
 
-class AvailableTime(BaseModel):
+class ServiceAvailableTime(BaseModel):
     SAT_DAY = 0
     SUN_DAY = 1
     MON_DAY = 2
@@ -86,31 +105,20 @@ class AvailableTime(BaseModel):
         (THU_DAY, _('thursday')),
         (FRI_DAY, _('friday'))
     )
-    day = models.PositiveSmallIntegerField(verbose_name=_('day'), choices=DAYS)
-    open_time = models.DateTimeField(verbose_name=_('open time'))
-    close_time = models.DateTimeField(verbose_name=_('close time'))
-    close_day = models.BooleanField(verbose_name=_('close day'), blank=True, null=True)
-
-    def __str__(self):
-        return f'{self.get_day_display()} - ' \
-               f'{self.close_day if self.close_time else self.open_time and "-" and self.close_time}'
-
-    class Meta:
-        verbose_name = _('AvailableTime')
-        verbose_name_plural = _('AvailableTimes')
-        db_table = 'available_time'
-
-
-class ServiceAvailableTime(BaseModel):
     service = models.ForeignKey(
         Service, verbose_name=_('service'), related_name='available_times', on_delete=models.CASCADE
     )
-    available_time = models.ForeignKey(AvailableTime, verbose_name=_('available time'), on_delete=models.PROTECT)
+    day = models.PositiveSmallIntegerField(verbose_name=_('day'), choices=DAYS, null=True)
+    open_time = models.TimeField(verbose_name=_('open time'), null=True)
+    close_time = models.TimeField(verbose_name=_('close time'), null=True)
+    is_close = models.BooleanField(verbose_name=_('close day'), blank=True, null=True)
 
     def __str__(self):
-        return f'{self.service.name} - {self.available_time.open_time} - {self.available_time.close_time}'
+        return f'{self.service.name} - {self.get_day_display()} - ' \
+               f'{self.is_close if self.close_time else self.open_time and "-" and self.close_time}'
 
     class Meta:
         verbose_name = _('ServiceAvailableTime')
         verbose_name_plural = _('ServiceAvailableTimes')
         db_table = 'service_available_time'
+        ordering = ('day',)

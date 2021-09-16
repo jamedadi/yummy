@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h4 class="text-warning"> Profile</h4>
+    <p> Your username : {{ request.user.username }}</p>
+    <p> Your email : {{ request.user.email }}</p>
+    <p> Your phone number : {{ request.user.phone_number }}</p>
+    <br><br>
+    <a href="{% url 'service:service-provider-service-list' %}">Service List</a>
+    <br><br>
+    <a href="{% url 'accounts:service-provider-change-password' %}">Change password</a>
+{% endblock %}

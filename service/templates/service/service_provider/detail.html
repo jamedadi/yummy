@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <h4 class="text-warning">Service Detail</h4>
+        <p>Service name : {{ service.name }}</p>
+        <p>Service minimum purchase : {{ service.minimum_purchase }}</p>
+        <p>Service minimum purchase : {{ service.get_service_type_display }}</p>
+        {% if service.available %}
+            <p>Service available : Yes</p>
+        {% else %}
+            <p>Service available : No</p>
+        {% endif %}
+        {% if service.logo %}
+            <p>Service Logo Image : <img src="{{ service.logo.url }}"></p>
+        {% else %}
+            <p>Service Logo Image : Not Yet Uploaded</p>
+        {% endif %}
+        {% if service.banner %}
+            <p>Service Banner Image : <img src="{{ service.banner.url }}"></p>
+        {% else %}
+            <p>Service Logo Image : Not Yet Uploaded</p>
+        {% endif %}
+
+        <br>
+        <hr>
+        <div style="margin-top: 20px; margin-bottom: 20px">
+            <h4 class="text-warning">Service Address</h4>
+            {% if service.address %}
+                <p>state : {{ service.address.state.name }}</p>
+                <p>city : {{ service.address.city.name }}</p>
+                <p>area : {{ service.address.area.name }}</p>
+                <p>street : {{ service.address.street }}</p>
+                <p>alley : {{ service.address.alley }}</p>
+                <p>floor : {{ service.address.floor }}</p>
+                <p>plaque : {{ service.address.plaque }}</p>
+                <a href="{% url 'address:service-address-update' service.address.pk %}">Update Address</a>
+            {% else %}
+                <p>Your service yet not has address!<a
+                        href="{% url 'address:service-address-create' service.pk %}">Create Address</a></p>
+            {% endif %}
+        </div>
+        <hr>
+        <div class="service-category" style="margin-top: 20px; margin-bottom: 20px">
+            <h4 class="text-warning">Service Categories</h4>
+            <br><br>
+            <a href="{% url 'service:service-provider-service-category-create' service.pk %}">Create new category</a>
+            <br><br>
+            <ul class="list-group">
+                {% for category in service.categories.all %}
+                    <li class="list-group-item">
+                        {{ category.name }}
+                        <div align="right">
+                            <a href="{% url 'service:service-provider-service-category-update' category.pk %}"
+                               class="btn btn-warning"
+                               style="margin-right: 10px">Update</a>
+                            <a href="{% url 'item:service-provider-list' service.pk category.pk %}"
+                               class="btn btn-primary"
+                               style="margin-right: 10px">Detail</a>
+                            <a href="{% url 'service:service-provider-service-category-delete' category.pk %}"
+                               class="btn btn-danger">Delete</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <hr>
+        <div class="delivery-area" style="margin-top: 20px; margin-bottom: 20px">
+            <h4 class="text-warning">Service Delivery Area</h4>
+            <br>
+            <br>
+            <a href="{% url 'service:service-provider-delivery-area-create' service.pk %}"> Create new delivery area</a>
+            <br>
+            <br>
+            {% with deliveries=service.delivery_areas.all %}
+                {% if deliveries %}
+                    {% for delivery in deliveries %}
+                        <li class="list-group-item">
+                            {{ delivery.area.name }}
+                            <div align="right">
+                                <a href="{% url 'service:service-provider-delivery-area-update' delivery.pk %}"
+                                   class="btn btn-warning" style="margin-right: 10px">Update</a>
+                                <a href="{% url 'service:service-provider-delivery-area-delete' delivery.pk %}"
+                                   class="btn btn-danger">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                {% endif %}
+            {% endwith %}
+        </div>
+        <hr>
+        <div class="available-time" style="margin-top: 20px; margin-bottom: 20px">
+            <h4 class="text-warning">Service Available Time</h4>
+            <br>
+            <br>
+            <a href="{% url 'service:service-provider-available-time-create' service.pk %}"> Create new available
+                time</a>
+            <br>
+            <br>
+            {% with availabletimes=service.available_times.all %}
+                {% if availabletimes %}
+                    {% for availabletime in availabletimes %}
+                        <li class="list-group-item">
+                            {{ availabletime.get_day_display }} | open at : {{ availabletime.open_time }} | close at
+                            : {{ availabletime.close_time }} | is close : {{ availabletime.is_close }}
+                            <div align="right">
+                                <a href="{% url 'service:service-provider-available-time-update' availabletime.pk %}"
+                                   class="btn btn-warning" style="margin-right: 10px">Update</a>
+                                <a href="{% url 'service:service-provider-available-time-delete' availabletime.pk %}"
+                                   class="btn btn-danger">Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}

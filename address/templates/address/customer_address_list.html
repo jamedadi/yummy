@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+    <a href="{% url 'address:customer-address-create' %}">Create new address</a><br><br>
+
+    <ul class="list-group">
+        {% for address in addresses %}
+            <li class="list-group-item">
+                    {{ address.state.name }} - {{ address.city.name }} - {{ address.area.name }} - {{ address.street }}
+                    - {{ address.alley }} - {{ address.floor }} - {{ address.plaque }}
+                    <div align="right">
+                        <a href="{% url 'address:customer-address-update' address.id %}" class="btn btn-warning"
+                           style="margin-left: 100px; margin-right: 10px">Update</a>
+                        <a href="{% url 'address:customer-address-delete' address.id %}"
+                           class="btn btn-danger">Delete</a>
+                    </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

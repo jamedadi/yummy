@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} Add item {% endblock %}
+{% block content %}
+    <h3> Add new item</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <label class="text-warning">{{ field.label }}</label>
+            <br>
+            <p>{{ field }}</p>
+            {% for error in field.errors %}
+                <p class="text-danger">{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+        <br>
+        {% if form.errors %}
+            {% block form_error %} {% endblock %}
+        {% endif %}
+        <button type="submit" class="btn btn-warning">Add</button>
+
+    </form>
+{% endblock %}

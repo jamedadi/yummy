@@ -12,6 +12,6 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'price', 'is_paid')
-    list_filter = ('is_paid', 'created_time')
-    search_fields = ('uuid',)
+    list_display = ('uuid', 'customer', 'gateway', 'price', 'is_paid')
+    list_filter = ('is_paid', 'created_time', 'gateway')
+    search_fields = ('uuid', 'customer__phone_number')
