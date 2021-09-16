@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Payment Verification{% endblock %}
+{% block content %}
+
+    <div style="width: 100%; padding: 40px; background-color: white">
+        <div style="margin-bottom: 30px">
+            <form method="get">
+                {{ filter.form.as_p }}
+                <button type="submit" class="btn btn-warning">Filter</button>
+            </form>
+        </div>
+        <div>
+            {% for order in orders %}
+                <div style="height: 200px;border: 1px solid #e2e2e2">
+                    <div style="padding: 20px;">
+                        <div style="float: left">
+                            <div style="font-size: 18px">
+                                <p>id : {{ order.id }}</p>
+                                <p>status : {{ order.get_status_display }}</p>
+                                <p>date time : {{ order.created_time }}</p>
+                                <p> total price : {{ order.invoice.price }}$</p>
+                            </div>
+                        </div>
+                        <div align="right" style="float: right; margin-top: 60px">
+                            <a href="{% url 'order:service-order-detail' order.pk %}"
+                               class="btn" style="background-color: deeppink; color: white">Show Factor</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
