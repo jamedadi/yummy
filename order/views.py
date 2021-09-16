@@ -1,5 +1,3 @@
-from abc import ABC
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
@@ -17,15 +15,16 @@ from service.models import Service
 
 from library.utils import CustomUserPasses
 
-from accounts.models import Customer
+from accounts.models import Customer, ServiceProvider
 from accounts.utils import IsCustomer
-
 
 
 class BaseOrderServiceList(CustomUserPasses):
     model = Order
 
     def test_func(self):
+        if not isinstance(self.request.user, ServiceProvider):
+            return False
         if self.service.service_provider != self.request.user:
             return False
         return True
@@ -36,6 +35,8 @@ class BaseOrderDetailUpdate(CustomUserPasses):
 
     def test_func(self):
         order = self.get_object()
+        if not isinstance(self.reqeust.user, ServiceProvider):
+            return False
         if order.invoice.cart.service.service_provider != self.request.user:
             return False
         return True
@@ -95,8 +96,6 @@ class OrderServiceUpdateView(BaseOrderDetailUpdate, UpdateView):
     def get_success_url(self):
         order = self.get_object()
         return reverse_lazy('order:service-order-list', kwargs={'service_pk': order.invoice.cart.service.id})
-
-
 
 
 @method_decorator(require_http_methods(['GET']), name='dispatch')
