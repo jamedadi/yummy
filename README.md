@@ -46,4 +46,3 @@ The main purpose of this project is being an acceptable resume and also a good p
 The project is based on the MVT architecture of the Django framework, so we will use SSR(server side rendering)
 
 ---
-
