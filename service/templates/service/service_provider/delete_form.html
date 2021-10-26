@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <p>Are you sure to delete service ({{ service.name }})?</p>
+            <input type="submit" value="delete" class="btn btn-danger">
+        </form>
+        <a href="{% url 'service:service-provider-service-list' %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+    </div>
+{% endblock %}

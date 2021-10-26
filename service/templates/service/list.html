@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load service_delivary_area %}
+{% block content %}
+    <div class="row py-3">
+        <div class="col-3" style="background-color: white; padding: 20px; margin-right: 10px; border-radius: 30px">
+            <div class="sticky-top">
+                <div class="filter"
+                     style="margin-bottom: 30px; border:1px solid #c4c4c8; border-radius: 15px; padding: 20px">
+                    <form method="get">
+                        {{ filter.form.as_p }}
+                        <button type="submit" class="btn btn-warning">Filter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-8" style="background-color: white; padding: 20px; margin-right: 10px; border-radius: 30px">
+            <div class="row">
+                {% for service in services %}
+
+                    <div class="col-lg-4">
+                        <div class="card text-center" style="width: 16rem; height: 22rem;margin: inherit">
+                            <div style="width: 100%; height: 150px; position: relative;">
+                                <div style="  width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+                                    {% if service.banner %}
+                                        <img src="{{ service.banner.url }}" width="100%" height="103px">
+                                    {% else %}
+                                        <img src="" width="103px" height="103px">
+                                    {% endif %}
+                                </div>
+                                <div style="width: 75px; height: 75px; position: absolute; top: 50px; left: 80px;z-index: 9; margin-bottom: 10px">
+                                    {% if service.logo %}
+                                        <img src="{{ service.logo.url }}" width="95px"
+                                             height="95px" style="border: 1px solid #dadada">
+                                    {% else %}
+                                        <img src="" width="95px" height="95px">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-body" style="margin-top: 10px">
+                                <h5 class="card-title text"><b>{{ service.name.title }}</b></h5>
+                                <br>
+                                <p class="card-text">{{ service.address | truncatechars:30 }}</p>
+                                {% delivery_area_string service as areas %}
+                                <p class="card-text">{{ areas | truncatechars:15 }}</p>
+                                <p class="card-text">{{ service.areas | truncatechars:20 }}</p>
+
+                            </div>
+                            <a href="{% url 'item:list' service.pk %}" style="text-decoration: none">
+                                <div style="border: 1px solid; border-color: deeppink; background-color: #d9d9d9; height: 40px; padding: 7px; color: deeppink;">
+                                    Menu
+                                </div>
+                            </a>
+                        </div>
+                        <br>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Payment Verification{% endblock %}
+{% block content %}
+    {% if is_paid %}
+
+        <div style="width: 100%; background-color: #b9ffa7; padding: 30px; height: 150px; border-radius: 30px; text-align: center">
+            <h4 style="color: green">Payment was successful</h4>
+            <h5>Your ref code: {{ ref_id }}</h5>
+        </div>
+    {% else %}
+        <div style="width: 100%; background-color: #ff8b87; padding: 30px; height: 150px; border-radius: 30px; text-align: center">
+            <h4 style="color: red">Payment was successful</h4>
+            <h5>Your ref code: {{ ref_id }}</h5>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}

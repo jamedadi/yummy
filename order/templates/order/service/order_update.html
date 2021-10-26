@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" value="submit" class="btn btn-primary">Update</button>
+    </form>
+    <a href="{% url 'order:service-order-detail' object.pk %}" class="btn btn-warning" style="margin-top: 20px">cancel</a>
+{% endblock %}

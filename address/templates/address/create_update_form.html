@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load accounts_tags %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="submit" class="btn btn-warning">
+    </form>
+    {% is_service_provider request.user as is_provider %}
+    {% is_customer request.user as is_customer %}
+    {% if is_provider %}
+        {% if service %}
+            <a href="{% url 'service:service-provider-service-detail' service.pk %}" class="btn btn-warning"
+               style="margin-top: 20px">cancel</a>
+
+        {% else %}
+            <a href="{% url 'service:service-provider-service-detail' object.services.pk %}" class="btn btn-warning"
+               style="margin-top: 20px">cancel</a>
+        {% endif %}
+    {% elif is_customer %}
+        <a href="{% url 'address:customer-address-list' %}" class="btn btn-warning"
+               style="margin-top: 20px">cancel</a>
+    {% endif %}
+{% endblock %}

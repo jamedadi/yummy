@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+{% load category_tags cart_tags %}
+{% block banner %}
+    <div class="service-info" style="margin-bottom: 20px">
+        <div style="width: 100%; height: 200px; position: relative;">
+            <div style="  width: 100%; height: 100%; position: absolute; top: 0; left: 0;filter: opacity(40%);">
+                {% if service.banner %}
+                    <img src="{{ service.banner.url }}" width="100%" height="200px">
+                {% else %}
+                    <img src="" width="103px" height="103px">
+                {% endif %}
+            </div>
+            <div style="width: 150px; height: 150px; position: absolute; top: 25px; left: 450px;z-index: 9; margin-bottom: 10px">
+                <div style="float: left;">
+                    {% if service.logo %}
+                        <img src="{{ service.logo.url }}" width="150px"
+                             height="150px" style="border: 1px solid #dadada">
+                    {% else %}
+                        <img src="" width="95px" height="95px">
+                    {% endif %}
+                </div>
+                <div style="width:400px;margin-left: 180px;margin-top: 38px">
+                    <h3>{{ service.name.title }} {{ service.get_service_type_display.title }}</h3>
+                    <p><b>Address : {{ service.address }}</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="row py-3">
+        <div class="col-2 text-center" id="sticky-sidebar" style="background-color: white; padding: 20px">
+            <div class="sticky-top">
+                <h5 class="text">Categories</h5>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    {% for category in service.categories.all %}
+                        <li class="nav-link link-dark">
+                            <a href="#{{ category.slug }}-{{ category.pk }}" class="nav-link" aria-current="page"
+                               style="color: black; background-color: #eb9b93">
+                                <b>{{ category.name.title }}</b>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-7" id="main" align="center" style="background-color: white; padding: 20px">
+            {% for category in service.categories.all %}
+                <div class="row" id="{{ category.slug }}-{{ category.pk }}">
+                    <h4 class="text" style="margin-bottom: 40px;"><b>{{ category.name.title }}</b></h4>
+                    {% filter_category items category as category_items %}
+                    {% for item in category_items %}
+                        <div class="col-lg-4">
+                            <div class="card text-center" style="width: 14rem;margin-bottom: 35px;height: 24rem">
+                                <div class="img">
+                                    {% if item.image %}
+                                        <img style="width: 100%; height: 190px;" class="img"
+                                             src="{{ item.image.url }}"
+                                             alt="{{ item.name }} image">
+                                    {% else %}
+                                        <img style="width: 190px; height: 120px; margin-bottom: 15px" class="img">
+                                    {% endif %}
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title text-danger" style="margin-top: 5px; margin-bottom: 10px">
+                                        <a href="{{ item.get_absolute_url }}"
+                                           style="text-decoration: none; color: black">
+                                            {{ item.name }}
+                                        </a>
+                                    </h5>
+                                    <p class="card-text">{{ item.description | truncatechars:35 }}</p>
+                                </div>
+                                <div style="width: 100%;height: 40px; background-color: #d9d9d9">
+
+                                    <form method="post"
+                                          style="flex-direction: column; align-items: stretch; height: 40px;"
+                                          action="{% url 'cart:add-to-cart' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ item.pk }}">
+                                        <div style="float:left; text-align: center">
+                                            <button type="submit"
+                                                    style="color: deeppink;font-size: 23px; text-align: left; border:  #d9d9d9; background-color: #d9d9d9">
+                                                +
+                                            </button>
+                                        </div>
+                                        <div style="float: right; text-align: right; margin: 6px  8px">
+                                            <small>{{ item.price }} $</small>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-3 text-center" id="">
+            {% get_cart request service as cart %}
+            {% if cart %}
+                <div style="border-top: 2px solid #d9d9d9; border-bottom: 1px solid #d9d9d9; border-right: 2px solid #d9d9d9; border-left: 2px solid #d9d9d9; background-color: white;">
+
+                    <div style="border-bottom: 2px solid #d9d9d9">
+                        <h5>Cart <i class="fa fa-shopping-cart" style="font-size:24px; color: deeppink"></i></h5>
+                    </div>
+                    <div style="border-bottom: 2px solid #d9d9d9">
+                        <form method="post" action="{% url 'cart:empty-cart' %}">
+                            {% csrf_token %}
+                            <button style="color: deeppink; background-color: white; border: 0px"
+                                    type="submit">Empty Cart
+                            </button>
+                        </form>
+                    </div>
+
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        {% for line in cart.lines.all %}
+                            <div style="height: 80px; padding: 10px 10px 10px 10px; border-bottom: 1px solid #d9d9d9">
+                                <div>
+                                    <form method="post" action="{% url 'cart:cart-line-delete' line.pk %}">
+                                        {% csrf_token %}
+                                        <div style="float: left; height: 60px; text-align: end; margin-right: 10px; color: deeppink">
+                                            <button type="submit"
+                                                    style="color: deeppink; background-color: white; border: 0px; padding-top: 20px">
+                                                ✕
+                                            </button>
+                                        </div>
+                                    </form>
+
+
+                                </div>
+                                <div style="text-align: left;">{{ line.item.name }}</div>
+                                <div style="float: left; margin-top: 10px">{{ line.price }} $</div>
+                                <div style="height: 30px; margin-right: 10px">
+                                    <form method="post" action="{% url 'cart:add-to-cart' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ line.item.pk }}">
+                                        <div style="float: right; padding-top: 5px">
+                                            <button type="submit"
+                                                    style=" font-size: 20px;color: deeppink; background-color: white; border: 0px">
+                                                +
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <div style="float: right; margin: 10px 15px 10px 15px; width: 20px">{{ line.quantity }}</div>
+                                    <div style="float: right;color: deeppink;">
+                                        {% if line.quantity == 1 %}
+                                            <form method="post" action="{% url 'cart:cart-line-delete' line.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        style="font-size: 25px;color: deeppink; background-color: white; border: 0px">
+                                                    -
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <form method="post" action="{% url 'cart:cart-line-decrease' line.pk %}">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        style="font-size: 25px;color: deeppink; background-color: white; border: 0px">
+                                                    -
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div style="height: 150px;margin-top: 40px; margin-bottom: 30px;border:  2px solid #d9d9d9; padding: 10px 23px 10px 23px; background-color: white">
+                    {% calculate_total_price cart as total_price %}
+                    <di border: 1px solid #d9d9d9;>
+                        <div style="float: left;">Total price</div>
+                        <div style="float: right;">{{ total_price }} $</div>
+                    </di>
+                </div>
+
+                <a href="{% url 'payment:checkout' %}" class="btn" style="background-color: deeppink; width: 150px; color: white">check out</a>
+            {% else %}
+                <div style="border-top: 2px solid #d9d9d9; border-bottom: 1px solid #d9d9d9; border-right: 2px solid #d9d9d9; border-left: 2px solid #d9d9d9; background-color: white;">
+
+                    <div style="border-bottom: 2px solid #d9d9d9; height: 200px">
+                        <h5 style="padding-top: 86px; font-size: 24px">Cart is empty! <i class="fa fa-shopping-cart"
+                                                                                         style="font-size:26px; color: deeppink"></i>
+                        </h5>
+                    </div>
+                </div>
+            {% endif %}
+
+
+        </div>
+    </div>
+
+{% endblock %}
