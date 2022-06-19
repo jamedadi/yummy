@@ -46,3 +46,36 @@ The main purpose of this project is being an acceptable resume and also a good p
 The project is based on the MVT architecture of the Django framework, so we will use SSR(server side rendering)
 
 ---
+## How to run:
+
+1- first create a virtualEnvirment
+```
+python3 -m venv .env
+// or other ways to create a VENV
+```
+2- then activate it
+```
+source .env/bin/activate    
+```
+3- start to install requirments.txt file
+```
+pip install -r requirements.txt
+```
+note:
+if suds-jurko throw error please install it in this way
+```
+pip install -i https://m.devpi.net/jaraco/dev suds-jurko    
+```
+then use 
+```
+pip install -r requirements.txt
+```
+4- on setting file you must change some places
+  - you must set a DBMS and its settings(if you junior ad django use this [url](https://docs.djangoproject.com/en/3.2/ref/settings/#databases)
+  - you must set ```ALLOWED_HOSTS,DEBUG``` in setting file
+5- start migrate to ctreate tables and columns in your choosen database
+6- enjoy it :)
+
+
+
+---
